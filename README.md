@@ -1,4 +1,4 @@
-make-video
+kano-video
 ==========
 
 Kano media player

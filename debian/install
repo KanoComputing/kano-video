@@ -1,0 +1,5 @@
+bin/* /usr/bin
+kdesktop/* /usr/share/kano-desktop/kdesk/kdesktop/
+icon/* /usr/share/kano-desktop/icons/
+
+#video/monkey.flv /usr/share/doc/kano-youtube/

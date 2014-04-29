@@ -1,0 +1,12 @@
+Package: kano-video
+Version: 1.0-1
+Architecture: all
+Maintainer: Team Kano <dev@kano.me>
+Installed-Size: 59
+Depends: kano-toolset
+Conflicts: kano-youtube, make-video, youtube-dl
+Replaces: kano-youtube, make-video, youtube-dl
+Provides: kano-youtube, make-video, youtube-dl
+Section: misc
+Priority: optional
+Description: A small video player for Kano OS

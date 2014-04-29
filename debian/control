@@ -1,0 +1,14 @@
+Source: kano-video
+Maintainer: Team Kano <dev@kano.me>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>=9.0.0)
+
+Package: kano-video
+Architecture: all
+Conflicts: make-video, youtube-dl, kano-youtube
+Provides: make-video, youtube-dl, kano-youtube
+Replaces: make-video, youtube-dl, kano-youtube
+Depends: ${misc:Depends}, kano-toolset
+Description: A small video player for Kano OS
