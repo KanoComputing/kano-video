@@ -3,12 +3,9 @@
 # Copyright (C) 2014 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# UI for login screen
 
-from gi.repository import Gtk, Gdk
 import os
 import sys
-from slugify import slugify
 
 if __name__ == '__main__' and __package__ is None:
     dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -16,154 +13,60 @@ if __name__ == '__main__' and __package__ is None:
         sys.path.insert(1, dir_path)
 
 from kano.network import is_internet
-from kano.utils import download_url, ensure_dir, read_json, get_home
-
-from kano.profile.paths import app_profiles_file
-from kano_profile_gui.paths import css_dir
-from kano_login.components import icons
-from kano.world.share import list_shares
+from kano.utils import requests_get_json
 
 
-def make_top_bar(title):
-    height = 44
-
-    eb = Gtk.EventBox()
-    eb.get_style_context().add_class('top_bar_container')
-
-    header = Gtk.Label(title)
-    header.set_size_request(400, height)
-    header.get_style_context().add_class('header')
-
-    cross = Gtk.Image()
-    cross.set_from_pixbuf(icons.Icons("cross").subpixbuf)
-
-    close_button = Gtk.Button()
-    close_button.set_image(cross)
-    close_button.set_size_request(height, height)
-    close_button.set_can_focus(False)
-    close_button.get_style_context().add_class("top_bar_button")
-    close_button.connect('clicked', Gtk.main_quit)
-
-    grid = Gtk.Grid()
-    grid.attach(header, 0, 0, 1, 1)
-    grid.attach(close_button, 1, 0, 1, 1)
-    grid.set_size_request(0, height)
-
-    eb.add(grid)
-    return eb
-
-
-def make_share_list():
-    row_height = 30
-
-    grid = Gtk.Grid()
-    grid.set_row_spacing(10)
-    grid.set_size_request(400, 400)
-
-    if len(sys.argv) == 2:
-        if sys.argv[1] == '--list-all':
-            filter_app = None
-            featured = False
-        else:
-            filter_app = sys.argv[1]
-            if filter_app not in read_json(app_profiles_file):
-                sys.exit('Given app not in app profiles: {}'.format(filter_app))
-            featured = False
-    else:
-        filter_app = None
-        featured = True
-
-    success, text, data = list_shares(app_name=filter_app, featured=featured)
+def search_youtube_by_keyword(keyword):
+    url = 'http://gdata.youtube.com/feeds/api/videos'
+    params = {
+        'vq': keyword,
+        'racy': 'exclude',
+        'orderby': 'relevance',
+        'alt': 'json'
+    }
+    success, error, data = requests_get_json(url, params=params)
     if not success:
-        sys.exit('Error with listing shares, error: {}'.format(text))
-
-    for i, entry in enumerate(data['entries']):
-        has_url = bool(entry['attachment_url'])
-
-        label = Gtk.Label(entry['app'])
-        label.set_size_request(50, row_height)
-        grid.attach(label, 0, i, 1, 1)
-
-        label = Gtk.Label(entry['title'])
-        label.set_size_request(250, row_height)
-        grid.attach(label, 1, i, 1, 1)
-
-        if has_url:
-            button = Gtk.Button('Download')
-            button.set_size_request(100, row_height)
-            button.connect('clicked', load_share, entry['app'], entry['title'], entry['attachment_url'])
-            grid.attach(button, 2, i, 1, 1)
-
-    align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
-    padding = 20
-    align.set_padding(padding, padding, padding, padding)
-    align.add(grid)
-
-    return align
+        sys.exit(error)
+    return data['feed']['entry']
 
 
-def load_share(_button, app, title, url):
-    app_profiles = read_json(app_profiles_file)
-
-    if app not in app_profiles:
-        print 'Cannot load, app not found in profiles'
-        return
-    app_profile = app_profiles[app]
-
-    folder = os.path.join(get_home(), app_profile['dir'], 'webload')
-    ensure_dir(folder)
-
-    title_slugified = slugify(title)
-    ext = url.split('.')[-1]
-    file_name = '{}.{}'.format(title_slugified, ext)
-    file_path = os.path.join(folder, file_name)
-
-    success, text = download_url(url, file_path)
+def search_youtube_by_user(username):
+    url = 'http://gdata.youtube.com/feeds/users/{}/uploads'.format(username)
+    params = {
+        'alt': 'json',
+        'orderby': 'viewCount',
+    }
+    success, error, data = requests_get_json(url, params=params)
     if not success:
-        print 'Error with downloading share file: {}'.format(text)
-    else:
-        print 'File Path: {}'.format(file_path)
-        sys.exit()
+        sys.exit(error)
+    return data['feed']['entry']
 
 
-class MainWindow(Gtk.Window):
-
-    def __init__(self):
-        Gtk.Window.__init__(self, title='Kano Share')
-
-        self.set_decorated(False)
-        self.set_position(Gtk.WindowPosition.CENTER)
-
-        grid = Gtk.Grid()
-        self.add(grid)
-
-        top_bar = make_top_bar('Kano Share')
-        grid.attach(top_bar, 0, 0, 1, 1)
-
-        share_list = make_share_list()
-        grid.attach(share_list, 0, 1, 1, 1)
-
-
-def main():
-    if not is_internet():
-        sys.exit('No internet')
-
-    # Create style sheet
-    cssProvider = Gtk.CssProvider()
-    css_file = os.path.join(css_dir, 'share.css')
-    if not os.path.exists(css_file):
-        sys.exit('CSS file missing!')
-    cssProvider.load_from_path(css_file)
-
-    screen = Gdk.Screen.get_default()
-    styleContext = Gtk.StyleContext()
-    styleContext.add_provider_for_screen(screen, cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
-
-    win = MainWindow()
-    win.connect('delete-event', Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
+def parse_youtube_entries(entries):
+    my_entries = list()
+    for e in entries:
+        author = e['author'][0]['name']['$t']
+        title = e['title']['$t']
+        description = e['content']['$t']
+        video_id = e['id']['$t'].split('/')[-1]
+        duration = int(e['media$group']['yt$duration']['seconds']) / float(60)
+        viewcount = e['yt$statistics']['viewCount']
+        entry_data = {
+            'author': author,
+            'title': title,
+            'description': description,
+            'video_id': video_id,
+            'duration': duration,
+            'viewcount': viewcount
+        }
+        my_entries.append(entry_data)
+    return my_entries
 
 
-if __name__ == '__main__':
-    main()
+# entries = search_youtube_by_keyword('leap motion')
+entries = search_youtube_by_user('leapmotion')
+my_entries = parse_youtube_entries(entries)
+
+
+from pprint import pprint
+pprint(my_entries)
