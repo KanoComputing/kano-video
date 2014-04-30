@@ -13,7 +13,7 @@ if __name__ == '__main__' and __package__ is None:
     if dir_path != '/usr':
         sys.path.insert(1, dir_path)
 
-from kano.utils import is_installed
+from kano.utils import is_installed, write_file_contents
 from kano.network import is_internet
 from kano_video.youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword, get_video_file_url
@@ -69,9 +69,22 @@ def make_video_list():
         # viewcount
 
         x_pos = 0
+
         button = Gtk.Button('Play')
         button.set_size_request(50, row_height)
-        button.connect('clicked', play_video, e['video_url'])
+        button.connect('clicked', play_video, e['video_url'], False)
+        grid.attach(button, x_pos, i, 1, 1)
+        x_pos += 1
+
+        button = Gtk.Button('FS')
+        button.set_size_request(20, row_height)
+        button.connect('clicked', play_video, e['video_url'], True)
+        grid.attach(button, x_pos, i, 1, 1)
+        x_pos += 1
+
+        button = Gtk.Button('Stop')
+        button.set_size_request(20, row_height)
+        button.connect('clicked', stop_videos)
         grid.attach(button, x_pos, i, 1, 1)
         x_pos += 1
 
@@ -104,13 +117,40 @@ def make_video_list():
     return align
 
 
-def play_video(_button, video_url):
+def play_video(_button, video_url, fullscreen):
+    print 'Getting video url: {}'.format(video_url)
     success, data = get_video_file_url(video_url)
     if not success:
         print 'Error with getting Youtube url: {}'.format(data)
         return
-    print data
-    print is_installed('omxplayer')
+
+    print 'Launching player...'
+
+    if omxplayer_present:
+        if fullscreen:
+            player_cmd = 'lxterminal -e "omxplayer -b \\"{url}\\""'.format(url=data)
+        else:
+            file_str = 'kano-window-tool -dno -t omxplayer -x 100 -y 100 -w 300 -h 180\n'
+            file_str += 'omxplayer --win "100 100 420 280" "{url}"\n'.format(url=data)
+            file_path = '/tmp/omxplayer.sh'
+            write_file_contents(file_path, file_str)
+            player_cmd = 'lxterminal -t omxplayer -e "bash {}"'.format(file_path)
+    else:
+        if fullscreen:
+            player_cmd = 'vlc -f --no-video-title-show "{url}"'.format(url=data)
+        else:
+            player_cmd = 'vlc --width 700 --no-video-title-show "{url}"'.format(url=data)
+
+    print player_cmd
+    os.system(player_cmd)
+    # run_cmd(player_cmd)
+
+
+def stop_videos(_button):
+    if omxplayer_present:
+        os.system('killall omxplayer.bin')
+    else:
+        os.system('killall vlc')
 
 
 class MainWindow(Gtk.Window):
@@ -132,8 +172,8 @@ class MainWindow(Gtk.Window):
 
 
 def main():
-    if not is_internet():
-        sys.exit('No internet')
+    if not omxplayer_present and not vlc_present:
+        sys.exit('Neither vlc nor omxplayer is installed!')
 
     # Create style sheet
     cssProvider = Gtk.CssProvider()
@@ -153,6 +193,12 @@ def main():
 
 
 if __name__ == '__main__':
+    if not is_internet():
+        sys.exit('No internet')
+
+    omxplayer_present = is_installed('omxplayer')
+    vlc_present = is_installed('vlc')
+
     main()
 
 
