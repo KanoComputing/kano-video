@@ -12,64 +12,15 @@ if __name__ == '__main__' and __package__ is None:
     if dir_path != '/usr':
         sys.path.insert(1, dir_path)
 
-from kano.network import is_internet
-from kano.utils import requests_get_json
-
-
-def search_youtube_by_keyword(keyword=None, popular=False):
-    url = 'http://gdata.youtube.com/feeds/api/videos'
-    params = {
-        'vq': keyword,
-        'racy': 'exclude',
-        'orderby': 'relevance',
-        'alt': 'json'
-    }
-    if popular:
-        params['orderby'] = 'viewCount'
-
-    success, error, data = requests_get_json(url, params=params)
-    if not success:
-        sys.exit(error)
-    return data['feed']['entry']
-
-
-def search_youtube_by_user(username):
-    url = 'http://gdata.youtube.com/feeds/users/{}/uploads'.format(username)
-    params = {
-        'alt': 'json',
-        'orderby': 'viewCount',
-    }
-    success, error, data = requests_get_json(url, params=params)
-    if not success:
-        sys.exit(error)
-    return data['feed']['entry']
-
-
-def parse_youtube_entries(entries):
-    my_entries = list()
-    for e in entries:
-        author = e['author'][0]['name']['$t']
-        title = e['title']['$t']
-        description = e['content']['$t']
-        video_id = e['id']['$t'].split('/')[-1]
-        duration = int(e['media$group']['yt$duration']['seconds']) / float(60)
-        viewcount = int(e['yt$statistics']['viewCount'])
-        entry_data = {
-            'author': author,
-            'title': title,
-            'description': description,
-            'video_id': video_id,
-            'duration': duration,
-            'viewcount': viewcount
-        }
-        my_entries.append(entry_data)
-    return my_entries
+from kano.utils import write_json
+from kano_video.youtube import search_youtube_by_keyword, search_youtube_by_user, parse_youtube_entries
 
 
 # entries = search_youtube_by_keyword(popular=True)
-entries = search_youtube_by_user('leapmotion')
+entries = search_youtube_by_user('KanoComputing')
+write_json('entries.json', entries[0])
 my_entries = parse_youtube_entries(entries)
 
 
-# from pprint import pprint
-# pprint(my_entries)
+from pprint import pprint
+pprint(my_entries[0])
