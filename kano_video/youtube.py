@@ -5,7 +5,7 @@
 #
 
 import sys
-from kano.utils import requests_get_json
+from kano.utils import requests_get_json, run_cmd
 
 
 def search_youtube_by_keyword(keyword=None, popular=False):
@@ -14,11 +14,11 @@ def search_youtube_by_keyword(keyword=None, popular=False):
         'vq': keyword,
         'racy': 'exclude',
         'orderby': 'relevance',
-        'alt': 'json'
+        'alt': 'json',
+        'max-results': 10
     }
     if popular:
         params['orderby'] = 'viewCount'
-
     success, error, data = requests_get_json(url, params=params)
     if not success:
         sys.exit(error)
@@ -30,6 +30,7 @@ def search_youtube_by_user(username):
     params = {
         'alt': 'json',
         'orderby': 'viewCount',
+        'max-results': 10
     }
     success, error, data = requests_get_json(url, params=params)
     if not success:
@@ -43,17 +44,28 @@ def parse_youtube_entries(entries):
         author = e['author'][0]['name']['$t']
         title = e['title']['$t']
         description = e['media$group']['media$description']['$t']
-        video_id = e['id']['$t'].split('/')[-1]
-        duration = int(e['media$group']['yt$duration']['seconds']) / float(60)
+        video_url = e['media$group']['media$player'][0]['url']
+        duration = int(e['media$group']['yt$duration']['seconds'])
+        duration_min = duration / 60
+        duration_sec = duration % 60
         viewcount = int(e['yt$statistics']['viewCount'])
         entry_data = {
             'author': author,
             'title': title,
             'description': description,
-            'video_id': video_id,
+            'video_url': video_url,
             'duration': duration,
+            'duration_min': duration_min,
+            'duration_sec': duration_sec,
             'viewcount': viewcount
         }
         my_entries.append(entry_data)
     return my_entries
 
+
+def get_video_file_url(video_url):
+    cmd = 'youtube-dl -g {}'.format(video_url)
+    o, e, _ = run_cmd(cmd)
+    if e:
+        return False, e
+    return True, o.strip()

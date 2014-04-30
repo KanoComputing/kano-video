@@ -1,0 +1,113 @@
+/*
+
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# This controls the styles
+
+*/
+
+/* Define colours */
+
+@define-color button_color #a0d779;
+@define-color kano_orange #ff842A;
+@define-color title_color #323232;
+@define-color subheading_color #6e6e6e;
+@define-color inactive_writing #cdcdcd;
+@define-color inactive_border #e1e1e1;
+@define-color active_writing #323232;
+@define-color active_border #ababab;
+@define-color hover_color #eeeeee;
+@define-color top_bar_active #ffffff;
+@define-color top_bar_selected #ff0000;
+@define-color top_bar_inactive #555555;
+@define-color top_bar_background #000000;
+
+/* All */
+* {
+    -GtkButton-inner-border: 0;
+    -GtkEntry-inner-border: 0;
+    -GtkComboBox-inner-border: 0;
+    -GtkMenuToolButton-inner-border: 0;
+    -GtkTreeMenu-inner-border: 0;
+    -unico-focus-border-color: transparent; /* Removes the annoying red outline on active buttons*/
+    engine: none; /* Turns off annoying borders */
+    border-width: 0px;
+    -GtkWidget-focus-line-width: 0px;
+    -GtkTreeView-vertical-separator: 0;
+    -GtkWidget-separator-width: 0;
+    -GtkWidget-separator-height: 0;
+}
+
+GtkWindow {
+    color: #ffffff;
+    background: #ffffff;
+}
+
+GtkEntry {
+    border-color: @active_border;
+    color: @active_writing;
+    border-style: solid;
+    border-width: 2px;
+    border-radius:3px;
+    padding: 10px;
+    font: Bariol 13;
+}
+GtkEntry:insensitive {
+    border-color: @inactive_border;
+    color: @inactive_writing;
+    border-style: solid;
+    border-width: 2px;
+    border-radius:3px;
+}
+GtkButton {
+    color: #ffffff;
+    background: @button_color;
+    border-radius: 3px;
+    border-color: transparent;
+}
+GtkImage {
+    background: transparent;
+}
+
+.green_event_box {
+    background: @button_color;
+    color: #ffffff;
+    border-radius: 3px;
+}
+.white_label {
+    color: #ffffff;
+    font: Bariol Bold 13;
+}
+/* The title of the current level*/
+.title {
+    color: @title_color;
+    padding-top:25px;
+    font: Bariol Bold 16;
+}
+/* Description of current project */
+.description {
+    color: @subheading_color;
+    padding-bottom: 18px;
+    font: Bariol 14;
+}
+
+/* The bar at the top that mimics the window bar */
+.top_bar_container {
+    background: #eeeeee;
+}
+.top_bar_button {
+    background: #eeeeee;
+}
+/* The title of the current level*/
+.title {
+    color: @title_color;
+    padding-top:25px;
+    font: Bariol Bold 16;
+}
+/* Description of current project */
+.description {
+    color: @subheading_color;
+    padding-bottom: 18px;
+    font: Bariol 14;
+}
