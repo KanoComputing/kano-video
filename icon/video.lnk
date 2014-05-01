@@ -1,6 +1,6 @@
 table Icon
   Caption:
-  AppID: kano-video
+  AppID: kano-vide[o]
   Command: /usr/bin/kano-video
   Singleton: true
   Icon: /usr/share/kano-desktop/icons/video.png
