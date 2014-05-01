@@ -130,7 +130,7 @@ class MainWindow(Gtk.Window):
         if open_folder_dialog:
             local_dir = self.dir_dialog()
         else:
-            local_dir = '/usr/share/kano-video/media'
+            local_dir = '/usr/share/kano-video/media/videos'
 
         files = list_dir(local_dir)
         files = [f for f in files if f[-3:] == 'mkv']
