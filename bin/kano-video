@@ -13,7 +13,7 @@ if __name__ == '__main__' and __package__ is None:
     if dir_path != '/usr':
         sys.path.insert(1, dir_path)
 
-from kano.utils import is_installed, write_file_contents
+from kano.utils import is_installed, write_file_contents, list_dir
 from kano.network import is_internet
 from kano_video.youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword, get_video_file_url
@@ -72,7 +72,7 @@ class MainWindow(Gtk.Window):
         search_bar = self.make_search_bar()
         self.grid.attach(search_bar, 0, 1, 1, 1)
 
-        self.video_list = self.make_video_list()
+        self.video_list = self.video_list_youtube()
         self.grid.attach(self.video_list, 0, 2, 1, 1)
 
     def make_top_bar(self, title):
@@ -127,27 +127,109 @@ class MainWindow(Gtk.Window):
         button.connect('clicked', self.search, None, list_by_username)
         grid.attach(button, 3, 0, 1, 1)
 
+        button = Gtk.Button('Local')
+        button.set_size_request(20, 20)
+        button.connect('clicked', self.list_local, False)
+        grid.attach(button, 4, 0, 1, 1)
+
         return grid
 
     def search(self, _button, search_keyword_entry=None, list_by_username=None):
         if search_keyword_entry and search_keyword_entry.get_text():
             self.grid.remove(self.video_list)
-            self.video_list = self.make_video_list(keyword=search_keyword_entry.get_text())
+            self.video_list = self.video_list_youtube(keyword=search_keyword_entry.get_text())
             self.grid.attach(self.video_list, 0, 2, 1, 1)
             self.show_all()
 
         elif list_by_username and list_by_username.get_text():
             self.grid.remove(self.video_list)
-            self.video_list = self.make_video_list(username=list_by_username.get_text())
+            self.video_list = self.video_list_youtube(username=list_by_username.get_text())
             self.grid.attach(self.video_list, 0, 2, 1, 1)
             self.show_all()
 
-    def make_video_list(self, keyword=None, username=None):
-        row_height = 30
+    def list_local(self, _button, open_folder_dialog=False):
+        self.grid.remove(self.video_list)
+        self.video_list = self.video_list_local()
+        self.grid.attach(self.video_list, 0, 2, 1, 1)
+        self.show_all()
 
+    def video_list_local(self):
         grid = Gtk.Grid()
         grid.set_row_spacing(10)
         grid.set_size_request(400, 400)
+
+        row_height = 30
+
+        files = list_dir('/usr/share/kano-video/media')
+        # filter mkv
+        print files
+
+        entries = None
+        if entries:
+            parsed_entries = parse_youtube_entries(entries)
+            for i, e in enumerate(parsed_entries):
+                # author
+                # description
+                # duration, duration_min, duration_sec
+                # title
+                # video_url
+                # viewcount
+
+                x_pos = 0
+
+                button = Gtk.Button('Play')
+                button.set_size_request(50, row_height)
+                button.connect('clicked', play_video, e['video_url'], False)
+                grid.attach(button, x_pos, i, 1, 1)
+                x_pos += 1
+
+                button = Gtk.Button('FS')
+                button.set_size_request(20, row_height)
+                button.connect('clicked', play_video, e['video_url'], True)
+                grid.attach(button, x_pos, i, 1, 1)
+                x_pos += 1
+
+                button = Gtk.Button('Stop')
+                button.set_size_request(20, row_height)
+                button.connect('clicked', stop_videos)
+                grid.attach(button, x_pos, i, 1, 1)
+                x_pos += 1
+
+                title_str = e['title'] if len(e['title']) <= 40 else e['title'][:37] + '...'
+                label = Gtk.Label(title_str)
+                label.set_size_request(400, row_height)
+                grid.attach(label, x_pos, i, 1, 1)
+                x_pos += 1
+
+                duration_str = '{}:{}'.format(e['duration_min'], e['duration_sec'])
+                label = Gtk.Label(duration_str)
+                label.set_size_request(50, row_height)
+                grid.attach(label, x_pos, i, 1, 1)
+                x_pos += 1
+
+                viewcount_str = '{}k'.format(int(e['viewcount'] / 1000.0))
+                label = Gtk.Label(viewcount_str)
+                label.set_size_request(50, row_height)
+                grid.attach(label, x_pos, i, 1, 1)
+                x_pos += 1
+
+                label = Gtk.Label(e['author'])
+                label.set_size_request(100, row_height)
+                grid.attach(label, x_pos, i, 1, 1)
+
+        align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
+        padding = 20
+        align.set_padding(padding, padding, padding, padding)
+        align.add(grid)
+        return align
+
+    def video_list_youtube(self, keyword=None, username=None):
+        grid = Gtk.Grid()
+        grid.set_row_spacing(10)
+        grid.set_size_request(400, 400)
+
+        row_height = 30
+        entries = None
 
         if keyword:
             entries = search_youtube_by_keyword(keyword)
