@@ -8,6 +8,8 @@ import os
 from gi.repository import Gtk
 
 from kano.utils import list_dir
+from kano.network import is_internet
+
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword
 from .icons import set_from_name
@@ -30,7 +32,10 @@ class MainWindow(Gtk.Window):
         search_bar = self.make_search_bar()
         self.grid.attach(search_bar, 0, 1, 1, 1)
 
-        self.video_list = self.video_list_youtube()
+        if is_internet():
+            self.video_list = self.video_list_youtube()
+        else:
+            self.video_list = self.video_list_local()
         self.grid.attach(self.video_list, 0, 2, 1, 1)
 
     def make_top_bar(self, title):
