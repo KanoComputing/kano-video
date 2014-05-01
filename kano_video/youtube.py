@@ -22,7 +22,8 @@ def search_youtube_by_keyword(keyword=None, popular=False):
     success, error, data = requests_get_json(url, params=params)
     if not success:
         sys.exit(error)
-    return data['feed']['entry']
+    if 'feed' in data and 'entry' in data['feed']:
+        return data['feed']['entry']
 
 
 def search_youtube_by_user(username):
@@ -35,7 +36,8 @@ def search_youtube_by_user(username):
     success, error, data = requests_get_json(url, params=params)
     if not success:
         sys.exit(error)
-    return data['feed']['entry']
+    if 'feed' in data and 'entry' in data['feed']:
+        return data['feed']['entry']
 
 
 def parse_youtube_entries(entries):
