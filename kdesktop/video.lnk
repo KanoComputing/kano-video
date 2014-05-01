@@ -1,7 +1,7 @@
 table Icon
   Caption:
   AppID: kano-video
-  #Command: /usr/bin/kano-launcher "rxvt -title 'Make Video' -e /usr/bin/make-video" "make-video"
+  Command: /usr/bin/kano-video
   Singleton: true
   Icon: /usr/share/kano-desktop/icons/video.png
   IconHover: /usr/share/kano-desktop/icons/video-hover.png
