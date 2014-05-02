@@ -2,6 +2,7 @@ bin/* /usr/bin/
 kano_video /usr/lib/python2.7/dist-packages/
 media /usr/share/kano-video/
 
+kdesktop/make-video.desktop /usr/share/applications/
 icon/video.png /usr/share/kano-desktop/icons/
 icon/video-hover.png /usr/share/kano-desktop/icons/
 icon/video.lnk /usr/share/kano-desktop/kdesk/kdesktop/
