@@ -31,11 +31,22 @@ def play_video(_button, video_url=None, localfile=None, fullscreen=False):
     print 'Launching player...'
 
     if omxplayer_present:
+        HDMI = False
+        try:
+            from kano.profile.apps import load_app_state_variable
+            HDMI = load_app_state_variable('kano-settings', 'Audio') == 'HDMI'
+        except Exception:
+            pass
+
+        hdmi_str = ''
+        if HDMI:
+            hdmi_str = '-o hdmi'
+
         if fullscreen:
-            player_cmd = 'lxterminal -e "omxplayer -b \\"{link}\\""'.format(link=link)
+            player_cmd = 'lxterminal -e "omxplayer {hdmi_str} -b \\"{link}\\""'.format(link=link, hdmi_str=hdmi_str)
         else:
             file_str = 'kano-window-tool -dno -t omxplayer -x 100 -y 100 -w 300 -h 180\n'
-            file_str += 'omxplayer --win "100 100 420 280" "{link}"\n'.format(link=link)
+            file_str += 'omxplayer {hdmi_str} --win "100 100 420 280" "{link}"\n'.format(link=link, hdmi_str=hdmi_str)
             file_path = '/tmp/omxplayer.sh'
             write_file_contents(file_path, file_str)
             player_cmd = 'lxterminal -t omxplayer -e "bash {}"'.format(file_path)
