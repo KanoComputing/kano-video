@@ -103,6 +103,27 @@ GtkGrid GtkEventBox {
     background: #eeeeee;
 }
 
+GtkGrid GtkButton.play {
+    background: #ffc498;
+}
+
+GtkGrid GtkButton.play.playing {
+    background: #8fd25e;
+}
+
+GtkGrid GtkEventBox * {
+    font-size: 11;
+}
+
+GtkGrid GtkEventBox GtkLabel.info * {
+    font-weight: bold;
+    font-size: 14;
+}
+
+GtkGrid GtkEventBox GtkGrid.info * {
+    font-weight: bold;
+}
+
 /********************************************************
  * Scrollbars                                           *
  * The design was taken from the UN5 gtk-3.0 theme      *

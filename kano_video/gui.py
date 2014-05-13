@@ -235,6 +235,7 @@ class VideoEntry(Gtk.EventBox):
 
         button = Gtk.Button('Play')
         button.set_size_request(row_height, row_height)
+        button.get_style_context().add_class('play')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
         entry_grid.attach(button, x_pos, 0, 1, 3)
         x_pos += 1
@@ -250,6 +251,7 @@ class VideoEntry(Gtk.EventBox):
         title_str = e['title'] if len(e['title']) <= 150 else e['title'][:147] + '...'
         label = Gtk.Label(title_str)
         label.set_size_request(400, row_title_height)
+        label.get_style_context().add_class('title')
         entry_grid.attach(label, x_pos, 0, 1, 1)
 
         if local is False:
@@ -260,6 +262,7 @@ class VideoEntry(Gtk.EventBox):
 
             info_grid = Gtk.Grid()
             info_grid.set_size_request(400, row_info_height)
+            info_grid.get_style_context().add_class('info')
             entry_grid.attach(info_grid, x_pos, 2, 1, 1)
 
             duration_str = 'DURATION: {}:{} |'.format(e['duration_min'], e['duration_sec'])
@@ -279,6 +282,7 @@ class VideoEntry(Gtk.EventBox):
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
         _button.set_label('Stop')
+        _button.get_style_context().add_class('playing')
         _button.disconnect(self._button_handler_id)
         self._button_handler_id = _button.connect('clicked', self._stop_handler, _url, _localfile, _fullscreen)
         Gtk.main_iteration()
@@ -286,6 +290,7 @@ class VideoEntry(Gtk.EventBox):
 
     def _stop_handler(self, _button, _url, _localfile, _fullscreen):
         _button.set_label('Play')
+        _button.get_style_context().remove_class('playing')
         _button.disconnect(self._button_handler_id)
         self._button_handler_id = _button.connect('clicked', self._play_handler, _url, _localfile, _fullscreen)
         Gtk.main_iteration()
