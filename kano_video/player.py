@@ -4,10 +4,9 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 
-import os
 import sys
 
-from kano.utils import write_file_contents, is_installed
+from kano.utils import write_file_contents, is_installed, run_bg
 from .youtube import get_video_file_url
 
 omxplayer_present = is_installed('omxplayer')
@@ -29,12 +28,12 @@ def play_video(_button, video_url=None, localfile=None, fullscreen=False):
         link = localfile
 
     print 'Launching player...'
-
     if omxplayer_present:
         HDMI = False
         try:
-            from kano.profile.apps import load_app_state_variable
-            HDMI = load_app_state_variable('kano-settings', 'Audio') == 'HDMI'
+            from kano_settings.config_file import get_setting
+            print 'audio:', get_setting('Audio')
+            HDMI = get_setting('Audio') == 'HDMI'
         except Exception:
             pass
 
@@ -56,12 +55,11 @@ def play_video(_button, video_url=None, localfile=None, fullscreen=False):
         else:
             player_cmd = 'vlc --width 700 --no-video-title-show "{link}"'.format(link=link)
 
-    print player_cmd
-    os.system(player_cmd)
+    run_bg(player_cmd)
 
 
 def stop_videos(_button):
     if omxplayer_present:
-        os.system('killall omxplayer.bin')
+        run_bg('killall omxplayer.bin')
     else:
-        os.system('killall vlc')
+        run_bg('killall vlc')
