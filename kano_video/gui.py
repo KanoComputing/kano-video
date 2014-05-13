@@ -21,6 +21,9 @@ class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title='Kano Video')
 
+        self._win_width = 600
+        self._contents_height = 400
+
         self.set_decorated(False)
         self.set_position(Gtk.WindowPosition.CENTER)
 
@@ -37,7 +40,11 @@ class MainWindow(Gtk.Window):
             self.video_list = self.video_list_youtube()
         else:
             self.video_list = self.video_list_local()
-        self.grid.attach(self.video_list, 0, 2, 1, 1)
+        self.contents = Contents(self.grid)
+        self.contents.set_contents(self.video_list)
+        self.contents.set_size_request(self._win_width, self._contents_height)
+
+        self.grid.attach(self.contents, 0, 2, 1, 1)
 
     def make_top_bar(self, title):
         height = 44
@@ -283,3 +290,36 @@ class VideoEntry(Gtk.EventBox):
         self._button_handler_id = _button.connect('clicked', self._play_handler, _url, _localfile, _fullscreen)
         Gtk.main_iteration()
         stop_videos(_button)
+
+
+class Contents(Gtk.ScrolledWindow):
+
+    def __init__(self, win):
+        Gtk.ScrolledWindow.__init__(self, hexpand=True, vexpand=True)
+        self.props.margin_top = 20
+        self.props.margin_bottom = 20
+        self.props.margin_left = 20
+        self.props.margin_right = 12
+
+        self._current = None
+        self._box = Gtk.Box(hexpand=True, vexpand=True)
+        self.add_with_viewport(self._box)
+
+        self._win = win
+
+    def get_window(self):
+        return self._win
+
+    def set_contents(self, obj):
+        for w in self._box.get_children():
+            self._box.remove(w)
+
+        obj.props.margin_right = 10
+        Gtk.Container.add(self._box, obj)
+        self._show_all(obj)
+
+    def _show_all(self, w):
+        w.show()
+        if hasattr(w, '__iter__'):
+            for c in w:
+                self._show_all(c)
