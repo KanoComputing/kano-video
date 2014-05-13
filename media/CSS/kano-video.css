@@ -41,7 +41,7 @@
 
 GtkWindow {
     color: #ffffff;
-    background: #ffffff;
+    background: #f3f3f3;
 }
 
 GtkEntry {
@@ -68,6 +68,9 @@ GtkButton {
 }
 GtkImage {
     background: transparent;
+}
+GtkGrid GtkEventBox {
+    background: #ffffff;
 }
 
 .green_event_box {

@@ -126,8 +126,6 @@ class MainWindow(Gtk.Window):
         grid.set_row_spacing(10)
         grid.set_size_request(400, 400)
 
-        row_height = 30
-
         if open_folder_dialog:
             local_dir = self.dir_dialog()
         else:
@@ -142,31 +140,13 @@ class MainWindow(Gtk.Window):
                 fullpath = os.path.join(local_dir, f)
                 filename = os.path.splitext(f)[0]
 
-                x_pos = 0
-
-                button = Gtk.Button('Play')
-                button.set_size_request(50, row_height)
-                button.connect('clicked', play_video, None, fullpath, False)
-                grid.attach(button, x_pos, i, 1, 1)
-                x_pos += 1
-
-                button = Gtk.Button('FS')
-                button.set_size_request(20, row_height)
-                button.connect('clicked', play_video, None, fullpath, True)
-                grid.attach(button, x_pos, i, 1, 1)
-                x_pos += 1
-
-                button = Gtk.Button('Stop')
-                button.set_size_request(20, row_height)
-                button.connect('clicked', stop_videos)
-                grid.attach(button, x_pos, i, 1, 1)
-                x_pos += 1
-
                 title_str = filename if len(filename) <= 40 else filename[:37] + '...'
-                label = Gtk.Label(title_str)
-                label.set_size_request(400, row_height)
-                grid.attach(label, x_pos, i, 1, 1)
-                x_pos += 1
+                e = {'title': title_str,
+                     'video_url': None,
+                     'local_path': fullpath}
+
+                entry_grid = VideoEntry(e, True)
+                grid.attach(entry_grid, 0, i, 1, 1)
 
         align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
         padding = 20
@@ -194,14 +174,9 @@ class MainWindow(Gtk.Window):
         if entries:
             parsed_entries = parse_youtube_entries(entries)
             for i, e in enumerate(parsed_entries):
-                # author
-                # description
-                # duration, duration_min, duration_sec
-                # title
-                # video_url
-                # viewcount
+                e['local_path'] = None
 
-                entry_grid = VideoEntry(e)
+                entry_grid = VideoEntry(e, False)
                 grid.attach(entry_grid, 0, i, 1, 1)
 
         align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
@@ -234,31 +209,33 @@ class MainWindow(Gtk.Window):
         return dir_path
 
 
-class VideoEntry(Gtk.Grid):
+class VideoEntry(Gtk.EventBox):
 
-    def __init__(self, e):
-        Gtk.Grid.__init__(self)
+    def __init__(self, e, local=False):
+        Gtk.EventBox.__init__(self)
 
         row_height = 110
         row_title_height = 20
         row_desc_height = 15
         row_info_height = 15
 
-        self.set_size_request(400, row_height)
+        entry_grid = Gtk.Grid()
+        self.add(entry_grid)
+
+        entry_grid.set_size_request(400, row_height)
 
         x_pos = 0
 
         button = Gtk.Button('Play')
         button.set_size_request(row_height, row_height)
-        # self._button_handler_id = button.connect('clicked', play_video, e['video_url'], None, False)
-        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], None, False)
-        self.attach(button, x_pos, 0, 1, 3)
+        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
+        entry_grid.attach(button, x_pos, 0, 1, 3)
         x_pos += 1
 
         """
         button = Gtk.Button('FS')
         button.set_size_request(20, row_height)
-        button.connect('clicked', play_video, e['video_url'], None, True)
+        button.connect('clicked', play_video, e['video_url'], e['local_path'], True)
         self.attach(button, x_pos, 0, 1, 3)
         x_pos += 1
         """
@@ -266,30 +243,32 @@ class VideoEntry(Gtk.Grid):
         title_str = e['title'] if len(e['title']) <= 150 else e['title'][:147] + '...'
         label = Gtk.Label(title_str)
         label.set_size_request(400, row_title_height)
-        self.attach(label, x_pos, 0, 1, 1)
+        entry_grid.attach(label, x_pos, 0, 1, 1)
 
-        desc_str = e['description'] if len(e['description']) <= 150 else e['description'][:37] + '...'
-        label = Gtk.Label(desc_str)
-        label.set_size_request(400, row_desc_height)
-        self.attach(label, x_pos, 1, 1, 1)
+        if local is False:
+            desc_str = e['description'] if len(e['description']) <= 150 else e['description'][:37] + '...'
+            label = Gtk.Label(desc_str)
+            label.set_size_request(400, row_desc_height)
+            entry_grid.attach(label, x_pos, 1, 1, 1)
 
-        info_grid = Gtk.Grid()
-        info_grid.set_size_request(400, row_info_height)
-        self.attach(info_grid, x_pos, 2, 1, 1)
+            info_grid = Gtk.Grid()
+            info_grid.set_size_request(400, row_info_height)
+            entry_grid.attach(info_grid, x_pos, 2, 1, 1)
 
-        duration_str = 'DURATION: {}:{}'.format(e['duration_min'], e['duration_sec'])
-        label = Gtk.Label(duration_str)
-        label.set_size_request(50, row_info_height)
-        info_grid.attach(label, 0, 0, 1, 1)
+            duration_str = 'DURATION: {}:{} |'.format(e['duration_min'], e['duration_sec'])
+            label = Gtk.Label(duration_str)
+            label.set_size_request(50, row_info_height)
+            info_grid.attach(label, 0, 0, 1, 1)
 
-        viewcount_str = 'VIEWS: {}K'.format(int(e['viewcount'] / 1000.0))
-        label = Gtk.Label(viewcount_str)
-        label.set_size_request(50, row_info_height)
-        info_grid.attach(label, 1, 0, 1, 1)
+            viewcount_str = 'VIEWS: {}K |'.format(int(e['viewcount'] / 1000.0))
+            label = Gtk.Label(viewcount_str)
+            label.set_size_request(50, row_info_height)
+            info_grid.attach(label, 1, 0, 1, 1)
 
-        label = Gtk.Label(e['author'])
-        label.set_size_request(100, row_height)
-        info_grid.attach(label, 2, 0, 1, 1)
+            author_str = 'AUTHOR: {}'.format(e['author'])
+            label = Gtk.Label(author_str)
+            label.set_size_request(100, row_height)
+            info_grid.attach(label, 2, 0, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
         _button.set_label('Stop')
