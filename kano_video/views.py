@@ -73,13 +73,13 @@ class YoutubeView(View):
 
 class PlaylistCollectionView(View):
 
-    def __init__(self):
+    def __init__(self, playlist_cb):
         super(PlaylistCollectionView, self).__init__()
 
         self._header = TopBar('Playlist')
         self._grid.attach(self._header, 0, 0, 1, 1)
 
-        self._vids = PlaylistList(playlistCollection.collection)
+        self._vids = PlaylistList(playlistCollection.collection, playlist_cb)
         self._grid.attach(self._vids, 0, 1, 1, 1)
 
 

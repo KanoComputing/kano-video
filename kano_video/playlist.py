@@ -50,8 +50,8 @@ playlistCollection = PlaylistCollection('playlists')
 
 
 def add_playlist_handler(_, playlist):
-    playlistCollection.add(playlist)
+    playlistCollection.collection.add(playlist)
 
 
-def add_to_playlist_handler(_, playlist, video):
-    playlistCollection[playlist].add(video)
+def add_to_playlist_handler(_, playlist_name, video):
+    playlistCollection.collection[playlist_name].add(video)

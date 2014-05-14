@@ -51,11 +51,11 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_playlist_collection(self, _button):
-        self.view = PlaylistCollectionView()
+        self.view = PlaylistCollectionView(self.switch_to_playlist)
         self.contents.set_contents(self.view)
 
-    def switch_to_playlist(self, _button):
-        self.view = PlaylistView()
+    def switch_to_playlist(self, _button, playlist):
+        self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
     def switch_to_youtube(self, _button):

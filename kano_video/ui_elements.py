@@ -7,7 +7,7 @@ from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword
 from .icons import set_from_name
-from .playlist import Playlist
+from .playlist import Playlist, add_to_playlist_handler
 
 
 class KanoWidget(Gtk.EventBox):
@@ -239,7 +239,7 @@ class VideoEntry(KanoWidget):
         button = Gtk.Button('Add to playlist')
         button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
         button.get_style_context().add_class('play')
-        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
+        self._button_handler_id = button.connect('clicked', add_to_playlist_handler, 'test.json', e)
         info_grid.attach(button, 2, 1, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
@@ -443,12 +443,12 @@ class PlayModeBar(KanoWidget):
 
 class PlaylistList(KanoWidget):
 
-    def __init__(self, playlists):
+    def __init__(self, playlists, playlist_cb):
         super(PlaylistList, self).__init__()
 
         i = 0
         for name, p in playlists.iteritems():
             button = Gtk.Button(name)
-            # button.connect('clicked', playlist_cb, p, False)
+            button.connect('clicked', playlist_cb, name)
             self._grid.attach(button, 0, i, 1, 1)
             i += 1
