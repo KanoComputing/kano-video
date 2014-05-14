@@ -9,11 +9,25 @@ from .youtube import search_youtube_by_user, parse_youtube_entries, \
 from .icons import set_from_name
 
 
+class KanoWidget(Gtk.EventBox):
+
+    def __init__(self):
+        Gtk.EventBox.__init__(self)
+
+        self._grid = Gtk.Grid()
+        self._grid.set_row_spacing(10)
+        self._grid.set_column_spacing(10)
+        self._grid.set_size_request(400, 30)
+
+        self.add(self._grid)
+
+
 class TopBar(Gtk.EventBox):
     _TOP_BAR_HEIGHT = 44
 
     def __init__(self, title):
-        Gtk.EventBox.__init__(self)
+        super(TopBar, self).__init__(hexpand=True, vexpand=True)
+
         self.get_style_context().add_class('top_bar_container')
 
         box = Gtk.Box()
@@ -69,27 +83,33 @@ class MenuBar(Gtk.EventBox):
     _MENU_BAR_HEIGHT = 44
     _BUTTON_WIDTH = 150
 
-    def __init__(self, library_cb, playlists_cb, youtube_cb):
+    def __init__(self, home_cb, library_cb, playlists_cb, youtube_cb):
         Gtk.EventBox.__init__(self)
 
         grid = Gtk.Grid()
         grid.set_row_spacing(10)
+        grid.set_column_spacing(10)
         grid.set_size_request(-1, self._MENU_BAR_HEIGHT)
+
+        button = Gtk.Button('Home')
+        button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
+        button.connect('clicked', home_cb)
+        grid.attach(button, 0, 0, 1, 1)
 
         button = Gtk.Button('Library')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', library_cb)
-        grid.attach(button, 0, 0, 1, 1)
+        grid.attach(button, 1, 0, 1, 1)
 
         button = Gtk.Button('Playlists')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', playlists_cb)
-        grid.attach(button, 1, 0, 1, 1)
+        grid.attach(button, 2, 0, 1, 1)
 
         button = Gtk.Button('Youtube')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', youtube_cb)
-        grid.attach(button, 2, 0, 1, 1)
+        grid.attach(button, 3, 0, 1, 1)
 
         self.add(grid)
 
@@ -97,7 +117,8 @@ class MenuBar(Gtk.EventBox):
 class Contents(Gtk.ScrolledWindow):
 
     def __init__(self, win):
-        Gtk.ScrolledWindow.__init__(self, hexpand=True, vexpand=True)
+        super(Contents, self).__init__(hexpand=True, vexpand=True)
+
         self.props.margin_top = 20
         self.props.margin_bottom = 20
         self.props.margin_left = 20
@@ -127,20 +148,17 @@ class Contents(Gtk.ScrolledWindow):
                 self._show_all(c)
 
 
-class VideoEntry(Gtk.EventBox):
+class VideoEntry(KanoWidget):
 
-    def __init__(self, e, local=False):
-        Gtk.EventBox.__init__(self)
+    def __init__(self, e):
+        super(VideoEntry, self).__init__()
 
         row_height = 110
         row_title_height = 20
         row_desc_height = 15
         row_info_height = 15
 
-        entry_grid = Gtk.Grid()
-        self.add(entry_grid)
-
-        entry_grid.set_size_request(-1, row_height)
+        self._grid.set_size_request(-1, row_height)
 
         x_pos = 0
 
@@ -148,7 +166,7 @@ class VideoEntry(Gtk.EventBox):
         button.set_size_request(row_height, row_height)
         button.get_style_context().add_class('play')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
-        entry_grid.attach(button, x_pos, 0, 1, 3)
+        self._grid.attach(button, x_pos, 0, 1, 3)
         x_pos += 1
 
         """
@@ -163,18 +181,18 @@ class VideoEntry(Gtk.EventBox):
         label = Gtk.Label(title_str)
         label.set_size_request(-1, row_title_height)
         label.get_style_context().add_class('title')
-        entry_grid.attach(label, x_pos, 0, 1, 1)
+        self._grid.attach(label, x_pos, 0, 1, 1)
 
-        if local is False:
+        if e['local_path'] is None:
             desc_str = e['description'] if len(e['description']) <= 70 else e['description'][:67] + '...'
             label = Gtk.Label(desc_str)
             label.set_size_request(-1, row_desc_height)
-            entry_grid.attach(label, x_pos, 1, 1, 1)
+            self._grid.attach(label, x_pos, 1, 1, 1)
 
             info_grid = Gtk.Grid()
             info_grid.set_size_request(-1, row_info_height)
             info_grid.get_style_context().add_class('info')
-            entry_grid.attach(info_grid, x_pos, 2, 1, 1)
+            self._grid.attach(info_grid, x_pos, 2, 1, 1)
 
             duration_str = 'DURATION: {}:{} |'.format(e['duration_min'], e['duration_sec'])
             label = Gtk.Label(duration_str)
@@ -212,7 +230,7 @@ class VideoList(Gtk.EventBox):
     _LIST_HEIGHT = 400
 
     def __init__(self):
-        Gtk.EventBox.__init__(self)
+        super(VideoList, self).__init__()
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)
@@ -229,7 +247,7 @@ class VideoList(Gtk.EventBox):
 class VideoListLocal(VideoList):
 
     def __init__(self, open_folder_dialog=False):
-        VideoList.__init__(self)
+        super(VideoListLocal, self).__init__()
 
         if open_folder_dialog:
             local_dir = self.dir_dialog()
@@ -250,14 +268,14 @@ class VideoListLocal(VideoList):
                      'video_url': None,
                      'local_path': fullpath}
 
-                entry = VideoEntry(e, True)
+                entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)
 
 
 class VideoListYoutube(VideoList):
 
     def __init__(self, keyword=None, username=None):
-        VideoList.__init__(self)
+        super(VideoListYoutube, self).__init__()
 
         entries = None
 
@@ -276,32 +294,86 @@ class VideoListYoutube(VideoList):
             for i, e in enumerate(parsed_entries):
                 e['local_path'] = None
 
-                entry = VideoEntry(e, False)
+                entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i, 1, 1)
 
 
-class SearchBar(Gtk.EventBox):
+class SearchResultsBar(KanoWidget):
+
+    def __init__(self, search_keyword, result_count):
+        super(SearchResultsBar, self).__init__()
+
+        keyword_str = 'Showing results for "{}"'.format(search_keyword)
+        keyword = Gtk.Label(keyword_str)
+        keyword.set_size_request(100, 20)
+        self._grid.attach(keyword, 0, 0, 1, 1)
+
+        count_str = '{} videos'.format(result_count)
+        count = Gtk.Label(count_str)
+        keyword.set_size_request(100, 20)
+        self._grid.attach(count, 0, 1, 1, 1)
+
+
+class SearchBar(KanoWidget):
 
     def __init__(self, search_cb):
-        Gtk.EventBox.__init__(self)
-
-        grid = Gtk.Grid()
-        grid.set_row_spacing(10)
-        grid.set_size_request(400, 30)
+        super(SearchBar, self).__init__()
 
         search_keyword_entry = Gtk.Entry()
         search_keyword_entry.props.placeholder_text = 'Search Youtube'
         search_keyword_entry.set_size_request(100, 20)
-        grid.attach(search_keyword_entry, 0, 0, 1, 1)
+        self._grid.attach(search_keyword_entry, 0, 0, 1, 1)
 
-        button = Gtk.Button('Search')
+        button = Gtk.Button('SEARCH')
         button.set_size_request(20, 20)
-        button.connect('clicked', search_cb, search_keyword_entry, None)
-        grid.attach(button, 1, 0, 1, 1)
+        button.connect('clicked', search_cb, search_keyword_entry, False)
+        self._grid.attach(button, 1, 0, 1, 1)
 
-        button = Gtk.Button('Search Users')
+        button = Gtk.Button('SEARCH USERS')
         button.set_size_request(20, 20)
-        button.connect('clicked', search_cb, None, search_keyword_entry)
-        grid.attach(button, 3, 0, 1, 1)
+        button.connect('clicked', search_cb, search_keyword_entry, True)
+        self._grid.attach(button, 3, 0, 1, 1)
 
-        self.add(grid)
+
+class AddVideoBar(KanoWidget):
+
+    def __init__(self):
+        super(AddVideoBar, self).__init__()
+
+        title_str = 'Your library'
+        title = Gtk.Label(title_str)
+        title.set_size_request(430, 20)
+        self._grid.attach(title, 0, 0, 1, 1)
+
+        button = Gtk.Button('ADD MEDIA')
+        button.set_size_request(20, 20)
+        # button.connect('clicked', search_cb, search_keyword_entry, False)
+        self._grid.attach(button, 1, 0, 1, 1)
+
+
+class PlayModeBar(KanoWidget):
+
+    def __init__(self):
+        super(PlayModeBar, self).__init__()
+
+        title_str = 'Play mode'
+        title = Gtk.Label(title_str)
+        title.set_size_request(310, 20)
+        self._grid.attach(title, 0, 0, 1, 1)
+
+        fullscreen_str = 'Fullscreen'
+        fullscreen = Gtk.Label(fullscreen_str)
+        fullscreen.set_size_request(70, 20)
+        self._grid.attach(fullscreen, 1, 0, 1, 1)
+
+        self._switch = Gtk.Switch()
+        self._switch.set_size_request(20, 20)
+        self._grid.attach(self._switch, 2, 0, 1, 1)
+
+        windowed_str = 'In player'
+        windowed = Gtk.Label(windowed_str)
+        windowed.set_size_request(70, 20)
+        self._grid.attach(windowed, 4, 0, 1, 1)
+
+    def is_fullscreen(self):
+        return not self._switch.get_active()

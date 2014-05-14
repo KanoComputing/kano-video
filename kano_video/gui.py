@@ -10,7 +10,7 @@ from gi.repository import Gtk
 from kano.network import is_internet
 
 from .ui_elements import TopBar, MenuBar, Contents
-from .views import LocalView, YoutubeView
+from .views import HomeView, LocalView, YoutubeView, PlaylistView
 
 
 class MainWindow(Gtk.Window):
@@ -30,12 +30,12 @@ class MainWindow(Gtk.Window):
         top_bar = TopBar('Kano Video')
         self.grid.attach(top_bar, 0, 0, 1, 1)
 
-        menu_bar = MenuBar(self.switch_to_local, self.switch_to_local, self.switch_to_youtube)
+        menu_bar = MenuBar(self.switch_to_home, self.switch_to_local, self.switch_to_playlist, self.switch_to_youtube)
         self.grid.attach(menu_bar, 0, 1, 1, 1)
+
         if is_internet():
-            self.view = YoutubeView()
-        else:
-            self.view = LocalView()
+            pass
+        self.view = HomeView()
 
         self.contents = Contents(self.grid)
         self.contents.set_contents(self.view)
@@ -43,12 +43,20 @@ class MainWindow(Gtk.Window):
 
         self.grid.attach(self.contents, 0, 2, 1, 1)
 
-    def switch_to_local(self, _button):
-        self.view = LocalView()
+    def switch_to_home(self, _button):
+        self.view = HomeView()
+        self.contents.set_contents(self.view)
+
+    def switch_to_playlist(self, _button):
+        self.view = PlaylistView()
         self.contents.set_contents(self.view)
 
     def switch_to_youtube(self, _button):
         self.view = YoutubeView()
+        self.contents.set_contents(self.view)
+
+    def switch_to_local(self, _button):
+        self.view = LocalView()
         self.contents.set_contents(self.view)
 
     def dir_dialog(self):
