@@ -9,7 +9,8 @@ from gi.repository import Gtk
 
 from kano.network import is_internet
 
-from .ui_elements import TopBar, MenuBar, Contents
+from .general_ui import Contents
+from .bar_ui import TopBar, MenuBar
 from .views import HomeView, LocalView, YoutubeView, \
     PlaylistView, PlaylistCollectionView
 

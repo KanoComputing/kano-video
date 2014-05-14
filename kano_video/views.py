@@ -1,8 +1,9 @@
 from gi.repository import Gtk
 
-from .ui_elements import TopBar, VideoList, VideoListLocal, \
-    VideoListYoutube, SearchBar, SearchResultsBar, \
-    AddVideoBar, PlayModeBar, PlaylistList
+from .bar_ui import TopBar, SearchBar, SearchResultsBar, \
+    AddVideoBar, PlayModeBar
+from .video_ui import VideoList, VideoListLocal, VideoListYoutube
+from .playlist_ui import PlaylistList
 from .playlist import playlistCollection
 
 
