@@ -1,6 +1,7 @@
 from gi.repository import Gtk, Gdk, Pango
 
 from .icons import set_from_name
+from .playlist import playlistCollection
 
 from .general_ui import KanoWidget
 
@@ -58,6 +59,8 @@ class TopBar(Gtk.EventBox):
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
         Gdk.flush()
+
+        playlistCollection.save()
 
         Gtk.main_quit()
 

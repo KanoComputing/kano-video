@@ -45,6 +45,10 @@ class PlaylistCollection(object):
     def add(self, playlist):
         self.collection[playlist.name] = playlist
 
+    def save(self):
+            for _, playlist in self.collection.iteritems():
+                playlist.save()
+
 
 playlistCollection = PlaylistCollection('playlists')
 
