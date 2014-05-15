@@ -87,6 +87,8 @@ class MenuBar(Gtk.EventBox):
     def __init__(self, home_cb, library_cb, playlists_cb, youtube_cb):
         Gtk.EventBox.__init__(self)
 
+        self.get_style_context().add_class('menu_bar')
+
         grid = Gtk.Grid()
         grid.set_row_spacing(10)
         grid.set_column_spacing(10)
@@ -119,6 +121,8 @@ class Contents(Gtk.ScrolledWindow):
 
     def __init__(self, win):
         super(Contents, self).__init__(hexpand=True, vexpand=True)
+
+        self.get_style_context().add_class('contents')
 
         self.props.margin_top = 20
         self.props.margin_bottom = 20
@@ -180,38 +184,56 @@ class VideoEntry(KanoWidget):
 
         title_str = e['title'] if len(e['title']) <= 70 else e['title'][:67] + '...'
         label = Gtk.Label(title_str)
-        label.set_size_request(-1, row_title_height)
+        label.set_size_request(-1, self._TITLE_HEIGHT)
         label.get_style_context().add_class('title')
         self._grid.attach(label, x_pos, 0, 1, 1)
+
+        info_grid = Gtk.Grid()
+        info_grid.set_size_request(-1, self._INFO_HEIGHT)
+        info_grid.get_style_context().add_class('info')
+        self._grid.attach(info_grid, x_pos, 2, 1, 1)
 
         if e['local_path'] is None:
             desc_str = e['description'] if len(e['description']) <= 70 else e['description'][:67] + '...'
             label = Gtk.Label(desc_str)
-            label.set_size_request(-1, row_desc_height)
+            label.set_size_request(-1, self._DESC_HEIGHT)
             self._grid.attach(label, x_pos, 1, 1, 1)
 
-            info_grid = Gtk.Grid()
-            info_grid.set_size_request(-1, row_info_height)
-            info_grid.get_style_context().add_class('info')
-            self._grid.attach(info_grid, x_pos, 2, 1, 1)
-
-            duration_str = 'DURATION: {}:{} |'.format(e['duration_min'], e['duration_sec'])
+            duration_str = 'DURATION: {}:{}'.format(e['duration_min'], e['duration_sec'])
             label = Gtk.Label(duration_str)
-            label.set_size_request(50, row_info_height)
+            label.set_size_request(50, self._INFO_HEIGHT)
             info_grid.attach(label, 0, 0, 1, 1)
 
-            viewcount_str = 'VIEWS: {}K |'.format(int(e['viewcount'] / 1000.0))
+            info_grid.attach(Spacer(), 1, 0, 1, 1)
+
+            viewcount_str = 'VIEWS: {}K'.format(int(e['viewcount'] / 1000.0))
             label = Gtk.Label(viewcount_str)
-            label.set_size_request(50, row_info_height)
-            info_grid.attach(label, 1, 0, 1, 1)
+            label.set_size_request(50, self._INFO_HEIGHT)
+            info_grid.attach(label, 2, 0, 1, 1)
+
+            info_grid.attach(Spacer(), 3, 0, 1, 1)
 
             author_str = 'AUTHOR: {}'.format(e['author'])
             label = Gtk.Label(author_str)
-            label.set_size_request(100, row_height)
-            info_grid.attach(label, 2, 0, 1, 1)
+            label.set_size_request(100, self._INFO_HEIGHT)
+            info_grid.attach(label, 4, 0, 1, 1)
+
+        button = Gtk.Button('Watch video')
+        button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
+        button.get_style_context().add_class('play')
+        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
+        info_grid.attach(button, 0, 1, 1, 1)
+
+        info_grid.attach(Spacer(), 1, 1, 1, 1)
+
+        button = Gtk.Button('Add to playlist')
+        button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
+        button.get_style_context().add_class('play')
+        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
+        info_grid.attach(button, 2, 1, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
-        _button.set_label('Stop')
+        _button.set_label('Stop video')
         _button.get_style_context().add_class('playing')
         _button.disconnect(self._button_handler_id)
         self._button_handler_id = _button.connect('clicked', self._stop_handler, _url, _localfile, _fullscreen)
@@ -219,7 +241,7 @@ class VideoEntry(KanoWidget):
         play_video(_button, _url, _localfile, _fullscreen)
 
     def _stop_handler(self, _button, _url, _localfile, _fullscreen):
-        _button.set_label('Play')
+        _button.set_label('Watch video')
         _button.get_style_context().remove_class('playing')
         _button.disconnect(self._button_handler_id)
         self._button_handler_id = _button.connect('clicked', self._play_handler, _url, _localfile, _fullscreen)
@@ -232,6 +254,8 @@ class VideoList(Gtk.EventBox):
 
     def __init__(self):
         super(VideoList, self).__init__()
+
+        self.get_style_context().add_class('video_list')
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)
@@ -249,6 +273,8 @@ class VideoListLocal(VideoList):
 
     def __init__(self, open_folder_dialog=False):
         super(VideoListLocal, self).__init__()
+
+        self.get_style_context().add_class('video_list_local')
 
         if open_folder_dialog:
             local_dir = self.dir_dialog()
@@ -278,6 +304,8 @@ class VideoListYoutube(VideoList):
     def __init__(self, keyword=None, username=None):
         super(VideoListYoutube, self).__init__()
 
+        self.get_style_context().add_class('video_list_youtube')
+
         entries = None
 
         if keyword:
@@ -304,6 +332,8 @@ class SearchResultsBar(KanoWidget):
     def __init__(self, search_keyword, result_count):
         super(SearchResultsBar, self).__init__()
 
+        self.get_style_context().add_class('search_results_bar')
+
         keyword_str = 'Showing results for "{}"'.format(search_keyword)
         keyword = Gtk.Label(keyword_str)
         keyword.set_size_request(100, 20)
@@ -319,6 +349,8 @@ class SearchBar(KanoWidget):
 
     def __init__(self, search_cb):
         super(SearchBar, self).__init__()
+
+        self.get_style_context().add_class('search_bar')
 
         search_keyword_entry = Gtk.Entry()
         search_keyword_entry.props.placeholder_text = 'Search Youtube'
@@ -341,8 +373,12 @@ class AddVideoBar(KanoWidget):
     def __init__(self):
         super(AddVideoBar, self).__init__()
 
+        self.get_style_context().add_class('add_video_bar')
+
         title_str = 'Your library'
         title = Gtk.Label(title_str)
+        title.get_style_context().add_class('title')
+        title.set_alignment(0, 0.5)
         title.set_size_request(430, 20)
         self._grid.attach(title, 0, 0, 1, 1)
 
@@ -357,8 +393,12 @@ class PlayModeBar(KanoWidget):
     def __init__(self):
         super(PlayModeBar, self).__init__()
 
+        self.get_style_context().add_class('play_mode_bar')
+
         title_str = 'Play mode'
         title = Gtk.Label(title_str)
+        title.get_style_context().add_class('title')
+        title.set_alignment(0, 0.5)
         title.set_size_request(310, 20)
         self._grid.attach(title, 0, 0, 1, 1)
 
