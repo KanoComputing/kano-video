@@ -319,7 +319,7 @@ class VideoListLocal(VideoList):
 
 class VideoListYoutube(VideoList):
 
-    def __init__(self, keyword=None, username=None):
+    def __init__(self, keyword=None, username=None, playlist=None):
         super(VideoListYoutube, self).__init__()
 
         self.get_style_context().add_class('video_list_youtube')
@@ -332,6 +332,9 @@ class VideoListYoutube(VideoList):
         elif username:
             entries = search_youtube_by_user(username)
             print 'listing by username: ' + username
+        elif playlist:
+            entries = playlist
+            print 'listing playlist: ' + playlist
         else:
             entries = search_youtube_by_user('KanoComputing')
             print 'listing default videos by KanoComputing'
