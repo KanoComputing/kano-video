@@ -22,6 +22,8 @@
 @define-color top_bar_selected #ff0000;
 @define-color top_bar_inactive #555555;
 @define-color top_bar_background #000000;
+@define-color bar_background #e5e5e5;
+@define-color menu_bar_background #fccf43;
 
 /* All */
 * {
@@ -89,15 +91,26 @@ GtkImage {
 }
 
 .menu_bar {
-    background: #9e9e9e;
+    background: @menu_bar_background;
+    font: Bariol Bold 16;
+    color: #3b310c;
 }
 
 .menu_bar GtkButton {
     background: transparent;
+    padding: 0;
+}
+
+.menu_bar .search_bar GtkButton {
+    background: #b6952d;
+}
+
+.menu_bar .search_bar GtkButton * {
+    color: #ffffff;
 }
 
 .play_mode_bar {
-    background: #909090;
+    background: @bar_background;
 }
 
 GtkLabel.title {

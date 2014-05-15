@@ -45,16 +45,13 @@ class YoutubeView(View):
     def __init__(self):
         super(YoutubeView, self).__init__()
 
-        self._header = SearchBar(self._search_handler)
-        self._grid.attach(self._header, 0, 0, 1, 1)
-
         self._play_mode = PlayModeBar()
-        self._grid.attach(self._play_mode, 0, 1, 1, 1)
+        self._grid.attach(self._play_mode, 0, 0, 1, 1)
 
         self._list = VideoListYoutube()
-        self._grid.attach(self._list, 0, 2, 1, 1)
+        self._grid.attach(self._list, 0, 1, 1, 1)
 
-    def _search_handler(self, _button, search_keyword=None, users=False):
+    def search_handler(self, _button, search_keyword=None, users=False):
         if search_keyword and search_keyword.get_text():
             self._grid.remove(self._list)
             if users is False:

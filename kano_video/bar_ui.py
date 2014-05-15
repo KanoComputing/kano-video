@@ -3,7 +3,7 @@ from gi.repository import Gtk, Gdk, Pango
 from .icons import set_from_name
 from .playlist import playlistCollection
 
-from .general_ui import KanoWidget
+from .general_ui import KanoWidget, Spacer
 
 
 class TopBar(Gtk.EventBox):
@@ -66,10 +66,10 @@ class TopBar(Gtk.EventBox):
 
 
 class MenuBar(Gtk.EventBox):
-    _MENU_BAR_HEIGHT = 44
+    _MENU_BAR_HEIGHT = 66
     _BUTTON_WIDTH = 150
 
-    def __init__(self, home_cb, library_cb, playlists_cb, youtube_cb):
+    def __init__(self, home_cb, library_cb, playlists_cb, youtube_cb, search_cb):
         Gtk.EventBox.__init__(self)
 
         self.get_style_context().add_class('menu_bar')
@@ -79,7 +79,10 @@ class MenuBar(Gtk.EventBox):
         grid.set_column_spacing(10)
         grid.set_size_request(-1, self._MENU_BAR_HEIGHT)
 
-        button = Gtk.Button('Home')
+        home_img = Gtk.Image()
+        home_img.set_from_file('media/images/icons/home.png')
+        button = Gtk.Button()
+        button.add(home_img)
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', home_cb)
         grid.attach(button, 0, 0, 1, 1)
@@ -94,12 +97,54 @@ class MenuBar(Gtk.EventBox):
         button.connect('clicked', playlists_cb)
         grid.attach(button, 2, 0, 1, 1)
 
+        grid.attach(Spacer(), 3, 0, 1, 1)
+
         button = Gtk.Button('Youtube')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', youtube_cb)
-        grid.attach(button, 3, 0, 1, 1)
+        grid.attach(button, 4, 0, 1, 1)
+
+        searchBar = SearchBar(search_cb)
+        grid.attach(searchBar, 5, 0, 1, 1)
+
+        # Close button
+        cross_icon = set_from_name('cross')
+
+        self._close_button = Gtk.Button()
+        self._close_button.set_image(cross_icon)
+        self._close_button.props.margin_right = 2
+        self._close_button.set_can_focus(False)
+        self._close_button.get_style_context().add_class('top_bar_button')
+        self._close_button.get_style_context().add_class('no_border')
+
+        self._close_button.connect('clicked', self._close_button_click)
+        self._close_button.connect('enter-notify-event',
+                                   self._close_button_mouse_enter)
+        self._close_button.connect('leave-notify-event',
+                                   self._close_button_mouse_leave)
+
+        grid.attach(self._close_button, 6, 0, 1, 1)
 
         self.add(grid)
+
+    def _close_button_mouse_enter(self, button, event):
+        # Change the cursor to hour Glass
+        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND1)
+        self.get_root_window().set_cursor(cursor)
+
+    def _close_button_mouse_leave(self, button, event):
+        # Set the cursor to normal Arrow
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
+
+    def _close_button_click(self, event):
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
+        Gdk.flush()
+
+        playlistCollection.save()
+
+        Gtk.main_quit()
 
 
 class SearchResultsBar(KanoWidget):
@@ -137,10 +182,12 @@ class SearchBar(KanoWidget):
         button.connect('clicked', search_cb, search_keyword_entry, False)
         self._grid.attach(button, 1, 0, 1, 1)
 
+        """
         button = Gtk.Button('SEARCH USERS')
         button.set_size_request(20, 20)
         button.connect('clicked', search_cb, search_keyword_entry, True)
         self._grid.attach(button, 3, 0, 1, 1)
+        """
 
 
 class AddVideoBar(KanoWidget):

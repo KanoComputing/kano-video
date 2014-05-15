@@ -8,9 +8,10 @@ import os
 from gi.repository import Gtk
 
 from kano.network import is_internet
+from .playlist import playlistCollection
 
 from .general_ui import Contents
-from .bar_ui import TopBar, MenuBar
+from .bar_ui import MenuBar
 from .views import HomeView, LocalView, YoutubeView, \
     PlaylistView, PlaylistCollectionView
 
@@ -30,12 +31,10 @@ class MainWindow(Gtk.Window):
         self.grid = Gtk.Grid()
         self.add(self.grid)
 
-        top_bar = TopBar('Kano Video')
-        self.grid.attach(top_bar, 0, 0, 1, 1)
-
         menu_bar = MenuBar(self.switch_to_home, self.switch_to_local,
-                           self.switch_to_playlist_collection, self.switch_to_youtube)
-        self.grid.attach(menu_bar, 0, 1, 1, 1)
+                           self.switch_to_playlist_collection, self.switch_to_youtube,
+                           self.switch_to_youtube)
+        self.grid.attach(menu_bar, 0, 0, 1, 1)
 
         if is_internet():
             pass
@@ -45,7 +44,9 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
         self.contents.set_size_request(self._win_width, self._contents_height)
 
-        self.grid.attach(self.contents, 0, 2, 1, 1)
+        self.grid.attach(self.contents, 0, 1, 1, 1)
+
+        self.connect('delete-event', self.on_close)
 
     def switch_to_home(self, _button):
         self.view = HomeView()
@@ -59,13 +60,18 @@ class MainWindow(Gtk.Window):
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
-    def switch_to_youtube(self, _button):
+    def switch_to_youtube(self, _button, search_keyword=None, users=False):
         self.view = YoutubeView()
+        self.view.search_handler(_button, search_keyword, users)
         self.contents.set_contents(self.view)
 
     def switch_to_local(self, _button):
         self.view = LocalView()
         self.contents.set_contents(self.view)
+
+    def on_close(self, widget=None, event=None):
+        playlistCollection.save()
+        Gtk.main_quit()
 
     def dir_dialog(self):
         dialog = Gtk.FileChooserDialog(
