@@ -7,12 +7,13 @@ from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword
 from .icons import set_from_name
+from .playlist import Playlist
 
 
 class KanoWidget(Gtk.EventBox):
 
     def __init__(self):
-        Gtk.EventBox.__init__(self)
+        super(KanoWidget, self).__init__(hexpand=True)
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)

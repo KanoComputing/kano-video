@@ -320,3 +320,44 @@ GtkGrid GtkEventBox GtkGrid.info * {
     border-color: transparent;
     border-width: 1px;
 }
+
+/* Custom slider CSS */
+GtkSwitch {
+    -GtkSwitch-slider-length: 5px;
+    -GtkRange-slider-width: 5px;
+    -GtkRange-trough-border: 0;
+    -GtkScale-slider-length: 5px;
+    /*-GtkWidget-focus-line-width: 5;*/ /* Should be 0 */
+    /*-GtkSwitch-value-spacing: 7;*/
+    -GtkSwitch-trough-height: 5px;
+    -GtkSwitch-trough-length: 5px;
+    -GtkSwitch-slider-length: 5px;
+    -GtkSwitch-slider-width: 5px;
+    -GtkSwitch-trough-border: 0px;
+    -GtkRange-trough-height: 5px;
+    -GtkRange-trough-length: 5px;
+    -GtkRange-slider-length: 5px;
+    -GtkRange-slider-width: 5px;
+    -GtkRange-trough-border: 0px;
+    -GtkBorder-trough-height: 5px;
+    -GtkBorder-trough-length: 5px;
+    -GtkBorder-slider-length: 5px;
+    -GtkBorder-slider-width: 5px;
+    -GtkBorder-trough-border: 0px;
+}
+
+GtkSwitch.trough {
+    border-radius: 10px;
+    background: @button_color;
+    color: @button_color;
+    font: Bariol 5;
+}
+
+GtkSwitch.slider {
+    border-radius: 10px;
+    background: #ffffff;
+    border-color: @button_color;
+    border-width: 1px;
+    border-style: solid;
+    /*padding: 6px;*/
+}
