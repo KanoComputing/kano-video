@@ -69,9 +69,6 @@ GtkButton {
 GtkImage {
     background: transparent;
 }
-GtkGrid GtkEventBox {
-    background: #ffffff;
-}
 
 .green_event_box {
     background: @button_color;
@@ -82,18 +79,6 @@ GtkGrid GtkEventBox {
     color: #ffffff;
     font: Bariol Bold 13;
 }
-/* The title of the current level*/
-.title {
-    color: @title_color;
-    padding-top:25px;
-    font: Bariol Bold 16;
-}
-/* Description of current project */
-.description {
-    color: @subheading_color;
-    padding-bottom: 18px;
-    font: Bariol 14;
-}
 
 /* The bar at the top that mimics the window bar */
 .top_bar_container {
@@ -103,25 +88,63 @@ GtkGrid GtkEventBox {
     background: #eeeeee;
 }
 
-GtkGrid GtkButton.play {
+.menu_bar {
+    background: #9e9e9e;
+}
+
+.menu_bar GtkButton {
+    background: transparent;
+}
+
+.play_mode_bar {
+    background: #909090;
+}
+
+GtkLabel.title {
+    color: @title_color;
+    padding-top:25px;
+    font: Bariol Bold 16;
+}
+
+.video_entry GtkButton.play {
     background: #ffc498;
 }
 
-GtkGrid GtkButton.play.playing {
+.video_entry GtkButton.play.playing {
     background: #8fd25e;
 }
 
-GtkGrid GtkEventBox * {
+.video_entry * {
     font-size: 11;
 }
 
-GtkGrid GtkEventBox GtkLabel.info * {
+.video_entry GtkGrid.info * {
     font-weight: bold;
-    font-size: 14;
 }
 
-GtkGrid GtkEventBox GtkGrid.info * {
+.video_entry GtkGrid.info GtkButton.play {
+    background: transparent;
+}
+
+.video_entry {
+    background: #ffffff;
+}
+
+.video_entry GtkLabel.title {
+    color: @title_color;
+    padding-top:25px;
+    font: Bariol Bold 16;
+}
+
+.video_entry GtkLabel.description {
+    color: @subheading_color;
+    padding-bottom: 18px;
+    font: Bariol 14;
+}
+
+.video_entry GtkLabel.info * {
     font-weight: bold;
+    font-size: 14;
 }
 
 /********************************************************
