@@ -153,6 +153,15 @@ class Contents(Gtk.ScrolledWindow):
                 self._show_all(c)
 
 
+class Spacer(Gtk.Label):
+
+    def __init__(self):
+        super(Spacer, self).__init__()
+
+        spacer_str = '|'
+        self.set_label(spacer_str)
+
+
 class VideoEntry(KanoWidget):
 
     def __init__(self, e):
