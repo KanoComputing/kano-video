@@ -10,7 +10,8 @@ from gi.repository import Gtk
 from kano.network import is_internet
 
 from .ui_elements import TopBar, MenuBar, Contents
-from .views import HomeView, LocalView, YoutubeView, PlaylistView
+from .views import HomeView, LocalView, YoutubeView, \
+    PlaylistView, PlaylistCollectionView
 
 
 class MainWindow(Gtk.Window):
@@ -30,7 +31,8 @@ class MainWindow(Gtk.Window):
         top_bar = TopBar('Kano Video')
         self.grid.attach(top_bar, 0, 0, 1, 1)
 
-        menu_bar = MenuBar(self.switch_to_home, self.switch_to_local, self.switch_to_playlist, self.switch_to_youtube)
+        menu_bar = MenuBar(self.switch_to_home, self.switch_to_local,
+                           self.switch_to_playlist_collection, self.switch_to_youtube)
         self.grid.attach(menu_bar, 0, 1, 1, 1)
 
         if is_internet():
@@ -45,6 +47,10 @@ class MainWindow(Gtk.Window):
 
     def switch_to_home(self, _button):
         self.view = HomeView()
+        self.contents.set_contents(self.view)
+
+    def switch_to_playlist_collection(self, _button):
+        self.view = PlaylistCollectionView()
         self.contents.set_contents(self.view)
 
     def switch_to_playlist(self, _button):

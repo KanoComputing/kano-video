@@ -1,8 +1,9 @@
 from gi.repository import Gtk
 
-from .ui_elements import TopBar, VideoListLocal, \
+from .ui_elements import TopBar, VideoList, VideoListLocal, \
     VideoListYoutube, SearchBar, SearchResultsBar, \
-    AddVideoBar, PlayModeBar
+    AddVideoBar, PlayModeBar, PlaylistList
+from .playlist import playlistCollection
 
 
 class View(Gtk.EventBox):
@@ -70,13 +71,35 @@ class YoutubeView(View):
         self._grid.show_all()
 
 
-class PlaylistView(View):
+class PlaylistCollectionView(View):
 
     def __init__(self):
+        super(PlaylistCollectionView, self).__init__()
+
+        self._header = TopBar('Playlist')
+        self._grid.attach(self._header, 0, 0, 1, 1)
+
+        self._vids = PlaylistList(playlistCollection.collection)
+        self._grid.attach(self._vids, 0, 1, 1, 1)
+
+
+class PlaylistView(View):
+
+    def __init__(self, playlist_name):
         super(PlaylistView, self).__init__()
 
         self._header = TopBar('Playlist')
         self._grid.attach(self._header, 0, 0, 1, 1)
+
+        """
+        self.playlist = Playlist('My Playlist')
+        self.playlist.add({'somevalue': './test.json'})
+        print self.playlist.playlist
+        self.playlist.save_to_file('playlists/new.json')
+        """
+
+        self._vids = VideoList(videos=playlistCollection.collection[playlist_name].playlist)
+        self._grid.attach(self._vids, 0, 1, 1, 1)
 
 
 class HomeView(View):
