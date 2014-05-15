@@ -163,29 +163,30 @@ class Spacer(Gtk.Label):
 
 
 class VideoEntry(KanoWidget):
+    _ENTRY_HEIGHT = 110
+    _TITLE_HEIGHT = 20
+    _DESC_HEIGHT = 15
+    _INFO_HEIGHT = 15
 
     def __init__(self, e):
         super(VideoEntry, self).__init__()
 
-        row_height = 110
-        row_title_height = 20
-        row_desc_height = 15
-        row_info_height = 15
+        self.get_style_context().add_class('video_entry')
 
-        self._grid.set_size_request(-1, row_height)
+        self._grid.set_size_request(-1, self._ENTRY_HEIGHT)
 
         x_pos = 0
 
-        button = Gtk.Button('Play')
-        button.set_size_request(row_height, row_height)
-        button.get_style_context().add_class('play')
-        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
-        self._grid.attach(button, x_pos, 0, 1, 3)
+        img = Gtk.Image()
+        img.set_from_file('media/images/test.svg')
+        img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
+        img.get_style_context().add_class('thumb')
+        self._grid.attach(img, x_pos, 0, 1, 4)
         x_pos += 1
 
         """
         button = Gtk.Button('FS')
-        button.set_size_request(20, row_height)
+        button.set_size_request(20, self._ENTRY_HEIGHT)
         button.connect('clicked', play_video, e['video_url'], e['local_path'], True)
         self.attach(button, x_pos, 0, 1, 3)
         x_pos += 1
