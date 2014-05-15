@@ -262,7 +262,7 @@ class VideoEntry(KanoWidget):
 class VideoList(Gtk.EventBox):
     _LIST_HEIGHT = 400
 
-    def __init__(self):
+    def __init__(self, videos=None):
         super(VideoList, self).__init__()
 
         self.get_style_context().add_class('video_list')
@@ -277,6 +277,14 @@ class VideoList(Gtk.EventBox):
         align.add(self._grid)
 
         self.add(align)
+
+        if videos is not None:
+            i = 0
+            for v in videos:
+                print 'adding'
+                entry = VideoEntry(v)
+                self._grid.attach(entry, 0, i, 1, 1)
+                i += 1
 
 
 class VideoListLocal(VideoList):
