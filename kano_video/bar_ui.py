@@ -147,24 +147,6 @@ class MenuBar(Gtk.EventBox):
         Gtk.main_quit()
 
 
-class SearchResultsBar(KanoWidget):
-
-    def __init__(self, search_keyword, result_count):
-        super(SearchResultsBar, self).__init__()
-
-        self.get_style_context().add_class('search_results_bar')
-
-        keyword_str = 'Showing results for "{}"'.format(search_keyword)
-        keyword = Gtk.Label(keyword_str)
-        keyword.set_size_request(100, 20)
-        self._grid.attach(keyword, 0, 0, 1, 1)
-
-        count_str = '{} videos'.format(result_count)
-        count = Gtk.Label(count_str)
-        keyword.set_size_request(100, 20)
-        self._grid.attach(count, 0, 1, 1, 1)
-
-
 class SearchBar(KanoWidget):
 
     def __init__(self, search_cb):
@@ -195,6 +177,7 @@ class AddVideoBar(KanoWidget):
     def __init__(self):
         super(AddVideoBar, self).__init__()
 
+        self.get_style_context().add_class('bar')
         self.get_style_context().add_class('add_video_bar')
 
         title_str = 'Your library'
@@ -215,6 +198,7 @@ class PlayModeBar(KanoWidget):
     def __init__(self):
         super(PlayModeBar, self).__init__()
 
+        self.get_style_context().add_class('bar')
         self.get_style_context().add_class('play_mode_bar')
 
         title_str = 'Play mode'
@@ -240,3 +224,59 @@ class PlayModeBar(KanoWidget):
 
     def is_fullscreen(self):
         return not self._switch.get_active()
+
+
+class HeaderBar(KanoWidget):
+
+    def __init__(self):
+        super(HeaderBar, self).__init__()
+
+        self.get_style_context().add_class('header_bar')
+
+        title = Gtk.Label(self._title)
+        title.get_style_context().add_class('title')
+        title.set_alignment(0, 0)
+        self._grid.attach(title, 0, 0, 1, 1)
+
+        if self._count is not 1:
+            self._item = '{}s'.format(self._item)
+        title_str = '{} {}'.format(self._count, self._item)
+        title = Gtk.Label(title_str)
+        title.set_alignment(0, 0)
+        self._grid.attach(title, 0, 1, 1, 1)
+
+
+class LibraryBar(HeaderBar):
+
+    def __init__(self):
+        self._title = 'Library'
+        self._count = len(playlistCollection.collection)
+        self._item = 'video'
+
+        super(LibraryBar, self).__init__()
+
+        self.get_style_context().add_class('library_bar')
+
+
+class PlaylistBar(HeaderBar):
+
+    def __init__(self):
+        self._title = 'Playlists'
+        self._count = len(playlistCollection.collection)
+        self._item = 'list'
+
+        super(PlaylistBar, self).__init__()
+
+        self.get_style_context().add_class('playlist_bar')
+
+
+class SearchResultsBar(HeaderBar):
+
+    def __init__(self, search_keyword, result_count):
+        self._title = 'Showing results for "{}"'.format(search_keyword)
+        self._count = result_count
+        self._item = 'video'
+
+        super(SearchResultsBar, self).__init__()
+
+        self.get_style_context().add_class('search_results_bar')

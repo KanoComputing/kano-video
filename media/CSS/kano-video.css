@@ -101,6 +101,10 @@ GtkImage {
     padding: 0;
 }
 
+.menu_bar GtkButton * {
+    color: #3b310c;
+}
+
 .menu_bar .search_bar GtkButton {
     background: #b6952d;
 }
@@ -109,7 +113,7 @@ GtkImage {
     color: #ffffff;
 }
 
-.play_mode_bar {
+.bar {
     background: @bar_background;
 }
 

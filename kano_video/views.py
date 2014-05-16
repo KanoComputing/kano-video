@@ -1,9 +1,9 @@
 from gi.repository import Gtk
 
-from .bar_ui import TopBar, SearchBar, SearchResultsBar, \
-    AddVideoBar, PlayModeBar
+from .bar_ui import TopBar, SearchResultsBar, \
+    AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar
 from .video_ui import VideoList, VideoListLocal, VideoListYoutube
-from .playlist_ui import PlaylistList
+from .playlist_ui import PlaylistList, PlaylistAddBar
 from .playlist import playlistCollection
 
 
@@ -30,14 +30,17 @@ class LocalView(View):
     def __init__(self):
         super(LocalView, self).__init__()
 
-        self._header = AddVideoBar()
+        self._header = LibraryBar()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
+        self._add = AddVideoBar()
+        self._grid.attach(self._add, 0, 1, 1, 1)
+
         self._play_mode = PlayModeBar()
-        self._grid.attach(self._play_mode, 0, 1, 1, 1)
+        self._grid.attach(self._play_mode, 0, 2, 1, 1)
 
         self._list = VideoListLocal()
-        self._grid.attach(self._list, 0, 2, 1, 1)
+        self._grid.attach(self._list, 0, 3, 1, 1)
 
 
 class YoutubeView(View):
@@ -74,11 +77,14 @@ class PlaylistCollectionView(View):
     def __init__(self, playlist_cb):
         super(PlaylistCollectionView, self).__init__()
 
-        self._header = TopBar('Playlist')
+        self._header = PlaylistBar()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
+        self._add = PlaylistAddBar()
+        self._grid.attach(self._add, 0, 1, 1, 1)
+
         self._vids = PlaylistList(playlistCollection.collection, playlist_cb)
-        self._grid.attach(self._vids, 0, 1, 1, 1)
+        self._grid.attach(self._vids, 0, 2, 1, 1)
 
 
 class PlaylistView(View):
@@ -88,13 +94,6 @@ class PlaylistView(View):
 
         self._header = TopBar('Playlist')
         self._grid.attach(self._header, 0, 0, 1, 1)
-
-        """
-        self.playlist = Playlist('My Playlist')
-        self.playlist.add({'somevalue': './test.json'})
-        print self.playlist.playlist
-        self.playlist.save_to_file('playlists/new.json')
-        """
 
         self._vids = VideoList(videos=playlistCollection.collection[playlist_name].playlist)
         self._grid.attach(self._vids, 0, 1, 1, 1)
