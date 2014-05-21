@@ -2,9 +2,10 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=/usr/bin/kano-launcher "rxvt -title 'Make Video' -e /usr/bin/make-video" "make-video"
+Exec=/usr/bin/kano-video
 Icon=/usr/share/kano-desktop/icons/video.png
 Terminal=false
 Name=Make Video
-Comment= Play videos from Youtube
+Comment=Play videos from Youtube
 Categories=Application;Education;Development;Kano;
+Name[en_GB]=kano-video.desktop
