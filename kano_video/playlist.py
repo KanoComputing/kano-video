@@ -1,15 +1,16 @@
 import os
 import json
 
+playlist_dir = 'playlists'
+
 
 class Playlist(object):
 
     def __init__(self, name):
         super(Playlist, self).__init__()
 
-        self._dir = 'playlists'
         self.name = name
-        self.filename = self._dir + '/' + name + '.json'
+        self.filename = playlist_dir + '/' + name + '.json'
 
         self.load()
 
@@ -41,6 +42,9 @@ class PlaylistCollection(object):
         super(PlaylistCollection, self).__init__()
 
         self.collection = {}
+
+        if not os.path.exists(playlist_dir):
+            os.makedirs(playlist_dir)
 
         for file in os.listdir(dir):
             filename = os.path.splitext(file)[0]
