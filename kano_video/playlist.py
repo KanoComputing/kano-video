@@ -4,21 +4,25 @@ import json
 
 class Playlist(object):
 
-    def __init__(self, name, filename=None):
+    def __init__(self, name):
         super(Playlist, self).__init__()
 
+        self._dir = 'playlists'
         self.name = name
-        self.filename = filename
+        self.filename = self._dir + '/' + name + '.json'
 
-        if filename is not None:
-            self.load_from_file(filename)
-        else:
-            self.playlist = []
+        self.load()
 
     def load_from_file(self, filepath):
         data = open(filepath).read()
 
         self.playlist = json.loads(data)
+
+    def load(self):
+        try:
+            self.load_from_file(self.filename)
+        except IOError:
+            self.playlist = []
 
     def save_to_file(self, filepath):
         with open(filepath, 'w') as savefile:
@@ -39,22 +43,22 @@ class PlaylistCollection(object):
         self.collection = {}
 
         for file in os.listdir(dir):
-            path = dir + '/' + file
-            self.add(Playlist(file, filename=path))
+            filename = os.path.splitext(file)[0]
+            self.add(Playlist(filename))
 
     def add(self, playlist):
         self.collection[playlist.name] = playlist
 
     def save(self):
-            for _, playlist in self.collection.iteritems():
-                playlist.save()
+        for _, playlist in self.collection.iteritems():
+            playlist.save()
 
 
 playlistCollection = PlaylistCollection('playlists')
 
 
 def add_playlist_handler(_, playlist):
-    playlistCollection.collection.add(playlist)
+    playlistCollection.add(playlist)
 
 
 def add_to_playlist_handler(_, playlist_name, video):

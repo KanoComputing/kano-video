@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 
-from .playlist import playlistCollection
+from .playlist import playlistCollection, Playlist
 
 from .general_ui import KanoWidget
 
@@ -90,5 +90,10 @@ class AddPlaylistPopup(PlaylistPopup):
         self.grid.attach(entry, 0, 0, 1, 1)
 
         button = Gtk.Button('ADD')
-        button.connect('clicked', self._add, entry.get_text())
+        button.connect('clicked', self._add, entry)
         self.grid.attach(button, 1, 0, 1, 1)
+
+    def _add(self, test, playlist_entry):
+        playlist = Playlist(playlist_entry.get_text())
+        playlistCollection.add(playlist)
+        self.hide()
