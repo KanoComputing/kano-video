@@ -265,12 +265,24 @@ class LibraryBar(HeaderBar):
         self.get_style_context().add_class('library_bar')
 
 
-class PlaylistBar(HeaderBar):
+class PlaylistCollectionBar(HeaderBar):
 
     def __init__(self):
         self._title = 'Playlists'
         self._count = len(playlistCollection.collection)
         self._item = 'list'
+
+        super(PlaylistCollectionBar, self).__init__()
+
+        self.get_style_context().add_class('playlist_collection_bar')
+
+
+class PlaylistBar(HeaderBar):
+
+    def __init__(self, playlist):
+        self._title = playlist.name
+        self._count = len(playlist.playlist)
+        self._item = 'video'
 
         super(PlaylistBar, self).__init__()
 

@@ -2,7 +2,7 @@ from gi.repository import Gtk
 
 from .bar_ui import TopBar, SearchResultsBar, \
     AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar, \
-    YoutubeBar
+    PlaylistCollectionBar, YoutubeBar
 from .video_ui import VideoList, VideoListLocal, \
     VideoListYoutube, VideoListPopular
 from .playlist_ui import PlaylistList, PlaylistAddBar
@@ -85,7 +85,7 @@ class PlaylistCollectionView(View):
     def __init__(self, playlist_cb):
         super(PlaylistCollectionView, self).__init__()
 
-        self._header = PlaylistBar()
+        self._header = PlaylistCollectionBar()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self._add = PlaylistAddBar()
@@ -100,10 +100,11 @@ class PlaylistView(View):
     def __init__(self, playlist_name):
         super(PlaylistView, self).__init__()
 
-        self._header = TopBar('Playlist')
+        playlist = playlistCollection.collection[playlist_name]
+        self._header = PlaylistBar(playlist)
         self._grid.attach(self._header, 0, 0, 1, 1)
 
-        self._vids = VideoList(videos=playlistCollection.collection[playlist_name].playlist)
+        self._vids = VideoList(videos=playlist.playlist)
         self._grid.attach(self._vids, 0, 1, 1, 1)
 
 
