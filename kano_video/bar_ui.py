@@ -240,6 +240,18 @@ class HeaderBar(KanoWidget):
         self._grid.attach(title, 0, 1, 1, 1)
 
 
+class YoutubeBar(HeaderBar):
+
+    def __init__(self):
+        self._title = 'Youtube'
+        self._count = len(playlistCollection.collection)
+        self._item = 'video'
+
+        super(YoutubeBar, self).__init__()
+
+        self.get_style_context().add_class('youtube_bar')
+
+
 class LibraryBar(HeaderBar):
 
     def __init__(self):

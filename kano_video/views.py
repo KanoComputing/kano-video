@@ -1,7 +1,8 @@
 from gi.repository import Gtk
 
 from .bar_ui import TopBar, SearchResultsBar, \
-    AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar
+    AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar, \
+    YoutubeBar
 from .video_ui import VideoList, VideoListLocal, VideoListYoutube
 from .playlist_ui import PlaylistList, PlaylistAddBar
 from .playlist import playlistCollection
@@ -48,27 +49,33 @@ class YoutubeView(View):
     def __init__(self):
         super(YoutubeView, self).__init__()
 
-        self._play_mode = PlayModeBar()
-        self._grid.attach(self._play_mode, 0, 0, 1, 1)
+        self._header = YoutubeBar()
+        self._grid.attach(self._header, 0, 0, 1, 1)
 
-        self._list = VideoListYoutube()
-        self._grid.attach(self._list, 0, 1, 1, 1)
+        self._play_mode = PlayModeBar()
+        self._grid.attach(self._play_mode, 0, 1, 1, 1)
 
     def search_handler(self, _button, search_keyword=None, users=False):
-        if search_keyword and search_keyword.get_text():
+        self._grid.remove(self._header)
+
+        try:
             self._grid.remove(self._list)
+        except Exception:
+            pass
+
+        if search_keyword and search_keyword.get_text():
+            self._header = SearchResultsBar(search_keyword.get_text(), '100,000')
+
             if users is False:
                 self._list = VideoListYoutube(keyword=search_keyword.get_text())
             else:
                 self._list = VideoListYoutube(username=search_keyword.get_text())
-            self._results_bar = SearchResultsBar(search_keyword.get_text(), '100,000')
-            self._grid.attach(self._results_bar, 0, 2, 1, 1)
-            self._grid.attach(self._list, 0, 3, 1, 1)
         else:
-            self._grid.remove(self._list)
+            self._header = YoutubeBar()
             self._list = VideoListYoutube()
-            self._grid.attach(self._list, 0, 2, 1, 1)
 
+        self._grid.attach(self._header, 0, 0, 1, 1)
+        self._grid.attach(self._list, 0, 2, 1, 1)
         self._grid.show_all()
 
 
