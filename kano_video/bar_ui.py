@@ -63,7 +63,8 @@ class MenuBar(Gtk.EventBox):
     _MENU_BAR_HEIGHT = 66
     _BUTTON_WIDTH = 150
 
-    def __init__(self, home_cb, library_cb, playlists_cb, youtube_cb, search_cb):
+    def __init__(self, home_cb, library_cb, playlists_cb,
+                 youtube_cb, search_cb):
         Gtk.EventBox.__init__(self)
 
         self.get_style_context().add_class('menu_bar')
