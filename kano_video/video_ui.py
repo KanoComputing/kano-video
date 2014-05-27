@@ -78,7 +78,7 @@ class VideoEntry(KanoWidget):
             label.set_size_request(100, self._INFO_HEIGHT)
             info_grid.attach(label, 4, 0, 1, 1)
 
-        button = Gtk.Button('Watch video')
+        button = Gtk.Button('WATCH')
         button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
         button.get_style_context().add_class('play')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
@@ -86,7 +86,7 @@ class VideoEntry(KanoWidget):
 
         info_grid.attach(Spacer(), 1, 1, 1, 1)
 
-        button = Gtk.Button('Add to playlist')
+        button = Gtk.Button('SAVE')
         button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
         button.get_style_context().add_class('play')
         self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)

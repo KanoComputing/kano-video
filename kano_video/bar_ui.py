@@ -81,19 +81,19 @@ class MenuBar(Gtk.EventBox):
         button.connect('clicked', home_cb)
         grid.attach(button, 0, 0, 1, 1)
 
-        button = Gtk.Button('Library')
+        button = Gtk.Button('LIBRARY')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', library_cb)
         grid.attach(button, 1, 0, 1, 1)
 
-        button = Gtk.Button('Playlists')
+        button = Gtk.Button('PLAYLISTS')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', playlists_cb)
         grid.attach(button, 2, 0, 1, 1)
 
         grid.attach(Spacer(), 3, 0, 1, 1)
 
-        button = Gtk.Button('Youtube')
+        button = Gtk.Button('YOUTUBE')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', youtube_cb)
         grid.attach(button, 4, 0, 1, 1)
