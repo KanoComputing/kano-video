@@ -6,21 +6,20 @@
 
 import sys
 import os
-from urllib import urlretrieve
 from shutil import rmtree
-from time import time
 from kano.utils import requests_get_json, run_cmd
 
 tmp_dir = '/tmp/kano-video'
 
-def search_youtube_by_keyword(keyword=None, popular=False):
+
+def search_youtube_by_keyword(keyword=None, popular=False, max_results=10):
     url = 'http://gdata.youtube.com/feeds/api/videos'
     params = {
         'vq': keyword,
         'racy': 'exclude',
         'orderby': 'relevance',
         'alt': 'json',
-        'max-results': 10
+        'max-results': max_results
     }
     if popular:
         params['orderby'] = 'viewCount'
@@ -46,18 +45,22 @@ def search_youtube_by_user(username):
 
 
 def parse_youtube_entries(entries):
-    tmp_dir = '/tmp/kano-video'
     if os.path.exists(tmp_dir):
         rmtree(tmp_dir)
     os.makedirs(tmp_dir)
 
     my_entries = list()
     for e in entries:
+        # Small thumbnail
         for thumb in e['media$group']['media$thumbnail']:
-            if thumb['width'] is 120 and thumb['height'] is 90:
-                thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
+            if thumb['width'] == 120 and thumb['height'] == 90:
+                thumbnail = thumb['url']
+                break
 
-                urlretrieve(thumb['url'], thumbnail)
+        # Big thumbnail
+        for thumb in e['media$group']['media$thumbnail']:
+            if thumb['width'] == 480 and thumb['height'] == 360:
+                bigthumb = thumb['url']
                 break
 
         author = e['author'][0]['name']['$t']
@@ -77,7 +80,8 @@ def parse_youtube_entries(entries):
             'duration_min': duration_min,
             'duration_sec': duration_sec,
             'viewcount': viewcount,
-            'thumbnail': thumbnail
+            'thumbnail': thumbnail,
+            'big_thumb': bigthumb
         }
         my_entries.append(entry_data)
     return my_entries

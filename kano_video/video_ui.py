@@ -5,7 +5,6 @@ from time import time
 
 from kano.utils import list_dir
 
-from .playlist import Playlist
 from .playlist_ui import AddToPlaylistPopup
 from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
@@ -30,7 +29,11 @@ class VideoEntry(KanoWidget):
         x_pos = 0
 
         img = Gtk.Image()
-        img.set_from_file(e['thumbnail'])
+
+        if e['thumbnail']:
+            thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
+            urlretrieve(e['thumbnail'], thumbnail)
+            img.set_from_file(thumbnail)
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
         self._grid.attach(img, x_pos, 0, 1, 4)
@@ -167,7 +170,7 @@ class VideoListLocal(VideoList):
                 e = {'title': title_str,
                      'video_url': None,
                      'local_path': fullpath,
-                     'thumbnail': '/usr/share/kano-video/local.jpg'}
+                     'thumbnail': None}
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)

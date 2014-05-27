@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 
-from .bar_ui import TopBar, SearchResultsBar, \
+from .bar_ui import SearchResultsBar, \
     AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar, \
     PlaylistCollectionBar, YoutubeBar
 from .video_ui import VideoList, VideoListLocal, \
