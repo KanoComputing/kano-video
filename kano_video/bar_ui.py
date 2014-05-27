@@ -1,7 +1,10 @@
 from gi.repository import Gtk, Gdk, Pango
+import os
+from shutil import rmtree
 
 from .icons import set_from_name
 from .playlist import playlistCollection
+from .youtube import tmp_dir
 
 from .general_ui import KanoWidget, Spacer
 
@@ -136,6 +139,10 @@ class MenuBar(Gtk.EventBox):
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
         Gdk.flush()
+
+        # Remove temp files
+        if os.path.exists(tmp_dir):
+            rmtree(tmp_dir)
 
         playlistCollection.save()
 
