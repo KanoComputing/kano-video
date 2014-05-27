@@ -198,9 +198,5 @@ class VideoListYoutube(VideoList):
             for i, e in enumerate(parsed_entries):
                 e['local_path'] = None
 
-                x = Playlist('test')
-                x.add(e)
-                x.save_to_file('playlists/vid.json')
-
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i, 1, 1)
