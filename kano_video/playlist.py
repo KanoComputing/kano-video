@@ -14,9 +14,9 @@ class Playlist(object):
         self.load()
 
     def load_from_file(self, filepath):
-        data = open(filepath).read()
-
-        self.playlist = json.loads(data)
+        with open(filepath) as openfile:
+            data = openfile.read()
+            self.playlist = json.loads(data)
 
     def load(self):
         try:
