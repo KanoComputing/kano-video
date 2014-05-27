@@ -3,7 +3,8 @@ from gi.repository import Gtk
 
 from kano.utils import list_dir
 
-from .playlist import Playlist, add_to_playlist_handler
+from .playlist import Playlist
+from .playlist_ui import AddToPlaylistPopup
 from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword
@@ -88,7 +89,7 @@ class VideoEntry(KanoWidget):
         button = Gtk.Button('Add to playlist')
         button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
         button.get_style_context().add_class('play')
-        self._button_handler_id = button.connect('clicked', add_to_playlist_handler, 'test.json', e)
+        self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
         info_grid.attach(button, 2, 1, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
@@ -106,6 +107,10 @@ class VideoEntry(KanoWidget):
         self._button_handler_id = _button.connect('clicked', self._play_handler, _url, _localfile, _fullscreen)
         Gtk.main_iteration()
         stop_videos(_button)
+
+    def add_to_playlist_handler(self, _, video):
+        popup = AddToPlaylistPopup(video)
+        popup.show_all()
 
 
 class VideoList(Gtk.EventBox):

@@ -55,11 +55,3 @@ class PlaylistCollection(object):
 
 
 playlistCollection = PlaylistCollection('playlists')
-
-
-def add_playlist_handler(_, playlist):
-    playlistCollection.add(playlist)
-
-
-def add_to_playlist_handler(_, playlist_name, video):
-    playlistCollection.collection[playlist_name].add(video)

@@ -56,13 +56,7 @@ class TopBar(Gtk.EventBox):
         self.get_root_window().set_cursor(cursor)
 
     def _close_button_click(self, event):
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
-        Gdk.flush()
-
-        playlistCollection.save()
-
-        Gtk.main_quit()
+        self.get_toplevel().destroy()
 
 
 class MenuBar(Gtk.EventBox):

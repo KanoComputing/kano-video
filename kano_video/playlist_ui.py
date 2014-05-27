@@ -3,6 +3,7 @@ from gi.repository import Gtk
 from .playlist import playlistCollection, Playlist
 
 from .general_ui import KanoWidget
+from .bar_ui import TopBar
 
 
 class PlaylistList(KanoWidget):
@@ -56,44 +57,66 @@ class PlaylistPopup(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
 
         self.grid = Gtk.Grid()
-        self.add(self.grid)
 
-    def _add(self, button, playlist):
-        print playlist
+        self._bar = TopBar('')
+        self.grid.attach(self._bar, 0, 0, 2, 1)
+
+        self.add(self.grid)
 
 
 class AddToPlaylistPopup(PlaylistPopup):
 
-    def __init__(self):
+    def __init__(self, video):
         super(AddToPlaylistPopup, self).__init__()
 
-        combo = Gtk.ComboBoxText.new()
-        for name, _ in playlistCollection.collection.iteritems():
-            combo.append_text(name)
+        self.video = video
 
-        self.grid.attach(combo, 0, 0, 1, 1)
+        self._combo = Gtk.ComboBoxText.new()
+        self.refresh()
+        self.grid.attach(self._combo, 0, 1, 1, 1)
 
         button = Gtk.Button('ADD')
-        button.connect('clicked', self._add, combo.get_active_text())
-        self.grid.attach(button, 1, 0, 1, 1)
+        button.connect('clicked', self._add, self._combo)
+        self.grid.attach(button, 1, 1, 1, 1)
 
         button = Gtk.Button('CREATE NEW')
-        self.grid.attach(button, 0, 1, 1, 1)
+        button.connect('clicked', self._new)
+        self.grid.attach(button, 0, 2, 1, 1)
+
+    def _add(self, _, playlist_entry):
+        playlist_name = playlist_entry.get_active_text()
+        playlistCollection.collection[playlist_name].add(self.video)
+        self.hide()
+
+    def _new(self, _):
+        popup = AddPlaylistPopup(caller=self)
+        popup.show_all()
+
+    def refresh(self):
+        model = self._combo.get_model()
+        model.clear()
+        for name, _ in playlistCollection.collection.iteritems():
+            self._combo.append_text(name)
 
 
 class AddPlaylistPopup(PlaylistPopup):
 
-    def __init__(self):
+    def __init__(self, caller=None):
         super(AddPlaylistPopup, self).__init__()
 
+        self._caller = caller
+
         entry = Gtk.Entry()
-        self.grid.attach(entry, 0, 0, 1, 1)
+        self.grid.attach(entry, 0, 1, 1, 1)
 
         button = Gtk.Button('ADD')
         button.connect('clicked', self._add, entry)
-        self.grid.attach(button, 1, 0, 1, 1)
+        self.grid.attach(button, 1, 1, 1, 1)
 
-    def _add(self, test, playlist_entry):
+    def _add(self, _, playlist_entry):
         playlist = Playlist(playlist_entry.get_text())
         playlistCollection.add(playlist)
         self.hide()
+
+        if self._caller is not None:
+            self._caller.refresh()
