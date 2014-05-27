@@ -1,5 +1,7 @@
 import os
 from gi.repository import Gtk
+from urllib import urlretrieve
+from time import time
 
 from kano.utils import list_dir
 
@@ -7,7 +9,7 @@ from .playlist import Playlist
 from .playlist_ui import AddToPlaylistPopup
 from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
-    search_youtube_by_keyword
+    search_youtube_by_keyword, tmp_dir
 
 from .general_ui import KanoWidget, Spacer
 
@@ -200,3 +202,34 @@ class VideoListYoutube(VideoList):
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i, 1, 1)
+
+
+class VideoListPopular(VideoList):
+
+    def __init__(self):
+        super(VideoListPopular, self).__init__()
+
+        self.get_style_context().add_class('video_list_popular')
+
+        entries = search_youtube_by_keyword(popular=True, max_results=3)
+
+        if entries:
+            parsed_entries = parse_youtube_entries(entries)
+            x_pos = 0
+
+            for i, e in enumerate(parsed_entries):
+                img = Gtk.Image()
+
+                button = Gtk.Button()
+                if e['big_thumb']:
+                    thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
+                    urlretrieve(e['big_thumb'], thumbnail)
+                    img.set_from_file(thumbnail)
+                button.add(img)
+                button.connect('clicked', self._play, e['video_url'])
+                self._grid.attach(button, x_pos, 0, 1, 1)
+
+                x_pos += 1
+
+    def _play(self, _button, _url):
+        play_video(_button, video_url=_url, fullscreen=True)

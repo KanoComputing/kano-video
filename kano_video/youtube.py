@@ -11,6 +11,7 @@ from shutil import rmtree
 from time import time
 from kano.utils import requests_get_json, run_cmd
 
+tmp_dir = '/tmp/kano-video'
 
 def search_youtube_by_keyword(keyword=None, popular=False):
     url = 'http://gdata.youtube.com/feeds/api/videos'

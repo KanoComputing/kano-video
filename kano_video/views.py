@@ -3,7 +3,8 @@ from gi.repository import Gtk
 from .bar_ui import TopBar, SearchResultsBar, \
     AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar, \
     YoutubeBar
-from .video_ui import VideoList, VideoListLocal, VideoListYoutube
+from .video_ui import VideoList, VideoListLocal, \
+    VideoListYoutube, VideoListPopular
 from .playlist_ui import PlaylistList, PlaylistAddBar
 from .playlist import playlistCollection
 
@@ -111,5 +112,5 @@ class HomeView(View):
     def __init__(self):
         super(HomeView, self).__init__()
 
-        self._header = TopBar('Home')
-        self._grid.attach(self._header, 0, 0, 1, 1)
+        self._popular = VideoListPopular()
+        self._grid.attach(self._popular, 0, 0, 1, 1)
