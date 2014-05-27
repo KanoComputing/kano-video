@@ -28,7 +28,7 @@ class VideoEntry(KanoWidget):
         x_pos = 0
 
         img = Gtk.Image()
-        img.set_from_file('media/images/test.svg')
+        img.set_from_file(e['thumbnail'])
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
         self._grid.attach(img, x_pos, 0, 1, 4)
@@ -164,7 +164,8 @@ class VideoListLocal(VideoList):
                 title_str = filename if len(filename) <= 40 else filename[:37] + '...'
                 e = {'title': title_str,
                      'video_url': None,
-                     'local_path': fullpath}
+                     'local_path': fullpath,
+                     'thumbnail': '/usr/share/kano-video/local.jpg'}
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)
