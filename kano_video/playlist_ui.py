@@ -6,6 +6,22 @@ from .general_ui import KanoWidget
 from .bar_ui import TopBar
 
 
+class PlaylistEntry(KanoWidget):
+    _ENTRY_HEIGHT = 110
+    _TITLE_HEIGHT = 20
+    _DESC_HEIGHT = 15
+    _INFO_HEIGHT = 15
+
+    def __init__(self, name, playlist_cb):
+        super(PlaylistEntry, self).__init__()
+
+        self.get_style_context().add_class('playlist_entry')
+
+        button = Gtk.Button(name)
+        button.connect('clicked', playlist_cb, name)
+        self._grid.attach(button, 0, 0, 1, 1)
+
+
 class PlaylistList(KanoWidget):
 
     def __init__(self, playlists, playlist_cb):
@@ -13,9 +29,8 @@ class PlaylistList(KanoWidget):
 
         i = 0
         for name, p in playlists.iteritems():
-            button = Gtk.Button(name)
-            button.connect('clicked', playlist_cb, name)
-            self._grid.attach(button, 0, i, 1, 1)
+            playlist = PlaylistEntry(name, playlist_cb)
+            self._grid.attach(playlist, 0, i, 1, 1)
             i += 1
 
 
