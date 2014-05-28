@@ -5,6 +5,8 @@ from .playlist import playlistCollection, Playlist
 from .general_ui import KanoWidget
 from .bar_ui import TopBar
 
+from kano.gtk3.kano_dialog import KanoDialog
+
 
 class PlaylistEntry(KanoWidget):
     _ENTRY_HEIGHT = 110
@@ -17,9 +19,39 @@ class PlaylistEntry(KanoWidget):
 
         self.get_style_context().add_class('playlist_entry')
 
-        button = Gtk.Button(name)
+        button = Gtk.Button()
         button.connect('clicked', playlist_cb, name)
+
+        button_grid = Gtk.Grid()
+        button.add(button_grid)
+
+        title = Gtk.Label(name)
+        title.get_style_context().add_class('title')
+        button_grid.attach(title, 0, 0, 1, 1)
+
+        count = len(playlistCollection.collection[name].playlist)
+        item = 'video'
+        if count is not 1:
+            item = '{}s'.format(item)
+
+        subtitle_str = '{} {}'.format(count, item)
+        subtitle = Gtk.Label(subtitle_str)
+        subtitle.get_style_context().add_class('subtitle')
+        button_grid.attach(subtitle, 0, 1, 1, 1)
+
+        remove = Gtk.Button('REMOVE')
+        remove.connect('clicked', self._remove_handler, name)
+        button_grid.attach(remove, 1, 0, 1, 1)
+
         self._grid.attach(button, 0, 0, 1, 1)
+
+    def _remove_handler(self, _button, _name):
+        confirm = KanoDialog('Are you sure?',
+                             'You are about to delete the playlist called "{}"'.format(_name),
+                             {'OK': True, 'CANCEL': False})
+        response = confirm.run()
+        if response:
+            playlistCollection.delete(_name)
 
 
 class PlaylistList(KanoWidget):

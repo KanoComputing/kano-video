@@ -35,6 +35,12 @@ class Playlist(object):
     def add(self, video):
         self.playlist.append(video)
 
+    def delete(self):
+        try:
+            os.remove(self.filename)
+        except IOError:
+            pass
+
 
 class PlaylistCollection(object):
 
@@ -52,6 +58,10 @@ class PlaylistCollection(object):
 
     def add(self, playlist):
         self.collection[playlist.name] = playlist
+
+    def delete(self, playlist_name):
+        self.collection[playlist_name].delete()
+        del self.collection[playlist_name]
 
     def save(self):
         for _, playlist in self.collection.iteritems():
