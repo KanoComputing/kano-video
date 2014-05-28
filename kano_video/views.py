@@ -10,6 +10,7 @@ from .playlist import playlistCollection
 
 
 class View(Gtk.EventBox):
+    _VIEW_WIDTH = 750
     _VIEW_HEIGHT = 400
 
     def __init__(self):
@@ -17,7 +18,8 @@ class View(Gtk.EventBox):
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)
-        self._grid.set_size_request(-1, self._VIEW_HEIGHT)
+        self._grid.set_column_spacing(0)
+        self._grid.set_size_request(self._VIEW_WIDTH, self._VIEW_HEIGHT)
 
         align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
         padding = 20

@@ -8,24 +8,20 @@ from .bar_ui import TopBar
 from kano.gtk3.kano_dialog import KanoDialog
 
 
-class PlaylistEntry(KanoWidget):
-    _ENTRY_HEIGHT = 110
-    _TITLE_HEIGHT = 20
-    _DESC_HEIGHT = 15
-    _INFO_HEIGHT = 15
+class PlaylistEntry(Gtk.Button):
 
     def __init__(self, name, playlist_cb):
-        super(PlaylistEntry, self).__init__()
+        super(PlaylistEntry, self).__init__(hexpand=True)
 
-        self.get_style_context().add_class('playlist_entry')
+        self.get_style_context().add_class('entry_item')
 
-        button = Gtk.Button()
-        button.connect('clicked', playlist_cb, name)
+        self.connect('clicked', playlist_cb, name)
 
         button_grid = Gtk.Grid()
-        button.add(button_grid)
+        self.add(button_grid)
 
-        title = Gtk.Label(name)
+        title = Gtk.Label(name, hexpand=True)
+        title.set_alignment(0, 0.5)
         title.get_style_context().add_class('title')
         button_grid.attach(title, 0, 0, 1, 1)
 
@@ -36,14 +32,15 @@ class PlaylistEntry(KanoWidget):
 
         subtitle_str = '{} {}'.format(count, item)
         subtitle = Gtk.Label(subtitle_str)
+        subtitle.set_alignment(0, 0.5)
         subtitle.get_style_context().add_class('subtitle')
         button_grid.attach(subtitle, 0, 1, 1, 1)
 
         remove = Gtk.Button('REMOVE')
+        remove.get_style_context().add_class('grey_linktext')
+        remove.set_alignment(1, 0)
         remove.connect('clicked', self._remove_handler, name)
         button_grid.attach(remove, 1, 0, 1, 1)
-
-        self._grid.attach(button, 0, 0, 1, 1)
 
     def _remove_handler(self, _button, _name):
         confirm = KanoDialog('Are you sure?',
@@ -75,13 +72,14 @@ class PlaylistAddBar(KanoWidget):
         self.get_style_context().add_class('playlist_add_bar')
 
         title_str = ''
-        title = Gtk.Label(title_str)
+        title = Gtk.Label(title_str, hexpand=True)
         title.get_style_context().add_class('title')
         title.set_alignment(0, 0.5)
         title.set_size_request(430, 20)
         self._grid.attach(title, 0, 0, 1, 1)
 
         button = Gtk.Button('CREATE LIST')
+        button.get_style_context().add_class('green')
         button.set_size_request(20, 20)
         button.connect('clicked', self._add_handler)
         self._grid.attach(button, 1, 0, 1, 1)
@@ -123,10 +121,12 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.grid.attach(self._combo, 0, 1, 1, 1)
 
         button = Gtk.Button('ADD')
+        button.get_style_context().add_class('green')
         button.connect('clicked', self._add, self._combo)
         self.grid.attach(button, 1, 1, 1, 1)
 
         button = Gtk.Button('CREATE NEW')
+        button.get_style_context().add_class('green')
         button.connect('clicked', self._new)
         self.grid.attach(button, 0, 2, 1, 1)
 
@@ -157,6 +157,7 @@ class AddPlaylistPopup(PlaylistPopup):
         self.grid.attach(entry, 0, 1, 1, 1)
 
         button = Gtk.Button('ADD')
+        button.get_style_context().add_class('green')
         button.connect('clicked', self._add, entry)
         self.grid.attach(button, 1, 1, 1, 1)
 

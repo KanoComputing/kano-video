@@ -8,7 +8,7 @@ class KanoWidget(Gtk.EventBox):
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)
-        self._grid.set_column_spacing(10)
+        self._grid.set_column_spacing(0)
         self._grid.set_size_request(400, 30)
 
         self.add(self._grid)

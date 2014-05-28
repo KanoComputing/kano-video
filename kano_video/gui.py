@@ -21,7 +21,7 @@ class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title='Kano Video')
 
-        self._win_width = 900
+        self._win_width = 950
         self._contents_height = 550
 
         self.set_decorated(False)

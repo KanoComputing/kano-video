@@ -10,21 +10,26 @@ from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword, tmp_dir
 
-from .general_ui import KanoWidget, Spacer
+from .general_ui import Spacer
 
 
-class VideoEntry(KanoWidget):
+class VideoEntry(Gtk.Button):
     _ENTRY_HEIGHT = 110
     _TITLE_HEIGHT = 20
     _DESC_HEIGHT = 15
     _INFO_HEIGHT = 15
 
     def __init__(self, e):
-        super(VideoEntry, self).__init__()
+        super(VideoEntry, self).__init__(hexpand=True)
 
-        self.get_style_context().add_class('video_entry')
+        self.get_style_context().add_class('entry_item')
 
-        self._grid.set_size_request(-1, self._ENTRY_HEIGHT)
+        # TODO: Add detailed view
+        # self.connect('clicked', playlist_cb, name)
+
+        button_grid = Gtk.Grid()
+        button_grid.set_column_spacing(30)
+        self.add(button_grid)
 
         x_pos = 0
 
@@ -36,66 +41,43 @@ class VideoEntry(KanoWidget):
             img.set_from_file(thumbnail)
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
-        self._grid.attach(img, x_pos, 0, 1, 4)
+        button_grid.attach(img, x_pos, 0, 1, 4)
         x_pos += 1
 
-        """
-        button = Gtk.Button('FS')
-        button.set_size_request(20, self._ENTRY_HEIGHT)
-        button.connect('clicked', play_video, e['video_url'], e['local_path'], True)
-        self.attach(button, x_pos, 0, 1, 3)
-        x_pos += 1
-        """
-
-        title_str = e['title'] if len(e['title']) <= 70 else e['title'][:67] + '...'
+        title_str = e['title'] if len(e['title']) <= 48 else e['title'][:45] + '...'
         label = Gtk.Label(title_str)
-        label.set_size_request(-1, self._TITLE_HEIGHT)
+        label.set_alignment(0, 0.5)
         label.get_style_context().add_class('title')
-        self._grid.attach(label, x_pos, 0, 1, 1)
-
-        info_grid = Gtk.Grid()
-        info_grid.set_size_request(-1, self._INFO_HEIGHT)
-        info_grid.get_style_context().add_class('info')
-        self._grid.attach(info_grid, x_pos, 2, 1, 1)
+        button_grid.attach(label, x_pos, 0, 1, 1)
 
         if e['local_path'] is None:
+            stats_str = '{}K views - {}:{} min - by {}'.format(int(e['viewcount'] / 1000.0), e['duration_min'],
+                                                               e['duration_sec'], e['author'])
+            label = Gtk.Label(stats_str)
+            label.get_style_context().add_class('subtitle')
+            label.set_alignment(0, 0.5)
+            button_grid.attach(label, x_pos, 1, 1, 1)
+
             desc_str = e['description'] if len(e['description']) <= 70 else e['description'][:67] + '...'
             label = Gtk.Label(desc_str)
-            label.set_size_request(-1, self._DESC_HEIGHT)
-            self._grid.attach(label, x_pos, 1, 1, 1)
+            label.get_style_context().add_class('subtitle')
+            label.set_alignment(0, 0.5)
+            button_grid.attach(label, x_pos, 2, 1, 1)
 
-            duration_str = 'DURATION: {}:{}'.format(e['duration_min'], e['duration_sec'])
-            label = Gtk.Label(duration_str)
-            label.set_size_request(50, self._INFO_HEIGHT)
-            info_grid.attach(label, 0, 0, 1, 1)
-
-            info_grid.attach(Spacer(), 1, 0, 1, 1)
-
-            viewcount_str = 'VIEWS: {}K'.format(int(e['viewcount'] / 1000.0))
-            label = Gtk.Label(viewcount_str)
-            label.set_size_request(50, self._INFO_HEIGHT)
-            info_grid.attach(label, 2, 0, 1, 1)
-
-            info_grid.attach(Spacer(), 3, 0, 1, 1)
-
-            author_str = 'AUTHOR: {}'.format(e['author'])
-            label = Gtk.Label(author_str)
-            label.set_size_request(100, self._INFO_HEIGHT)
-            info_grid.attach(label, 4, 0, 1, 1)
+        action_grid = Gtk.Grid()
+        button_grid.attach(action_grid, x_pos, 3, 1, 1)
 
         button = Gtk.Button('WATCH')
-        button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
-        button.get_style_context().add_class('play')
+        button.get_style_context().add_class('orange_linktext')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
-        info_grid.attach(button, 0, 1, 1, 1)
+        action_grid.attach(button, 0, 0, 1, 1)
 
-        info_grid.attach(Spacer(), 1, 1, 1, 1)
+        action_grid.attach(Spacer(), 1, 0, 1, 1)
 
         button = Gtk.Button('SAVE')
-        button.set_size_request(self._ENTRY_HEIGHT, self._INFO_HEIGHT)
-        button.get_style_context().add_class('play')
+        button.get_style_context().add_class('orange_linktext')
         self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
-        info_grid.attach(button, 2, 1, 1, 1)
+        action_grid.attach(button, 2, 0, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile, _fullscreen):
         _button.set_label('Stop video')
@@ -119,23 +101,17 @@ class VideoEntry(KanoWidget):
 
 
 class VideoList(Gtk.EventBox):
-    _LIST_HEIGHT = 400
 
     def __init__(self, videos=None):
-        super(VideoList, self).__init__()
+        super(VideoList, self).__init__(hexpand=True)
 
         self.get_style_context().add_class('video_list')
 
         self._grid = Gtk.Grid()
         self._grid.set_row_spacing(10)
-        self._grid.set_size_request(-1, self._LIST_HEIGHT)
+        self._grid.set_column_spacing(0)
 
-        align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
-        padding = 20
-        align.set_padding(padding, padding, padding, padding)
-        align.add(self._grid)
-
-        self.add(align)
+        self.add(self._grid)
 
         if videos is not None:
             i = 0

@@ -83,27 +83,27 @@ class MenuBar(Gtk.EventBox):
         button.add(home_img)
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', home_cb)
-        grid.attach(button, 0, 0, 1, 1)
+        grid.attach(button, 0, 0, 1, 3)
 
         button = Gtk.Button('LIBRARY')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', library_cb)
-        grid.attach(button, 1, 0, 1, 1)
+        grid.attach(button, 1, 0, 1, 3)
 
         button = Gtk.Button('PLAYLISTS')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', playlists_cb)
-        grid.attach(button, 2, 0, 1, 1)
+        grid.attach(button, 2, 0, 1, 3)
 
-        grid.attach(Spacer(), 3, 0, 1, 1)
+        grid.attach(Spacer(), 3, 0, 1, 3)
 
         button = Gtk.Button('YOUTUBE')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', youtube_cb)
-        grid.attach(button, 4, 0, 1, 1)
+        grid.attach(button, 4, 0, 1, 3)
 
         searchBar = SearchBar(search_cb)
-        grid.attach(searchBar, 5, 0, 1, 1)
+        grid.attach(searchBar, 5, 1, 1, 1)
 
         # Close button
         cross_icon = set_from_name('cross')
@@ -121,7 +121,7 @@ class MenuBar(Gtk.EventBox):
         self._close_button.connect('leave-notify-event',
                                    self._close_button_mouse_leave)
 
-        grid.attach(self._close_button, 6, 0, 1, 1)
+        grid.attach(self._close_button, 6, 0, 1, 3)
 
         self.add(grid)
 
@@ -156,8 +156,9 @@ class SearchBar(KanoWidget):
 
         self.get_style_context().add_class('search_bar')
 
-        search_keyword_entry = Gtk.Entry()
+        search_keyword_entry = Gtk.Entry(hexpand=True)
         search_keyword_entry.props.placeholder_text = 'Search Youtube'
+        search_keyword_entry.set_alignment(0.5)
         search_keyword_entry.set_size_request(100, 20)
         self._grid.attach(search_keyword_entry, 0, 0, 1, 1)
 
@@ -183,13 +184,14 @@ class AddVideoBar(KanoWidget):
         self.get_style_context().add_class('add_video_bar')
 
         title_str = 'Your library'
-        title = Gtk.Label(title_str)
+        title = Gtk.Label(title_str, hexpand=True)
         title.get_style_context().add_class('title')
         title.set_alignment(0, 0.5)
         title.set_size_request(430, 20)
         self._grid.attach(title, 0, 0, 1, 1)
 
         button = Gtk.Button('ADD MEDIA')
+        button.get_style_context().add_class('green')
         button.set_size_request(20, 20)
         # button.connect('clicked', search_cb, search_keyword_entry, False)
         self._grid.attach(button, 1, 0, 1, 1)
@@ -204,7 +206,7 @@ class PlayModeBar(KanoWidget):
         self.get_style_context().add_class('play_mode_bar')
 
         title_str = 'Play mode'
-        title = Gtk.Label(title_str)
+        title = Gtk.Label(title_str, hexpand=True)
         title.get_style_context().add_class('title')
         title.set_alignment(0, 0.5)
         title.set_size_request(310, 20)
@@ -244,6 +246,7 @@ class HeaderBar(KanoWidget):
             self._item = '{}s'.format(self._item)
         title_str = '{} {}'.format(self._count, self._item)
         title = Gtk.Label(title_str)
+        title.get_style_context().add_class('subtitle')
         title.set_alignment(0, 0)
         self._grid.attach(title, 0, 1, 1, 1)
 

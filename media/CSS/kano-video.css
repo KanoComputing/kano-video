@@ -11,6 +11,8 @@
 
 @define-color button_color #a0d779;
 @define-color kano_orange #ff842A;
+@define-color green_button #91d064;
+@define-color grey_text_link #d6d6d6;
 @define-color title_color #323232;
 @define-color subheading_color #6e6e6e;
 @define-color inactive_writing #cdcdcd;
@@ -24,6 +26,7 @@
 @define-color top_bar_background #000000;
 @define-color bar_background #e5e5e5;
 @define-color menu_bar_background #fccf43;
+@define-color menu_bar_text #3b310c;
 
 /* All */
 * {
@@ -53,8 +56,9 @@ GtkEntry {
     border-width: 2px;
     border-radius:3px;
     padding: 10px;
-    font: Bariol 13;
+    font: Bariol 14;
 }
+
 GtkEntry:insensitive {
     border-color: @inactive_border;
     color: @inactive_writing;
@@ -62,24 +66,70 @@ GtkEntry:insensitive {
     border-width: 2px;
     border-radius:3px;
 }
+
 GtkButton {
-    color: #ffffff;
-    background: @button_color;
     border-radius: 3px;
     border-color: transparent;
 }
+
+GtkButton GtkLabel {
+    font: Bariol 16 Bold;
+}
+
+GtkLabel {
+    font: Bariol 14 normal;
+}
+
 GtkImage {
     background: transparent;
+}
+
+GtkButton.green,
+GtkButton.orange,
+.menu_bar .search_bar GtkButton {
+    padding: 16px;
+}
+
+GtkButton.green GtkLabel,
+GtkButton.orange GtkLabel,
+.menu_bar .search_bar GtkButton * {
+    color: #ffffff;
+}
+
+GtkButton.green {
+    background: @green_button;
+}
+
+GtkButton.orange {
+    background: @kano_orange;
+}
+
+.menu_bar .search_bar GtkButton {
+    background: #b6952d;
+}
+
+GtkButton.orange_linktext,
+GtkButton.grey_linktext {
+    background: transparent;
+}
+
+GtkButton.orange_linktext GtkLabel,
+GtkButton.grey_linktext GtkLabel {
+    font: Bariol 14 normal;
+}
+
+GtkButton.orange_linktext GtkLabel {
+    color: @kano_orange;
+}
+
+GtkButton.grey_linktext GtkLabel {
+    color: @grey_text_link;
 }
 
 .green_event_box {
     background: @button_color;
     color: #ffffff;
     border-radius: 3px;
-}
-.white_label {
-    color: #ffffff;
-    font: Bariol Bold 13;
 }
 
 /* The bar at the top that mimics the window bar */
@@ -92,7 +142,9 @@ GtkImage {
 
 .menu_bar {
     background: @menu_bar_background;
-    font: Bariol Bold 16;
+}
+
+.menu_bar GtkLabel {
     color: #3b310c;
 }
 
@@ -102,66 +154,29 @@ GtkImage {
 }
 
 .menu_bar GtkButton * {
-    color: #3b310c;
-}
-
-.menu_bar .search_bar GtkButton {
-    background: #b6952d;
-}
-
-.menu_bar .search_bar GtkButton * {
-    color: #ffffff;
+    color: @menu_bar_text;
 }
 
 .bar {
     background: @bar_background;
 }
 
-GtkLabel.title {
-    color: @title_color;
-    padding-top:25px;
-    font: Bariol Bold 16;
-}
-
-.video_entry GtkButton.play {
-    background: #ffc498;
-}
-
-.video_entry GtkButton.play.playing {
-    background: #8fd25e;
-}
-
-.video_entry * {
-    font-size: 11;
-}
-
-.video_entry GtkGrid.info * {
-    font-weight: bold;
-}
-
-.video_entry GtkGrid.info GtkButton.play {
-    background: transparent;
-}
-
-.video_entry {
+GtkButton.entry_item {
     background: #ffffff;
 }
 
-.video_entry GtkLabel.title {
-    color: @title_color;
-    padding-top:25px;
-    font: Bariol Bold 16;
-}
-
-.video_entry GtkLabel.description {
-    color: @subheading_color;
-    padding-bottom: 18px;
-    font: Bariol 14;
-}
-
-.video_entry GtkLabel.info * {
+GtkButton.entry_item GtkGrid.info * {
     font-weight: bold;
-    font-size: 14;
+}
+
+GtkLabel.title {
+    color: @title_color;
+    font: Bariol 16 Bold;
+}
+
+GtkLabel.subtitle {
+    color: @subheading_color;
+    font: Bariol 14 normal;
 }
 
 /********************************************************
