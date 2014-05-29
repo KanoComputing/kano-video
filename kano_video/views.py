@@ -6,7 +6,8 @@ from .headers import SearchResultsHeader, \
 from .bar_ui import AddVideoBar, PlayModeBar, \
     PlaylistAddBar
 from .video_ui import VideoList, VideoListLocal, \
-    VideoListYoutube, VideoListPopular
+    VideoListYoutube, VideoListPopular, \
+    VideoDetailEntry
 from .playlist_ui import PlaylistList
 from .playlist import playlistCollection
 
@@ -42,8 +43,8 @@ class LocalView(View):
         self._add = AddVideoBar()
         self._grid.attach(self._add, 0, 1, 1, 1)
 
-        self._play_mode = PlayModeBar()
-        self._grid.attach(self._play_mode, 0, 2, 1, 1)
+        self.play_mode = PlayModeBar()
+        self._grid.attach(self.play_mode, 0, 2, 1, 1)
 
         self._list = VideoListLocal()
         self._grid.attach(self._list, 0, 3, 1, 1)
@@ -57,8 +58,8 @@ class YoutubeView(View):
         self._header = YoutubeHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
-        self._play_mode = PlayModeBar()
-        self._grid.attach(self._play_mode, 0, 1, 1, 1)
+        self.play_mode = PlayModeBar()
+        self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
     def search_handler(self, search_keyword=None, users=False):
         self._grid.remove(self._header)
@@ -82,6 +83,18 @@ class YoutubeView(View):
         self._grid.attach(self._header, 0, 0, 1, 1)
         self._grid.attach(self._list, 0, 2, 1, 1)
         self._grid.show_all()
+
+
+class DetailView(View):
+
+    def __init__(self, video):
+        super(DetailView, self).__init__()
+
+        self.play_mode = PlayModeBar(back_button=True)
+        self._grid.attach(self.play_mode, 0, 1, 1, 1)
+
+        self._list = VideoDetailEntry(video)
+        self._grid.attach(self._list, 0, 2, 1, 1)
 
 
 class PlaylistCollectionView(View):
@@ -108,8 +121,11 @@ class PlaylistView(View):
         self._header = PlaylistHeader(playlist)
         self._grid.attach(self._header, 0, 0, 1, 1)
 
+        self.play_mode = PlayModeBar()
+        self._grid.attach(self.play_mode, 0, 1, 1, 1)
+
         self._vids = VideoList(videos=playlist.playlist)
-        self._grid.attach(self._vids, 0, 1, 1, 1)
+        self._grid.attach(self._vids, 0, 2, 1, 1)
 
 
 class HomeView(View):

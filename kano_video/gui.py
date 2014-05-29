@@ -12,7 +12,7 @@ from .playlist import playlistCollection
 from .general_ui import Contents
 from .bar_ui import MenuBar
 from .views import HomeView, LocalView, YoutubeView, \
-    PlaylistView, PlaylistCollectionView
+    PlaylistView, PlaylistCollectionView, DetailView
 
 
 class MainWindow(Gtk.Window):
@@ -45,17 +45,21 @@ class MainWindow(Gtk.Window):
 
         self.connect('delete-event', self.on_close)
 
-    def switch_view(self, view, playlist=None, search_keyword=None, users=False):
+    def switch_view(self, view, playlist=None, search_keyword=None, users=False, video=None):
         views = {'home': self.switch_to_home,
                  'playlist-collection': self.switch_to_playlist_collection,
                  'playlist': self.switch_to_playlist,
                  'youtube': self.switch_to_youtube,
-                 'library': self.switch_to_local}
+                 'library': self.switch_to_local,
+                 'detail': self.switch_to_detail,
+                 'previous': self.switch_to_previous}
 
         if view is 'playlist':
             views[view](playlist)
         elif view is 'youtube':
             views[view](search_keyword=search_keyword, users=users)
+        elif view is 'detail':
+            views[view](video=video)
         else:
             views[view]()
 
@@ -79,6 +83,16 @@ class MainWindow(Gtk.Window):
     def switch_to_local(self):
         self.view = LocalView()
         self.contents.set_contents(self.view)
+
+    def switch_to_detail(self, video):
+        self.prev_view = self.view
+        self.view = DetailView(video)
+        self.contents.set_contents(self.view)
+
+    def switch_to_previous(self):
+        if self.prev_view:
+            self.view = self.prev_view
+            self.contents.set_contents(self.view)
 
     def on_close(self, widget=None, event=None):
         playlistCollection.save()

@@ -24,8 +24,7 @@ class VideoEntry(Gtk.Button):
 
         self.get_style_context().add_class('entry_item')
 
-        # TODO: Add detailed view
-        # self.connect('clicked', playlist_cb, name)
+        self.connect('clicked', self._detail_view_handler, e)
 
         button_grid = Gtk.Grid()
         button_grid.set_column_spacing(30)
@@ -65,11 +64,11 @@ class VideoEntry(Gtk.Button):
             button_grid.attach(label, x_pos, 2, 1, 1)
 
         action_grid = Gtk.Grid()
-        button_grid.attach(action_grid, x_pos, 3, 1, 1)
+        button_grid.attach(action_grid, 1, 3, 1, 1)
 
         button = Gtk.Button('WATCH')
         button.get_style_context().add_class('orange_linktext')
-        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'], False)
+        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'])
         action_grid.attach(button, 0, 0, 1, 1)
 
         action_grid.attach(Spacer(), 1, 0, 1, 1)
@@ -79,21 +78,89 @@ class VideoEntry(Gtk.Button):
         self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
         action_grid.attach(button, 2, 0, 1, 1)
 
-    def _play_handler(self, _button, _url, _localfile, _fullscreen):
-        _button.set_label('Stop video')
-        _button.get_style_context().add_class('playing')
-        _button.disconnect(self._button_handler_id)
-        self._button_handler_id = _button.connect('clicked', self._stop_handler, _url, _localfile, _fullscreen)
-        Gtk.main_iteration()
-        play_video(_button, _url, _localfile, _fullscreen)
+    def _play_handler(self, _button, _url, _localfile):
+        win = self.get_toplevel()
+        fullscreen = win.view.play_mode.is_fullscreen()
+        play_video(_button, _url, _localfile, fullscreen)
 
-    def _stop_handler(self, _button, _url, _localfile, _fullscreen):
-        _button.set_label('Watch video')
-        _button.get_style_context().remove_class('playing')
-        _button.disconnect(self._button_handler_id)
-        self._button_handler_id = _button.connect('clicked', self._play_handler, _url, _localfile, _fullscreen)
-        Gtk.main_iteration()
-        stop_videos(_button)
+    def add_to_playlist_handler(self, _, video):
+        popup = AddToPlaylistPopup(video)
+        popup.show_all()
+
+    def _detail_view_handler(self, _, video):
+        win = self.get_toplevel()
+        win.switch_view('detail', video=video)
+
+
+class VideoDetailEntry(Gtk.Button):
+    _ENTRY_HEIGHT = 110
+    _TITLE_HEIGHT = 20
+    _DESC_HEIGHT = 15
+    _INFO_HEIGHT = 15
+
+    def __init__(self, e):
+        super(VideoDetailEntry, self).__init__(hexpand=True)
+
+        self.get_style_context().add_class('entry_item')
+
+        button_grid = Gtk.Grid()
+        button_grid.set_column_spacing(30)
+        self.add(button_grid)
+
+        img = Gtk.Image()
+
+        if e['big_thumb']:
+            big_thumb = '{}/video_large_{}.jpg'.format(tmp_dir, time())
+            urlretrieve(e['big_thumb'], big_thumb)
+            img.set_from_file(big_thumb)
+        img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
+        img.get_style_context().add_class('thumb')
+        button_grid.attach(img, 0, 0, 1, 1)
+
+        info_grid = Gtk.Grid()
+        button_grid.attach(info_grid, 1, 0, 1, 1)
+
+        title_str = e['title']
+        label = Gtk.Label(title_str)
+        label.set_line_wrap(True)
+        label.set_alignment(0, 0.5)
+        label.get_style_context().add_class('title')
+        info_grid.attach(label, 0, 0, 1, 1)
+
+        if e['local_path'] is None:
+            stats_str = '{}K views - {}:{} min - by {}'.format(int(e['viewcount'] / 1000.0), e['duration_min'],
+                                                               e['duration_sec'], e['author'])
+            label = Gtk.Label(stats_str)
+            label.get_style_context().add_class('subtitle')
+            label.set_alignment(0, 0.5)
+            info_grid.attach(label, 0, 1, 1, 1)
+
+            desc_str = e['description']
+            label = Gtk.Label(desc_str)
+            label.set_line_wrap(True)
+            label.get_style_context().add_class('subtitle')
+            label.set_alignment(0, 0.5)
+            info_grid.attach(label, 0, 2, 1, 1)
+
+        action_grid = Gtk.Grid()
+        button_grid.attach(action_grid, x_pos, 3, 1, 1)
+
+        button = Gtk.Button('WATCH')
+        button.get_style_context().add_class('orange_linktext')
+        self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'])
+        action_grid.attach(button, 0, 0, 1, 1)
+
+        action_grid.attach(Spacer(), 1, 0, 1, 1)
+
+        button = Gtk.Button('SAVE')
+        button.get_style_context().add_class('orange_linktext')
+        self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
+        action_grid.attach(button, 2, 0, 1, 1)
+
+    def _play_handler(self, _button, _url, _localfile):
+        win = self.get_toplevel()
+        fullscreen = win.view.play_mode.is_fullscreen()
+        play_video(_button, _url, _localfile, fullscreen)
 
     def add_to_playlist_handler(self, _, video):
         popup = AddToPlaylistPopup(video)

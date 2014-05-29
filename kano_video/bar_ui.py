@@ -153,35 +153,44 @@ class AddVideoBar(KanoWidget):
 
 class PlayModeBar(KanoWidget):
 
-    def __init__(self):
+    def __init__(self, back_button=False):
         super(PlayModeBar, self).__init__()
 
         self.get_style_context().add_class('bar')
         self.get_style_context().add_class('play_mode_bar')
 
-        title_str = 'Play mode'
+        if back_button:
+            button = Gtk.Button('Back')
+            button.connect('clicked', self._back_handler)
+            button.set_alignment(0, 0.5)
+            self._grid.attach(button, 0, 0, 1, 1)
+
+        title_str = ''
         title = Gtk.Label(title_str, hexpand=True)
         title.get_style_context().add_class('title')
         title.set_alignment(0, 0.5)
-        title.set_size_request(310, 20)
-        self._grid.attach(title, 0, 0, 1, 1)
+        self._grid.attach(title, 1, 0, 1, 1)
 
-        fullscreen_str = 'Fullscreen'
+        fullscreen_str = 'PLAYER'
         fullscreen = Gtk.Label(fullscreen_str)
         fullscreen.set_size_request(70, 20)
-        self._grid.attach(fullscreen, 1, 0, 1, 1)
+        self._grid.attach(fullscreen, 2, 0, 1, 1)
 
         self._switch = Gtk.Switch()
         self._switch.set_size_request(20, 20)
-        self._grid.attach(self._switch, 2, 0, 1, 1)
+        self._grid.attach(self._switch, 3, 0, 1, 1)
 
-        windowed_str = 'In player'
+        windowed_str = 'FULLSCREEN'
         windowed = Gtk.Label(windowed_str)
         windowed.set_size_request(70, 20)
         self._grid.attach(windowed, 4, 0, 1, 1)
 
     def is_fullscreen(self):
-        return not self._switch.get_active()
+        return self._switch.get_active()
+
+    def _back_handler(self, _):
+        win = self.get_toplevel()
+        win.switch_view('previous')
 
 
 class PlaylistAddBar(KanoWidget):
