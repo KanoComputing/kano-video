@@ -24,6 +24,7 @@ class Playlist(object):
             self.load_from_file(self.filename)
         except IOError:
             self.playlist = []
+            self.save()
 
     def save_to_file(self, filepath):
         with open(filepath, 'w') as savefile:
