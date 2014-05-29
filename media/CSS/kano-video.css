@@ -49,6 +49,10 @@ GtkWindow {
     background: #f3f3f3;
 }
 
+GtkWindow.popup {
+    background: #ffffff;
+}
+
 GtkEntry {
     border-color: @active_border;
     color: @active_writing;
@@ -73,11 +77,11 @@ GtkButton {
 }
 
 GtkButton GtkLabel {
-    font: Bariol 16 Bold;
+    font: Bariol Bold 12;
 }
 
 GtkLabel {
-    font: Bariol 14 normal;
+    font: Bariol Normal 12;
 }
 
 GtkImage {
@@ -87,7 +91,7 @@ GtkImage {
 GtkButton.green,
 GtkButton.orange,
 .menu_bar .search_bar GtkButton {
-    padding: 16px;
+    padding: 10px;
 }
 
 GtkButton.green GtkLabel,
@@ -111,11 +115,6 @@ GtkButton.orange {
 GtkButton.orange_linktext,
 GtkButton.grey_linktext {
     background: transparent;
-}
-
-GtkButton.orange_linktext GtkLabel,
-GtkButton.grey_linktext GtkLabel {
-    font: Bariol 14 normal;
 }
 
 GtkButton.orange_linktext GtkLabel {
@@ -171,12 +170,12 @@ GtkButton.entry_item GtkGrid.info * {
 
 GtkLabel.title {
     color: @title_color;
-    font: Bariol 16 Bold;
+    font: Bariol Bold 16;
 }
 
 GtkLabel.subtitle {
     color: @subheading_color;
-    font: Bariol 14 normal;
+    font: Bariol Normal 12;
 }
 
 /********************************************************

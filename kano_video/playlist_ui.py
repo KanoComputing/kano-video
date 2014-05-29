@@ -98,9 +98,7 @@ class PlaylistPopup(Gtk.Window):
     def __init__(self):
         super(PlaylistPopup, self).__init__(title='Kano Video')
 
-        self._win_width = 300
-        self._contents_height = 200
-
+        self.get_style_context().add_class('popup')
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -130,7 +128,7 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.grid.attach(button, 1, 1, 1, 1)
 
         button = Gtk.Button('CREATE NEW')
-        button.get_style_context().add_class('green')
+        button.get_style_context().add_class('orange_linktext')
         button.connect('clicked', self._new)
         self.grid.attach(button, 0, 2, 1, 1)
 
