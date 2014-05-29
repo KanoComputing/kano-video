@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 
-from .playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection
 
 from .general_ui import KanoWidget
 

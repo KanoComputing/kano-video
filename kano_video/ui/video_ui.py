@@ -5,11 +5,11 @@ from time import time
 
 from kano.utils import list_dir
 
-from .popups import AddToPlaylistPopup
-from .player import play_video
-from .youtube import search_youtube_by_user, parse_youtube_entries, \
-    search_youtube_by_keyword, tmp_dir
+from kano_video.logic.player import play_video
+from kano_video.logic.youtube import search_youtube_by_user, \
+    parse_youtube_entries, search_youtube_by_keyword, tmp_dir
 
+from .popups import AddToPlaylistPopup
 from .general_ui import Spacer
 
 

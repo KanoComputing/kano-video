@@ -7,7 +7,7 @@
 from gi.repository import Gtk
 
 from kano.network import is_internet
-from .playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection
 
 from .general_ui import Contents
 from .bar_ui import MenuBar

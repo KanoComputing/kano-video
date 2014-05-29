@@ -1,5 +1,7 @@
 from gi.repository import Gtk
 
+from kano_video.logic.playlist import playlistCollection
+
 from .headers import SearchResultsHeader, \
     LibraryHeader, PlaylistHeader, \
     PlaylistCollectionHeader, YoutubeHeader
@@ -9,7 +11,6 @@ from .video_ui import VideoList, VideoListLocal, \
     VideoListYoutube, VideoListPopular, \
     VideoDetailEntry
 from .playlist_ui import PlaylistList
-from .playlist import playlistCollection
 
 
 class View(Gtk.EventBox):

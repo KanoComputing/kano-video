@@ -2,7 +2,7 @@ from gi.repository import Gtk
 
 from .general_ui import KanoWidget
 
-from .playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection
 
 
 class HeaderBar(KanoWidget):

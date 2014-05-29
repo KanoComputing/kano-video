@@ -1,8 +1,9 @@
 import os
 from gi.repository import Gtk
 
+from kano_video.logic.playlist import Playlist, playlistCollection
+
 from .general_ui import TopBar
-from .playlist import Playlist, playlistCollection
 
 
 class PlaylistPopup(Gtk.Dialog):
