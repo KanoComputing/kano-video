@@ -3,10 +3,11 @@ from gi.repository import Gtk
 from .headers import SearchResultsHeader, \
     LibraryHeader, PlaylistHeader, \
     PlaylistCollectionHeader, YoutubeHeader
-from .bar_ui import AddVideoBar, PlayModeBar
+from .bar_ui import AddVideoBar, PlayModeBar, \
+    PlaylistAddBar
 from .video_ui import VideoList, VideoListLocal, \
     VideoListYoutube, VideoListPopular
-from .playlist_ui import PlaylistList, PlaylistAddBar
+from .playlist_ui import PlaylistList
 from .playlist import playlistCollection
 
 

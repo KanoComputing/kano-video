@@ -6,7 +6,7 @@ from .icons import set_from_name
 from .playlist import playlistCollection
 from .youtube import tmp_dir
 
-from .popups import LoadFilePopup
+from .popups import LoadFilePopup, AddPlaylistPopup
 from .general_ui import KanoWidget, Spacer
 
 
@@ -182,3 +182,32 @@ class PlayModeBar(KanoWidget):
 
     def is_fullscreen(self):
         return not self._switch.get_active()
+
+
+class PlaylistAddBar(KanoWidget):
+
+    def __init__(self):
+        super(PlaylistAddBar, self).__init__()
+
+        self.get_style_context().add_class('bar')
+        self.get_style_context().add_class('playlist_add_bar')
+
+        title_str = ''
+        title = Gtk.Label(title_str, hexpand=True)
+        title.get_style_context().add_class('title')
+        title.set_alignment(0, 0.5)
+        title.set_size_request(430, 20)
+        self._grid.attach(title, 0, 0, 1, 1)
+
+        button = Gtk.Button('CREATE LIST')
+        button.get_style_context().add_class('green')
+        button.set_size_request(20, 20)
+        button.connect('clicked', self._add_handler)
+        self._grid.attach(button, 1, 0, 1, 1)
+
+    def _add_handler(self, button):
+        popup = AddPlaylistPopup()
+        res = popup.run()
+        if res:
+            win = self.get_toplevel()
+            win.switch_view('playlist-collection')

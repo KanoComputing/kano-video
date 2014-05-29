@@ -2,7 +2,6 @@ from gi.repository import Gtk
 
 from .playlist import playlistCollection
 
-from .popups import AddPlaylistPopup
 from .general_ui import KanoWidget
 
 from kano.gtk3.kano_dialog import KanoDialog
@@ -67,32 +66,3 @@ class PlaylistList(KanoWidget):
             playlist = PlaylistEntry(name)
             self._grid.attach(playlist, 0, i, 1, 1)
             i += 1
-
-
-class PlaylistAddBar(KanoWidget):
-
-    def __init__(self):
-        super(PlaylistAddBar, self).__init__()
-
-        self.get_style_context().add_class('bar')
-        self.get_style_context().add_class('playlist_add_bar')
-
-        title_str = ''
-        title = Gtk.Label(title_str, hexpand=True)
-        title.get_style_context().add_class('title')
-        title.set_alignment(0, 0.5)
-        title.set_size_request(430, 20)
-        self._grid.attach(title, 0, 0, 1, 1)
-
-        button = Gtk.Button('CREATE LIST')
-        button.get_style_context().add_class('green')
-        button.set_size_request(20, 20)
-        button.connect('clicked', self._add_handler)
-        self._grid.attach(button, 1, 0, 1, 1)
-
-    def _add_handler(self, button):
-        popup = AddPlaylistPopup()
-        res = popup.run()
-        if res:
-            win = self.get_toplevel()
-            win.switch_view('playlist-collection')
