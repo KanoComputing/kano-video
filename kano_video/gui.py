@@ -4,7 +4,6 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 
-import os
 from gi.repository import Gtk
 
 from kano.network import is_internet
@@ -84,26 +83,3 @@ class MainWindow(Gtk.Window):
     def on_close(self, widget=None, event=None):
         playlistCollection.save()
         Gtk.main_quit()
-
-    def dir_dialog(self):
-        dialog = Gtk.FileChooserDialog(
-            "Please select a folder", self, Gtk.FileChooserAction.OPEN,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-
-        dialog.set_action(Gtk.FileChooserAction.SELECT_FOLDER)
-
-        # Set up file filters
-        filter_text = Gtk.FileFilter()
-        filter_text.set_name("Video files")
-        filter_text.add_pattern('*.mkv')
-        dialog.add_filter(filter_text)
-
-        dialog.set_current_folder(os.path.expanduser('~'))
-
-        response = dialog.run()
-
-        dir_path = None
-        if response == Gtk.ResponseType.OK:
-            dir_path = dialog.get_filename()
-        dialog.destroy()
-        return dir_path

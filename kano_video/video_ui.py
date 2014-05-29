@@ -5,7 +5,7 @@ from time import time
 
 from kano.utils import list_dir
 
-from .playlist_ui import AddToPlaylistPopup
+from .popups import AddToPlaylistPopup
 from .player import play_video, stop_videos
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword, tmp_dir

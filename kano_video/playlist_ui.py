@@ -1,9 +1,9 @@
 from gi.repository import Gtk
 
-from .playlist import playlistCollection, Playlist
+from .playlist import playlistCollection
 
+from .popups import AddPlaylistPopup
 from .general_ui import KanoWidget
-from .bar_ui import TopBar
 
 from kano.gtk3.kano_dialog import KanoDialog
 
@@ -96,94 +96,3 @@ class PlaylistAddBar(KanoWidget):
         if res:
             win = self.get_toplevel()
             win.switch_view('playlist-collection')
-
-
-class PlaylistPopup(Gtk.Dialog):
-
-    def __init__(self):
-        super(PlaylistPopup, self).__init__(title='Kano Video')
-
-        self.get_style_context().add_class('popup')
-        self.set_decorated(False)
-        self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.CENTER)
-
-        self.grid = Gtk.Grid()
-
-        self._bar = TopBar('')
-        self.grid.attach(self._bar, 0, 0, 2, 1)
-
-        self.get_content_area().add(self.grid)
-
-        self._return = None
-
-    def run(self):
-        self.show_all()
-        super(PlaylistPopup, self).run()
-
-        return self._return
-
-
-class AddToPlaylistPopup(PlaylistPopup):
-
-    def __init__(self, video):
-        super(AddToPlaylistPopup, self).__init__()
-
-        self.video = video
-
-        self._combo = Gtk.ComboBoxText.new()
-        self.refresh()
-        self.grid.attach(self._combo, 0, 1, 1, 1)
-
-        button = Gtk.Button('ADD')
-        button.get_style_context().add_class('green')
-        button.connect('clicked', self._add, self._combo)
-        self.grid.attach(button, 1, 1, 1, 1)
-
-        button = Gtk.Button('CREATE NEW')
-        button.get_style_context().add_class('orange_linktext')
-        button.connect('clicked', self._new)
-        self.grid.attach(button, 0, 2, 1, 1)
-
-    def _add(self, _, playlist_entry):
-        playlist_name = playlist_entry.get_active_text()
-        playlistCollection.collection[playlist_name].add(self.video)
-
-        self._return = playlist_name
-        self.destroy()
-
-    def _new(self, _):
-        popup = AddPlaylistPopup()
-        res = popup.run()
-        if res:
-            self._combo.prepend_text(res)
-            self._combo.set_active(0)
-
-    def refresh(self):
-        model = self._combo.get_model()
-        model.clear()
-        for name, _ in playlistCollection.collection.iteritems():
-            self._combo.append_text(name)
-
-
-class AddPlaylistPopup(PlaylistPopup):
-
-    def __init__(self):
-        super(AddPlaylistPopup, self).__init__()
-
-        entry = Gtk.Entry()
-        self.grid.attach(entry, 0, 1, 1, 1)
-
-        button = Gtk.Button('ADD')
-        button.get_style_context().add_class('green')
-        button.connect('clicked', self._add, entry)
-        self.grid.attach(button, 1, 1, 1, 1)
-
-    def _add(self, _, playlist_entry):
-        playlist_name = playlist_entry.get_text()
-
-        playlist = Playlist(playlist_name)
-        playlistCollection.add(playlist)
-
-        self._return = playlist_name
-        self.destroy()

@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gdk, Pango
+from gi.repository import Gtk, Gdk
 import os
 from shutil import rmtree
 
@@ -6,60 +6,8 @@ from .icons import set_from_name
 from .playlist import playlistCollection
 from .youtube import tmp_dir
 
+from .popups import LoadFilePopup
 from .general_ui import KanoWidget, Spacer
-
-
-class TopBar(Gtk.EventBox):
-    _TOP_BAR_HEIGHT = 44
-
-    def __init__(self, title):
-        super(TopBar, self).__init__(hexpand=True, vexpand=True)
-
-        self.get_style_context().add_class('top_bar_container')
-
-        box = Gtk.Box()
-        box.set_size_request(-1, self._TOP_BAR_HEIGHT)
-
-        self._header = Gtk.Label(title, halign=Gtk.Align.CENTER,
-                                 valign=Gtk.Align.CENTER,
-                                 hexpand=True)
-        box.pack_start(self._header, True, True, 0)
-
-        self._header.modify_font(Pango.FontDescription('Bariol 13'))
-        self._header.get_style_context().add_class('header')
-
-        # Close button
-        cross_icon = set_from_name('cross')
-
-        self._close_button = Gtk.Button()
-        self._close_button.set_image(cross_icon)
-        self._close_button.props.margin_right = 2
-        self._close_button.set_can_focus(False)
-        self._close_button.get_style_context().add_class('top_bar_button')
-        self._close_button.get_style_context().add_class('no_border')
-
-        self._close_button.connect('clicked', self._close_button_click)
-        self._close_button.connect('enter-notify-event',
-                                   self._close_button_mouse_enter)
-        self._close_button.connect('leave-notify-event',
-                                   self._close_button_mouse_leave)
-
-        box.pack_start(self._close_button, False, False, 0)
-
-        self.add(box)
-
-    def _close_button_mouse_enter(self, button, event):
-        # Change the cursor to hour Glass
-        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND1)
-        self.get_root_window().set_cursor(cursor)
-
-    def _close_button_mouse_leave(self, button, event):
-        # Set the cursor to normal Arrow
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
-
-    def _close_button_click(self, event):
-        self.get_toplevel().destroy()
 
 
 class MenuBar(Gtk.EventBox):
@@ -195,8 +143,12 @@ class AddVideoBar(KanoWidget):
         button = Gtk.Button('ADD MEDIA')
         button.get_style_context().add_class('green')
         button.set_size_request(20, 20)
-        # button.connect('clicked', search_cb, search_keyword_entry, False)
+        button.connect('clicked', self._add_handler)
         self._grid.attach(button, 1, 0, 1, 1)
+
+    def _add_handler(self, _):
+        popup = LoadFilePopup()
+        print popup.run()
 
 
 class PlayModeBar(KanoWidget):
@@ -230,84 +182,3 @@ class PlayModeBar(KanoWidget):
 
     def is_fullscreen(self):
         return not self._switch.get_active()
-
-
-class HeaderBar(KanoWidget):
-
-    def __init__(self):
-        super(HeaderBar, self).__init__()
-
-        self.get_style_context().add_class('header_bar')
-
-        title = Gtk.Label(self._title)
-        title.get_style_context().add_class('title')
-        title.set_alignment(0, 0)
-        self._grid.attach(title, 0, 0, 1, 1)
-
-        if self._count is not 1:
-            self._item = '{}s'.format(self._item)
-        title_str = '{} {}'.format(self._count, self._item)
-        title = Gtk.Label(title_str)
-        title.get_style_context().add_class('subtitle')
-        title.set_alignment(0, 0)
-        self._grid.attach(title, 0, 1, 1, 1)
-
-
-class YoutubeBar(HeaderBar):
-
-    def __init__(self):
-        self._title = 'Youtube'
-        self._count = len(playlistCollection.collection)
-        self._item = 'video'
-
-        super(YoutubeBar, self).__init__()
-
-        self.get_style_context().add_class('youtube_bar')
-
-
-class LibraryBar(HeaderBar):
-
-    def __init__(self):
-        self._title = 'Library'
-        self._count = len(playlistCollection.collection)
-        self._item = 'video'
-
-        super(LibraryBar, self).__init__()
-
-        self.get_style_context().add_class('library_bar')
-
-
-class PlaylistCollectionBar(HeaderBar):
-
-    def __init__(self):
-        self._title = 'Playlists'
-        self._count = len(playlistCollection.collection)
-        self._item = 'list'
-
-        super(PlaylistCollectionBar, self).__init__()
-
-        self.get_style_context().add_class('playlist_collection_bar')
-
-
-class PlaylistBar(HeaderBar):
-
-    def __init__(self, playlist):
-        self._title = playlist.name
-        self._count = len(playlist.playlist)
-        self._item = 'video'
-
-        super(PlaylistBar, self).__init__()
-
-        self.get_style_context().add_class('playlist_bar')
-
-
-class SearchResultsBar(HeaderBar):
-
-    def __init__(self, search_keyword, result_count):
-        self._title = 'Showing results for "{}"'.format(search_keyword)
-        self._count = result_count
-        self._item = 'video'
-
-        super(SearchResultsBar, self).__init__()
-
-        self.get_style_context().add_class('search_results_bar')

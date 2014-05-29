@@ -1,8 +1,9 @@
 from gi.repository import Gtk
 
-from .bar_ui import SearchResultsBar, \
-    AddVideoBar, PlayModeBar, LibraryBar, PlaylistBar, \
-    PlaylistCollectionBar, YoutubeBar
+from .headers import SearchResultsHeader, \
+    LibraryHeader, PlaylistHeader, \
+    PlaylistCollectionHeader, YoutubeHeader
+from .bar_ui import AddVideoBar, PlayModeBar
 from .video_ui import VideoList, VideoListLocal, \
     VideoListYoutube, VideoListPopular
 from .playlist_ui import PlaylistList, PlaylistAddBar
@@ -34,7 +35,7 @@ class LocalView(View):
     def __init__(self):
         super(LocalView, self).__init__()
 
-        self._header = LibraryBar()
+        self._header = LibraryHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self._add = AddVideoBar()
@@ -52,7 +53,7 @@ class YoutubeView(View):
     def __init__(self):
         super(YoutubeView, self).__init__()
 
-        self._header = YoutubeBar()
+        self._header = YoutubeHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self._play_mode = PlayModeBar()
@@ -67,14 +68,14 @@ class YoutubeView(View):
             pass
 
         if search_keyword and search_keyword.get_text():
-            self._header = SearchResultsBar(search_keyword.get_text(), '100,000')
+            self._header = SearchResultsHeader(search_keyword.get_text(), '100,000')
 
             if users is False:
                 self._list = VideoListYoutube(keyword=search_keyword.get_text())
             else:
                 self._list = VideoListYoutube(username=search_keyword.get_text())
         else:
-            self._header = YoutubeBar()
+            self._header = YoutubeHeader()
             self._list = VideoListYoutube()
 
         self._grid.attach(self._header, 0, 0, 1, 1)
@@ -87,7 +88,7 @@ class PlaylistCollectionView(View):
     def __init__(self):
         super(PlaylistCollectionView, self).__init__()
 
-        self._header = PlaylistCollectionBar()
+        self._header = PlaylistCollectionHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self._add = PlaylistAddBar()
@@ -103,7 +104,7 @@ class PlaylistView(View):
         super(PlaylistView, self).__init__()
 
         playlist = playlistCollection.collection[playlist_name]
-        self._header = PlaylistBar(playlist)
+        self._header = PlaylistHeader(playlist)
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self._vids = VideoList(videos=playlist.playlist)
