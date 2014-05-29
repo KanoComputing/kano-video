@@ -31,9 +31,7 @@ class MainWindow(Gtk.Window):
         self.grid = Gtk.Grid()
         self.add(self.grid)
 
-        menu_bar = MenuBar(self.switch_to_home, self.switch_to_local,
-                           self.switch_to_playlist_collection, self.switch_to_youtube,
-                           self.switch_to_youtube)
+        menu_bar = MenuBar()
         self.grid.attach(menu_bar, 0, 0, 1, 1)
 
         if is_internet():
@@ -48,24 +46,38 @@ class MainWindow(Gtk.Window):
 
         self.connect('delete-event', self.on_close)
 
-    def switch_to_home(self, _button):
+    def switch_view(self, view, playlist=None, search_keyword=None, users=False):
+        views = {'home': self.switch_to_home,
+                 'playlist-collection': self.switch_to_playlist_collection,
+                 'playlist': self.switch_to_playlist,
+                 'youtube': self.switch_to_youtube,
+                 'library': self.switch_to_local}
+
+        if view is 'playlist':
+            views[view](playlist)
+        elif view is 'youtube':
+            views[view](search_keyword=search_keyword, users=users)
+        else:
+            views[view]()
+
+    def switch_to_home(self):
         self.view = HomeView()
         self.contents.set_contents(self.view)
 
-    def switch_to_playlist_collection(self, _button):
-        self.view = PlaylistCollectionView(self.switch_to_playlist)
+    def switch_to_playlist_collection(self):
+        self.view = PlaylistCollectionView()
         self.contents.set_contents(self.view)
 
-    def switch_to_playlist(self, _button, playlist):
+    def switch_to_playlist(self, playlist):
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
-    def switch_to_youtube(self, _button, search_keyword=None, users=False):
+    def switch_to_youtube(self, search_keyword=None, users=False):
         self.view = YoutubeView()
-        self.view.search_handler(_button, search_keyword, users)
+        self.view.search_handler(search_keyword, users)
         self.contents.set_contents(self.view)
 
-    def switch_to_local(self, _button):
+    def switch_to_local(self):
         self.view = LocalView()
         self.contents.set_contents(self.view)
 

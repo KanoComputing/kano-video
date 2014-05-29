@@ -66,8 +66,7 @@ class MenuBar(Gtk.EventBox):
     _MENU_BAR_HEIGHT = 66
     _BUTTON_WIDTH = 150
 
-    def __init__(self, home_cb, library_cb, playlists_cb,
-                 youtube_cb, search_cb):
+    def __init__(self):
         Gtk.EventBox.__init__(self)
 
         self.get_style_context().add_class('menu_bar')
@@ -82,27 +81,28 @@ class MenuBar(Gtk.EventBox):
         button = Gtk.Button()
         button.add(home_img)
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
-        button.connect('clicked', home_cb)
+        button.connect('clicked', self._switch_handler, 'home')
+        button.set_alignment(0, 0)
         grid.attach(button, 0, 0, 1, 3)
 
         button = Gtk.Button('LIBRARY')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
-        button.connect('clicked', library_cb)
+        button.connect('clicked', self._switch_handler, 'library')
         grid.attach(button, 1, 0, 1, 3)
 
         button = Gtk.Button('PLAYLISTS')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
-        button.connect('clicked', playlists_cb)
+        button.connect('clicked', self._switch_handler, 'playlist-collection')
         grid.attach(button, 2, 0, 1, 3)
 
         grid.attach(Spacer(), 3, 0, 1, 3)
 
         button = Gtk.Button('YOUTUBE')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
-        button.connect('clicked', youtube_cb)
+        button.connect('clicked', self._switch_handler, 'youtube')
         grid.attach(button, 4, 0, 1, 3)
 
-        searchBar = SearchBar(search_cb)
+        searchBar = SearchBar()
         grid.attach(searchBar, 5, 1, 1, 1)
 
         # Close button
@@ -124,6 +124,10 @@ class MenuBar(Gtk.EventBox):
         grid.attach(self._close_button, 6, 0, 1, 3)
 
         self.add(grid)
+
+    def _switch_handler(self, _button, switchto):
+        win = self.get_toplevel()
+        win.switch_view(switchto)
 
     def _close_button_mouse_enter(self, button, event):
         # Change the cursor to hour Glass
@@ -151,28 +155,26 @@ class MenuBar(Gtk.EventBox):
 
 class SearchBar(KanoWidget):
 
-    def __init__(self, search_cb):
+    def __init__(self):
         super(SearchBar, self).__init__()
 
         self.get_style_context().add_class('search_bar')
+        self._grid.set_column_spacing(10)
 
         search_keyword_entry = Gtk.Entry(hexpand=True)
         search_keyword_entry.props.placeholder_text = 'Search Youtube'
-        search_keyword_entry.set_alignment(0.5)
+        search_keyword_entry.set_alignment(0)
         search_keyword_entry.set_size_request(100, 20)
         self._grid.attach(search_keyword_entry, 0, 0, 1, 1)
 
         button = Gtk.Button('SEARCH')
         button.set_size_request(20, 20)
-        button.connect('clicked', search_cb, search_keyword_entry, False)
+        button.connect('clicked', self.switch_to_youtube, search_keyword_entry, False)
         self._grid.attach(button, 1, 0, 1, 1)
 
-        """
-        button = Gtk.Button('SEARCH USERS')
-        button.set_size_request(20, 20)
-        button.connect('clicked', search_cb, search_keyword_entry, True)
-        self._grid.attach(button, 3, 0, 1, 1)
-        """
+    def switch_to_youtube(self, _button, search_keyword=None, users=False):
+        win = self.get_toplevel()
+        win.switch_view('youtube', search_keyword=search_keyword, users=users)
 
 
 class AddVideoBar(KanoWidget):

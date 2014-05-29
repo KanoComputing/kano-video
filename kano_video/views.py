@@ -58,7 +58,7 @@ class YoutubeView(View):
         self._play_mode = PlayModeBar()
         self._grid.attach(self._play_mode, 0, 1, 1, 1)
 
-    def search_handler(self, _button, search_keyword=None, users=False):
+    def search_handler(self, search_keyword=None, users=False):
         self._grid.remove(self._header)
 
         try:
@@ -84,7 +84,7 @@ class YoutubeView(View):
 
 class PlaylistCollectionView(View):
 
-    def __init__(self, playlist_cb):
+    def __init__(self):
         super(PlaylistCollectionView, self).__init__()
 
         self._header = PlaylistCollectionBar()
@@ -93,7 +93,7 @@ class PlaylistCollectionView(View):
         self._add = PlaylistAddBar()
         self._grid.attach(self._add, 0, 1, 1, 1)
 
-        self._vids = PlaylistList(playlistCollection.collection, playlist_cb)
+        self._vids = PlaylistList(playlistCollection.collection)
         self._grid.attach(self._vids, 0, 2, 1, 1)
 
 
