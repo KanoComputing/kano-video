@@ -6,8 +6,8 @@ from kano_video.icons import set_from_name
 from kano_video.logic.playlist import playlistCollection
 from kano_video.logic.youtube import tmp_dir
 
-from .popups import LoadFilePopup, AddPlaylistPopup
-from .general_ui import KanoWidget, Spacer
+from .popup import LoadFilePopup, AddPlaylistPopup
+from .general import KanoWidget, Spacer
 
 
 class MenuBar(Gtk.EventBox):

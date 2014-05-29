@@ -3,7 +3,7 @@ from gi.repository import Gtk
 
 from kano_video.logic.playlist import Playlist, playlistCollection
 
-from .general_ui import TopBar
+from .general import TopBar
 
 
 class PlaylistPopup(Gtk.Dialog):

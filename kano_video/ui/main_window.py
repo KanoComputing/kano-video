@@ -9,9 +9,9 @@ from gi.repository import Gtk
 from kano.network import is_internet
 from kano_video.logic.playlist import playlistCollection
 
-from .general_ui import Contents
-from .bar_ui import MenuBar
-from .views import HomeView, LocalView, YoutubeView, \
+from .general import Contents
+from .bar import MenuBar
+from .view import HomeView, LocalView, YoutubeView, \
     PlaylistView, PlaylistCollectionView, DetailView
 
 

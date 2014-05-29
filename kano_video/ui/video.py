@@ -9,8 +9,8 @@ from kano_video.logic.player import play_video
 from kano_video.logic.youtube import search_youtube_by_user, \
     parse_youtube_entries, search_youtube_by_keyword, tmp_dir
 
-from .popups import AddToPlaylistPopup
-from .general_ui import Spacer
+from .popup import AddToPlaylistPopup
+from .general import Spacer
 
 
 class VideoEntry(Gtk.Button):

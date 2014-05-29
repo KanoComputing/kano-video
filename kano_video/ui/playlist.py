@@ -2,7 +2,7 @@ from gi.repository import Gtk
 
 from kano_video.logic.playlist import playlistCollection
 
-from .general_ui import KanoWidget
+from .general import KanoWidget
 
 from kano.gtk3.kano_dialog import KanoDialog
 
