@@ -6,7 +6,7 @@ from time import time
 from kano.utils import list_dir
 
 from .popups import AddToPlaylistPopup
-from .player import play_video, stop_videos
+from .player import play_video
 from .youtube import search_youtube_by_user, parse_youtube_entries, \
     search_youtube_by_keyword, tmp_dir
 
@@ -30,8 +30,6 @@ class VideoEntry(Gtk.Button):
         button_grid.set_column_spacing(30)
         self.add(button_grid)
 
-        x_pos = 0
-
         img = Gtk.Image()
 
         if e['thumbnail']:
@@ -40,14 +38,13 @@ class VideoEntry(Gtk.Button):
             img.set_from_file(thumbnail)
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
-        button_grid.attach(img, x_pos, 0, 1, 4)
-        x_pos += 1
+        button_grid.attach(img, 0, 0, 1, 4)
 
         title_str = e['title'] if len(e['title']) <= 48 else e['title'][:45] + '...'
         label = Gtk.Label(title_str)
         label.set_alignment(0, 0.5)
         label.get_style_context().add_class('title')
-        button_grid.attach(label, x_pos, 0, 1, 1)
+        button_grid.attach(label, 1, 0, 1, 1)
 
         if e['local_path'] is None:
             stats_str = '{}K views - {}:{} min - by {}'.format(int(e['viewcount'] / 1000.0), e['duration_min'],
@@ -55,13 +52,13 @@ class VideoEntry(Gtk.Button):
             label = Gtk.Label(stats_str)
             label.get_style_context().add_class('subtitle')
             label.set_alignment(0, 0.5)
-            button_grid.attach(label, x_pos, 1, 1, 1)
+            button_grid.attach(label, 1, 1, 1, 1)
 
             desc_str = e['description'] if len(e['description']) <= 70 else e['description'][:67] + '...'
             label = Gtk.Label(desc_str)
             label.get_style_context().add_class('subtitle')
             label.set_alignment(0, 0.5)
-            button_grid.attach(label, x_pos, 2, 1, 1)
+            button_grid.attach(label, 1, 2, 1, 1)
 
         action_grid = Gtk.Grid()
         button_grid.attach(action_grid, 1, 3, 1, 1)
@@ -143,7 +140,7 @@ class VideoDetailEntry(Gtk.Button):
             info_grid.attach(label, 0, 2, 1, 1)
 
         action_grid = Gtk.Grid()
-        button_grid.attach(action_grid, x_pos, 3, 1, 1)
+        info_grid.attach(action_grid, 0, 3, 1, 1)
 
         button = Gtk.Button('WATCH')
         button.get_style_context().add_class('orange_linktext')
