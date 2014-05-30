@@ -90,9 +90,7 @@ class MainWindow(Gtk.Window):
 
         self.prev_view = []
 
-        self.view = YoutubeView()
-        self.view.search_handler(search_keyword, users)
-
+        self.view = YoutubeView(search_keyword, users)
         self.contents.set_contents(self.view)
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)

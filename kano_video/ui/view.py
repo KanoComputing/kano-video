@@ -53,22 +53,8 @@ class LocalView(View):
 
 class YoutubeView(View):
 
-    def __init__(self):
+    def __init__(self, search_keyword=None, users=False):
         super(YoutubeView, self).__init__()
-
-        self._header = YoutubeHeader()
-        self._grid.attach(self._header, 0, 0, 1, 1)
-
-        self.play_mode = PlayModeBar()
-        self._grid.attach(self.play_mode, 0, 1, 1, 1)
-
-    def search_handler(self, search_keyword=None, users=False):
-        self._grid.remove(self._header)
-
-        try:
-            self._grid.remove(self._list)
-        except Exception:
-            pass
 
         if search_keyword and search_keyword.get_text():
             self._header = SearchResultsHeader(search_keyword.get_text(), '100,000')
@@ -83,7 +69,9 @@ class YoutubeView(View):
 
         self._grid.attach(self._header, 0, 0, 1, 1)
         self._grid.attach(self._list, 0, 2, 1, 1)
-        self._grid.show_all()
+
+        self.play_mode = PlayModeBar()
+        self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
 
 class DetailView(View):
