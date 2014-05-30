@@ -65,29 +65,39 @@ class MainWindow(Gtk.Window):
             views[view]()
 
     def switch_to_home(self):
+        self.prev_view = []
+
         self.view = HomeView()
         self.contents.set_contents(self.view)
 
     def switch_to_playlist_collection(self):
+        self.prev_view = []
+
         self.view = PlaylistCollectionView()
         self.contents.set_contents(self.view)
 
     def switch_to_playlist(self, playlist):
         self.prev_view.append(self.view)
+
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
     def switch_to_youtube(self, search_keyword=None, users=False):
+        self.prev_view = []
+
         self.view = YoutubeView()
         self.view.search_handler(search_keyword, users)
         self.contents.set_contents(self.view)
 
     def switch_to_local(self):
+        self.prev_view = []
+
         self.view = LocalView()
         self.contents.set_contents(self.view)
 
     def switch_to_detail(self, video):
         self.prev_view.append(self.view)
+
         self.view = DetailView(video)
         self.contents.set_contents(self.view)
 
