@@ -9,24 +9,24 @@
 
 /* Define colours */
 
-@define-color button_color #a0d779;
-@define-color kano_orange #ff842A;
-@define-color green_button #91d064;
-@define-color grey_text_link #d6d6d6;
-@define-color title_color #323232;
-@define-color subheading_color #6e6e6e;
 @define-color inactive_writing #cdcdcd;
 @define-color inactive_border #e1e1e1;
 @define-color active_writing #323232;
 @define-color active_border #ababab;
-@define-color hover_color #eeeeee;
-@define-color top_bar_active #ffffff;
-@define-color top_bar_selected #ff0000;
-@define-color top_bar_inactive #555555;
-@define-color top_bar_background #000000;
-@define-color bar_background #e5e5e5;
+
 @define-color menu_bar_background #fccf43;
 @define-color menu_bar_text #3b310c;
+
+@define-color bar_background #e5e5e5;
+
+@define-color title_color #323232;
+@define-color subtitle_color #6e6e6e;
+
+@define-color button_color #a0d779;
+@define-color kano_orange #ff842A;
+@define-color green_button #91d064;
+@define-color grey_button #b9b9b9;
+@define-color grey_text_link #d6d6d6;
 
 /* All */
 * {
@@ -44,6 +44,10 @@
     -GtkWidget-separator-height: 0;
 }
 
+/**
+ * The windows
+ */
+
 GtkWindow {
     color: #ffffff;
     background: #f3f3f3;
@@ -51,6 +55,119 @@ GtkWindow {
 
 GtkWindow.popup {
     background: #ffffff;
+}
+
+/**
+ * The bar at the top that mimics the window bar
+ */
+.top_bar_container {
+    background: #eeeeee;
+}
+.top_bar_button {
+    background: #eeeeee;
+}
+
+/**
+ * Standard label font
+ */
+GtkLabel {
+    font: Bariol Normal 12;
+}
+
+GtkLabel.title {
+    color: @title_color;
+    font: Bariol Bold 16;
+}
+
+GtkLabel.subtitle {
+    color: @subtitle_color;
+    font: Bariol Normal 12;
+}
+
+/**
+ * Images
+ */
+GtkImage {
+    background: transparent;
+}
+
+/**
+ * Standard buttons
+ */
+GtkButton {
+    border-radius: 3px;
+    border-color: transparent;
+}
+
+GtkButton GtkLabel {
+    font: Bariol Bold 12;
+}
+
+GtkButton.green,
+GtkButton.orange,
+GtkButton.grey,
+.menu_bar .search_bar GtkButton {
+    padding: 10px;
+}
+
+GtkButton.green GtkLabel,
+GtkButton.orange GtkLabel,
+GtkButton.grey GtkLabel,
+.menu_bar .search_bar GtkButton * {
+    color: #ffffff;
+}
+
+GtkButton.green {
+    background: @green_button;
+}
+
+GtkButton.orange {
+    background: @kano_orange;
+}
+
+GtkButton.grey {
+    background: @grey_button;
+}
+
+.menu_bar .search_bar GtkButton {
+    background: #b6952d;
+}
+
+/**
+ * Buttons which look like hyperlink text
+ */
+
+GtkButton.orange_linktext,
+GtkButton.grey_linktext {
+    background: transparent;
+}
+
+GtkButton.orange_linktext GtkLabel {
+    color: @kano_orange;
+}
+
+GtkButton.grey_linktext GtkLabel {
+    color: @grey_text_link;
+}
+
+/**
+ * Menu Bar
+ */
+.menu_bar {
+    background: @menu_bar_background;
+}
+
+.menu_bar GtkLabel {
+    color: #3b310c;
+}
+
+.menu_bar GtkButton {
+    background: transparent;
+    padding: 0;
+}
+
+.menu_bar GtkButton * {
+    color: @menu_bar_text;
 }
 
 GtkEntry {
@@ -71,115 +188,22 @@ GtkEntry:insensitive {
     border-radius:3px;
 }
 
-GtkButton {
-    border-radius: 3px;
-    border-color: transparent;
-}
-
-GtkButton GtkLabel {
-    font: Bariol Bold 12;
-}
-
-GtkLabel {
-    font: Bariol Normal 12;
-}
-
-GtkImage {
-    background: transparent;
-}
-
-GtkEventBox.thumb {
-    background: #ffc092;
-}
-
-GtkButton.green,
-GtkButton.orange,
-.menu_bar .search_bar GtkButton {
-    padding: 10px;
-}
-
-GtkButton.green GtkLabel,
-GtkButton.orange GtkLabel,
-.menu_bar .search_bar GtkButton * {
-    color: #ffffff;
-}
-
-GtkButton.green {
-    background: @green_button;
-}
-
-GtkButton.orange {
-    background: @kano_orange;
-}
-
-.menu_bar .search_bar GtkButton {
-    background: #b6952d;
-}
-
-GtkButton.orange_linktext,
-GtkButton.grey_linktext {
-    background: transparent;
-}
-
-GtkButton.orange_linktext GtkLabel {
-    color: @kano_orange;
-}
-
-GtkButton.grey_linktext GtkLabel {
-    color: @grey_text_link;
-}
-
-.green_event_box {
-    background: @button_color;
-    color: #ffffff;
-    border-radius: 3px;
-}
-
-/* The bar at the top that mimics the window bar */
-.top_bar_container {
-    background: #eeeeee;
-}
-.top_bar_button {
-    background: #eeeeee;
-}
-
-.menu_bar {
-    background: @menu_bar_background;
-}
-
-.menu_bar GtkLabel {
-    color: #3b310c;
-}
-
-.menu_bar GtkButton {
-    background: transparent;
-    padding: 0;
-}
-
-.menu_bar GtkButton * {
-    color: @menu_bar_text;
-}
-
+/**
+ * Bars which are contained in the views
+ */
 .bar {
     background: @bar_background;
 }
 
+/**
+ * Entries
+ */
 GtkButton.entry_item {
     background: #ffffff;
 }
 
-GtkButton.entry_item GtkGrid.info * {
-    font-weight: bold;
-}
-
-GtkLabel.title {
-    color: @title_color;
-    font: Bariol Bold 16;
-}
-
-GtkLabel.subtitle {
-    color: @subheading_color;
-    font: Bariol Normal 12;
+GtkEventBox.thumb {
+    background: #ffc092;
 }
 
 /********************************************************

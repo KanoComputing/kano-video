@@ -165,6 +165,7 @@ class PlayModeBar(KanoWidget):
             button = Gtk.Button('Back')
             button.connect('clicked', self._back_handler)
             button.set_alignment(0, 0.5)
+            button.get_style_context().add_class('grey')
             self._grid.attach(button, 0, 0, 1, 1)
 
         title_str = ''
