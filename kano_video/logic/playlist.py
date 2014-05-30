@@ -42,6 +42,9 @@ class Playlist(object):
         except IOError:
             pass
 
+    def remove(self, video):
+        self.playlist.remove(video)
+
 
 class PlaylistCollection(object):
 
