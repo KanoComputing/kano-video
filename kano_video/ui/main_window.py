@@ -36,6 +36,7 @@ class MainWindow(Gtk.Window):
         if is_internet():
             pass
         self.view = HomeView()
+        self.prev_view = []
 
         self.contents = Contents(self.grid)
         self.contents.set_contents(self.view)
@@ -72,6 +73,7 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_playlist(self, playlist):
+        self.prev_view.append(self.view)
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
@@ -85,13 +87,14 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_detail(self, video):
-        self.prev_view = self.view
+        self.prev_view.append(self.view)
         self.view = DetailView(video)
         self.contents.set_contents(self.view)
 
     def switch_to_previous(self):
-        if self.prev_view:
-            self.view = self.prev_view
+        prev = self.prev_view.pop()
+        if prev:
+            self.view = prev
             self.contents.set_contents(self.view)
 
     def on_close(self, widget=None, event=None):

@@ -122,7 +122,7 @@ class PlaylistView(View):
         self._header = PlaylistHeader(playlist)
         self._grid.attach(self._header, 0, 0, 1, 1)
 
-        self.play_mode = PlayModeBar()
+        self.play_mode = PlayModeBar(back_button=True)
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
         self._vids = VideoList(videos=playlist.playlist, playlist=playlist_name)
