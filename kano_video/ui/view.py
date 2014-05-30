@@ -125,3 +125,14 @@ class HomeView(View):
 
         self._popular = VideoListPopular()
         self._grid.attach(self._popular, 0, 0, 1, 1)
+
+
+class NoInternetView(View):
+
+    def __init__(self):
+        super(NoInternetView, self).__init__()
+
+        self._no_internet = Gtk.Label('Are you sure that you are connected to the internet?')
+        self._no_internet.get_style_context().add_class('title')
+
+        self._grid.attach(self._no_internet, 0, 0, 1, 1)

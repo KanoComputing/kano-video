@@ -12,7 +12,8 @@ from kano_video.logic.playlist import playlistCollection
 from .general import Contents
 from .bar import MenuBar
 from .view import HomeView, LocalView, YoutubeView, \
-    PlaylistView, PlaylistCollectionView, DetailView
+    PlaylistView, PlaylistCollectionView, DetailView, \
+    NoInternetView
 
 
 class MainWindow(Gtk.Window):
@@ -33,8 +34,6 @@ class MainWindow(Gtk.Window):
         menu_bar = MenuBar()
         self.grid.attach(menu_bar, 0, 0, 1, 1)
 
-        if is_internet():
-            pass
         self.view = HomeView()
         self.prev_view = []
 
@@ -53,6 +52,7 @@ class MainWindow(Gtk.Window):
                  'youtube': self.switch_to_youtube,
                  'library': self.switch_to_local,
                  'detail': self.switch_to_detail,
+                 'no-internet': self.switch_to_no_internet,
                  'previous': self.switch_to_previous}
 
         if view is 'playlist':
@@ -83,18 +83,21 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_youtube(self, search_keyword=None, users=False):
-        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
-        self.get_root_window().set_cursor(cursor)
+        if is_internet():
+            cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
+            self.get_root_window().set_cursor(cursor)
 
-        Gtk.main_iteration_do(True)
+            Gtk.main_iteration_do(True)
 
-        self.prev_view = []
+            self.prev_view = []
 
-        self.view = YoutubeView(search_keyword, users)
-        self.contents.set_contents(self.view)
+            self.view = YoutubeView(search_keyword, users)
+            self.contents.set_contents(self.view)
 
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
+            cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+            self.get_root_window().set_cursor(cursor)
+        else:
+            self.switch_view('no-internet')
 
     def switch_to_local(self):
         self.prev_view = []
@@ -106,6 +109,12 @@ class MainWindow(Gtk.Window):
         self.prev_view.append(self.view)
 
         self.view = DetailView(video)
+        self.contents.set_contents(self.view)
+
+    def switch_to_no_internet(self):
+        self.prev_view = []
+
+        self.view = NoInternetView()
         self.contents.set_contents(self.view)
 
     def switch_to_previous(self):
