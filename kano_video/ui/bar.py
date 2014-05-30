@@ -127,66 +127,80 @@ class SearchBar(KanoWidget):
         win.switch_view('youtube', search_keyword=search_keyword, users=users)
 
 
-class AddVideoBar(KanoWidget):
+class HorizontalBar(KanoWidget):
+    left_widget = None
+    centre_widget = None
+    right_widget = None
 
     def __init__(self):
-        super(AddVideoBar, self).__init__()
+        super(HorizontalBar, self).__init__()
 
         self.get_style_context().add_class('bar')
-        self.get_style_context().add_class('add_video_bar')
 
-        title_str = 'Your library'
-        title = Gtk.Label(title_str, hexpand=True)
-        title.get_style_context().add_class('title')
-        title.set_alignment(0, 0.5)
-        title.set_size_request(430, 20)
-        self._grid.attach(title, 0, 0, 1, 1)
+        self._grid.set_row_spacing(10)
+        self._grid.set_column_spacing(10)
 
-        button = Gtk.Button('ADD MEDIA')
-        button.get_style_context().add_class('green')
-        button.set_size_request(20, 20)
-        button.connect('clicked', self._add_handler)
-        self._grid.attach(button, 1, 0, 1, 1)
+        self._grid.attach(Gtk.Label(''), 0, 0, 1, 3)
+
+        if self.left_widget:
+            self._grid.attach(self.left_widget, 1, 1, 1, 1)
+        else:
+            self._grid.attach(Gtk.Label('', hexpand=True), 1, 0, 1, 3)
+
+        if self.centre_widget:
+            self._grid.attach(self.centre_widget, 2, 1, 1, 1)
+        else:
+            self._grid.attach(Gtk.Label('', hexpand=True), 2, 0, 1, 3)
+
+        if self.right_widget:
+            self._grid.attach(self.right_widget, 3, 1, 1, 1)
+        else:
+            self._grid.attach(Gtk.Label('', hexpand=True), 3, 0, 1, 3)
+
+        self._grid.attach(Gtk.Label(''), 4, 0, 1, 3)
+
+
+class AddVideoBar(HorizontalBar):
+
+    def __init__(self):
+        self.right_widget = Gtk.Button('ADD MEDIA')
+        self.right_widget.get_style_context().add_class('green')
+        self.right_widget.set_size_request(20, 20)
+        self.right_widget.connect('clicked', self._add_handler)
+
+        super(AddVideoBar, self).__init__()
 
     def _add_handler(self, _):
         popup = LoadFilePopup()
         print popup.run()
 
 
-class PlayModeBar(KanoWidget):
+class PlayModeBar(HorizontalBar):
 
     def __init__(self, back_button=False):
-        super(PlayModeBar, self).__init__()
-
-        self.get_style_context().add_class('bar')
-        self.get_style_context().add_class('play_mode_bar')
-
         if back_button:
-            button = Gtk.Button('Back')
-            button.connect('clicked', self._back_handler)
-            button.set_alignment(0, 0.5)
-            button.get_style_context().add_class('grey')
-            self._grid.attach(button, 0, 0, 1, 1)
+            self.left_widget = Gtk.Button('Back')
+            self.left_widget.connect('clicked', self._back_handler)
+            self.left_widget.set_alignment(0, 0.5)
+            self.left_widget.get_style_context().add_class('grey')
 
-        title_str = ''
-        title = Gtk.Label(title_str, hexpand=True)
-        title.get_style_context().add_class('title')
-        title.set_alignment(0, 0.5)
-        self._grid.attach(title, 1, 0, 1, 1)
+        self.right_widget = Gtk.Grid()
 
         fullscreen_str = 'PLAYER'
         fullscreen = Gtk.Label(fullscreen_str)
         fullscreen.set_size_request(70, 20)
-        self._grid.attach(fullscreen, 2, 0, 1, 1)
+        self.right_widget.attach(fullscreen, 0, 0, 1, 1)
 
         self._switch = Gtk.Switch()
         self._switch.set_size_request(20, 20)
-        self._grid.attach(self._switch, 3, 0, 1, 1)
+        self.right_widget.attach(self._switch, 1, 0, 1, 1)
 
         windowed_str = 'FULLSCREEN'
         windowed = Gtk.Label(windowed_str)
         windowed.set_size_request(70, 20)
-        self._grid.attach(windowed, 4, 0, 1, 1)
+        self.right_widget.attach(windowed, 2, 0, 1, 1)
+
+        super(PlayModeBar, self).__init__()
 
     def is_fullscreen(self):
         return self._switch.get_active()
@@ -196,26 +210,15 @@ class PlayModeBar(KanoWidget):
         win.switch_view('previous')
 
 
-class PlaylistAddBar(KanoWidget):
+class PlaylistAddBar(HorizontalBar):
 
     def __init__(self):
+        self.right_widget = Gtk.Button('CREATE LIST')
+        self.right_widget.get_style_context().add_class('green')
+        self.right_widget.set_size_request(20, 20)
+        self.right_widget.connect('clicked', self._add_handler)
+
         super(PlaylistAddBar, self).__init__()
-
-        self.get_style_context().add_class('bar')
-        self.get_style_context().add_class('playlist_add_bar')
-
-        title_str = ''
-        title = Gtk.Label(title_str, hexpand=True)
-        title.get_style_context().add_class('title')
-        title.set_alignment(0, 0.5)
-        title.set_size_request(430, 20)
-        self._grid.attach(title, 0, 0, 1, 1)
-
-        button = Gtk.Button('CREATE LIST')
-        button.get_style_context().add_class('green')
-        button.set_size_request(20, 20)
-        button.connect('clicked', self._add_handler)
-        self._grid.attach(button, 1, 0, 1, 1)
 
     def _add_handler(self, button):
         popup = AddPlaylistPopup()
