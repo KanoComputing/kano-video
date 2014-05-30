@@ -113,6 +113,8 @@ class SearchBar(KanoWidget):
         search_keyword_entry.props.placeholder_text = 'Search Youtube'
         search_keyword_entry.set_alignment(0)
         search_keyword_entry.set_size_request(100, 20)
+        search_keyword_entry.connect('activate', self.switch_to_youtube,
+                                     search_keyword_entry, False)
         self._grid.attach(search_keyword_entry, 0, 0, 1, 1)
 
         button = Gtk.Button('SEARCH')
