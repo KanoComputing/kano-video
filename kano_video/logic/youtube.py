@@ -63,9 +63,9 @@ def parse_youtube_entries(entries):
                 bigthumb = thumb['url']
                 break
 
-        author = e['author'][0]['name']['$t']
-        title = e['title']['$t']
-        description = e['media$group']['media$description']['$t']
+        author = e['author'][0]['name']['$t'].encode('utf-8')
+        title = e['title']['$t'].encode('utf-8')
+        description = e['media$group']['media$description']['$t'].encode('utf-8')
         video_url = e['media$group']['media$player'][0]['url']
         duration = int(e['media$group']['yt$duration']['seconds'])
         duration_min = duration / 60
