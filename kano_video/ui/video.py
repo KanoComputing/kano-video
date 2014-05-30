@@ -1,5 +1,5 @@
 import os
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from urllib import urlretrieve
 from time import time
 
@@ -88,9 +88,18 @@ class VideoEntry(Gtk.Button):
             action_grid.attach(button, 2, 0, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile):
+        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
+        self.get_root_window().set_cursor(cursor)
+
+        Gtk.main_iteration_do(True)
+
         win = self.get_toplevel()
+
         fullscreen = win.view.play_mode.is_fullscreen()
         play_video(_button, _url, _localfile, fullscreen)
+
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
 
     def add_to_playlist_handler(self, _, video):
         popup = AddToPlaylistPopup(video)
@@ -180,9 +189,18 @@ class VideoDetailEntry(Gtk.Button):
         action_grid.attach(button, 2, 0, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile):
+        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
+        self.get_root_window().set_cursor(cursor)
+
+        Gtk.main_iteration_do(True)
+
         win = self.get_toplevel()
+
         fullscreen = win.view.play_mode.is_fullscreen()
         play_video(_button, _url, _localfile, fullscreen)
+
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
 
     def add_to_playlist_handler(self, _, video):
         popup = AddToPlaylistPopup(video)

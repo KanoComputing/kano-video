@@ -4,7 +4,7 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 from kano.network import is_internet
 from kano_video.logic.playlist import playlistCollection
@@ -83,11 +83,20 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_youtube(self, search_keyword=None, users=False):
+        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
+        self.get_root_window().set_cursor(cursor)
+
+        Gtk.main_iteration_do(True)
+
         self.prev_view = []
 
         self.view = YoutubeView()
         self.view.search_handler(search_keyword, users)
+
         self.contents.set_contents(self.view)
+
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
 
     def switch_to_local(self):
         self.prev_view = []
