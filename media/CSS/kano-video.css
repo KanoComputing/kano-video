@@ -88,6 +88,10 @@ GtkImage {
     background: transparent;
 }
 
+GtkEventBox.thumb {
+    background: #ffc092;
+}
+
 GtkButton.green,
 GtkButton.orange,
 .menu_bar .search_bar GtkButton {
