@@ -220,6 +220,9 @@ class VideoList(Gtk.EventBox):
 
         self.add(self._grid)
 
+        self._no_results = Gtk.Label('No results to display')
+        self._no_results.get_style_context().add_class('subtitle')
+
         if videos is not None:
             i = 0
             for v in videos:
@@ -258,6 +261,8 @@ class VideoListLocal(VideoList):
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)
+        else:
+            self._grid.attach(self._no_results, 0, 0, 1, 1)
 
 
 class VideoListYoutube(VideoList):
@@ -289,6 +294,8 @@ class VideoListYoutube(VideoList):
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i, 1, 1)
+        else:
+            self._grid.attach(self._no_results, 0, 0, 1, 1)
 
 
 class VideoListPopular(VideoList):
