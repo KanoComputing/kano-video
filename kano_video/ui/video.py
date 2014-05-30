@@ -231,7 +231,8 @@ class VideoListLocal(VideoList):
                 e = {'title': title_str,
                      'video_url': None,
                      'local_path': fullpath,
-                     'thumbnail': None}
+                     'thumbnail': None,
+                     'big_thumb': None}
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)
