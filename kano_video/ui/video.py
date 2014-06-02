@@ -291,7 +291,7 @@ class VideoListYoutube(VideoList):
 
         self.get_style_context().add_class('video_list_youtube')
 
-        start_index = ((page - 1) * 10) + page
+        start_index = ((page - 1) * 10) + 1
         entries = None
 
         if keyword:
