@@ -74,13 +74,23 @@ class PlaylistHeader(HeaderBar):
         self.get_style_context().add_class('playlist_bar')
 
 
-class SearchResultsHeader(HeaderBar):
+class SearchResultsHeader(KanoWidget):
 
-    def __init__(self, search_keyword, result_count):
-        self._title = 'Showing results for "{}"'.format(search_keyword)
-        self._count = result_count
-        self._item = 'video'
-
+    def __init__(self, search_keyword, result_count, start=1):
         super(SearchResultsHeader, self).__init__()
+
+        self.get_style_context().add_class('header_bar')
+
+        self._title = 'Showing results for "{}"'.format(search_keyword)
+        title = Gtk.Label(self._title)
+        title.get_style_context().add_class('title')
+        title.set_alignment(0, 0)
+        self._grid.attach(title, 0, 0, 1, 1)
+
+        title_str = 'Results {} - {}'.format(start, start + 9)
+        title = Gtk.Label(title_str)
+        title.get_style_context().add_class('subtitle')
+        title.set_alignment(0, 0)
+        self._grid.attach(title, 0, 1, 1, 1)
 
         self.get_style_context().add_class('search_results_bar')

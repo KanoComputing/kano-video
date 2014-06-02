@@ -57,7 +57,8 @@ class YoutubeView(View):
         super(YoutubeView, self).__init__()
 
         if search_keyword and search_keyword.get_text():
-            self._header = SearchResultsHeader(search_keyword.get_text(), '100,000')
+            index = ((page - 1) * 10) + 1
+            self._header = SearchResultsHeader(search_keyword.get_text(), '', start=index)
 
             if users is False:
                 self._list = VideoListYoutube(keyword=search_keyword.get_text(), page=page)
