@@ -60,7 +60,7 @@ class MainWindow(Gtk.Window):
         elif view is 'youtube':
             views[view](search_keyword=search_keyword, users=users)
         elif view is 'detail':
-            views[view](video=video)
+            views[view](video=video, playlist_name=playlist)
         else:
             views[view]()
 
@@ -105,10 +105,10 @@ class MainWindow(Gtk.Window):
         self.view = LocalView()
         self.contents.set_contents(self.view)
 
-    def switch_to_detail(self, video):
+    def switch_to_detail(self, video, playlist_name=None):
         self.prev_view.append(self.view)
 
-        self.view = DetailView(video)
+        self.view = DetailView(video, playlist_name=playlist_name)
         self.contents.set_contents(self.view)
 
     def switch_to_no_internet(self):

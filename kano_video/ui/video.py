@@ -26,7 +26,7 @@ class VideoEntry(Gtk.Button):
 
         self.get_style_context().add_class('entry_item')
 
-        self.connect('clicked', self._detail_view_handler, e)
+        self.connect('clicked', self._detail_view_handler, e, playlist_name)
 
         button_grid = Gtk.Grid()
         button_grid.set_column_spacing(30)
@@ -116,9 +116,9 @@ class VideoEntry(Gtk.Button):
             win = self.get_toplevel()
             win.switch_view('playlist', name)
 
-    def _detail_view_handler(self, _, video):
+    def _detail_view_handler(self, _, video, playlist_name=None):
         win = self.get_toplevel()
-        win.switch_view('detail', video=video)
+        win.switch_view('detail', video=video, playlist=playlist_name)
 
 
 class VideoDetailEntry(Gtk.Button):
@@ -127,7 +127,7 @@ class VideoDetailEntry(Gtk.Button):
     _DESC_HEIGHT = 15
     _INFO_HEIGHT = 15
 
-    def __init__(self, e):
+    def __init__(self, e, playlist_name=None):
         super(VideoDetailEntry, self).__init__(hexpand=True)
 
         self.get_style_context().add_class('entry_item')
@@ -152,11 +152,18 @@ class VideoDetailEntry(Gtk.Button):
         button_grid.attach(info_grid, 1, 0, 1, 1)
 
         title_str = e['title']
-        label = Gtk.Label(title_str)
+        label = Gtk.Label(title_str, hexpand=True)
         label.set_line_wrap(True)
         label.set_alignment(0, 0.5)
         label.get_style_context().add_class('title')
-        info_grid.attach(label, 0, 0, 1, 1)
+        info_grid.attach(label, 1, 0, 1, 1)
+
+        if playlist_name:
+            remove = Gtk.Button('REMOVE')
+            remove.get_style_context().add_class('grey_linktext')
+            remove.set_alignment(1, 0)
+            remove.connect('clicked', self._remove_from_playlist_handler, e, playlist_name)
+            button_grid.attach(remove, 2, 0, 1, 1)
 
         if e['local_path'] is None:
             stats_str = '{}K views - {}:{} min - by {}'.format(int(e['viewcount'] / 1000.0), e['duration_min'],
@@ -164,29 +171,30 @@ class VideoDetailEntry(Gtk.Button):
             label = Gtk.Label(stats_str)
             label.get_style_context().add_class('subtitle')
             label.set_alignment(0, 0.5)
-            info_grid.attach(label, 0, 1, 1, 1)
+            info_grid.attach(label, 0, 1, 2, 1)
 
             desc_str = e['description']
             label = Gtk.Label(desc_str)
             label.set_line_wrap(True)
             label.get_style_context().add_class('subtitle')
             label.set_alignment(0, 0.5)
-            info_grid.attach(label, 0, 2, 1, 1)
+            info_grid.attach(label, 0, 2, 2, 1)
 
         action_grid = Gtk.Grid()
-        info_grid.attach(action_grid, 0, 3, 1, 1)
+        info_grid.attach(action_grid, 0, 3, 2, 1)
 
         button = Gtk.Button('WATCH')
         button.get_style_context().add_class('orange_linktext')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'])
         action_grid.attach(button, 0, 0, 1, 1)
 
-        action_grid.attach(Spacer(), 1, 0, 1, 1)
+        if not playlist_name:
+            action_grid.attach(Spacer(), 1, 0, 1, 1)
 
-        button = Gtk.Button('SAVE')
-        button.get_style_context().add_class('orange_linktext')
-        self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
-        action_grid.attach(button, 2, 0, 1, 1)
+            button = Gtk.Button('SAVE')
+            button.get_style_context().add_class('orange_linktext')
+            self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
+            action_grid.attach(button, 2, 0, 1, 1)
 
     def _play_handler(self, _button, _url, _localfile):
         cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
@@ -205,6 +213,17 @@ class VideoDetailEntry(Gtk.Button):
     def add_to_playlist_handler(self, _, video):
         popup = AddToPlaylistPopup(video)
         popup.show_all()
+
+    def _remove_from_playlist_handler(self, _button, video, name):
+        confirm = KanoDialog('Are you sure?',
+                             'You are about to delete this video from the playlist called "{}"'.format(name),
+                             {'OK': True, 'CANCEL': False})
+        response = confirm.run()
+        if response:
+            playlistCollection.collection[name].remove(video)
+
+            win = self.get_toplevel()
+            win.switch_view('playlist', name)
 
 
 class VideoList(Gtk.EventBox):

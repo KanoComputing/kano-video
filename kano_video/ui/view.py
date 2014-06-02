@@ -76,13 +76,13 @@ class YoutubeView(View):
 
 class DetailView(View):
 
-    def __init__(self, video):
+    def __init__(self, video, playlist_name=None):
         super(DetailView, self).__init__()
 
         self.play_mode = PlayModeBar(back_button=True)
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
-        self._list = VideoDetailEntry(video)
+        self._list = VideoDetailEntry(video, playlist_name=playlist_name)
         self._grid.attach(self._list, 0, 2, 1, 1)
 
 
