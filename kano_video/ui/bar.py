@@ -184,21 +184,23 @@ class PlayModeBar(HorizontalBar):
             self.left_widget.set_alignment(0, 0.5)
             self.left_widget.get_style_context().add_class('grey')
 
-        self.right_widget = Gtk.Grid()
+        self.right_widget = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
+        grid = Gtk.Grid()
+        self.right_widget.add(grid)
 
         fullscreen_str = 'PLAYER'
         fullscreen = Gtk.Label(fullscreen_str)
         fullscreen.set_size_request(70, 20)
-        self.right_widget.attach(fullscreen, 0, 0, 1, 1)
+        grid.attach(fullscreen, 0, 0, 1, 1)
 
         self._switch = Gtk.Switch()
         self._switch.set_size_request(20, 20)
-        self.right_widget.attach(self._switch, 1, 0, 1, 1)
+        grid.attach(self._switch, 1, 0, 1, 1)
 
         windowed_str = 'FULLSCREEN'
         windowed = Gtk.Label(windowed_str)
         windowed.set_size_request(70, 20)
-        self.right_widget.attach(windowed, 2, 0, 1, 1)
+        grid.attach(windowed, 2, 0, 1, 1)
 
         super(PlayModeBar, self).__init__()
 
