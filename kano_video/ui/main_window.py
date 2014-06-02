@@ -67,8 +67,11 @@ class MainWindow(Gtk.Window):
     def switch_to_home(self):
         self.prev_view = []
 
-        self.view = HomeView()
-        self.contents.set_contents(self.view)
+        if is_internet():
+            self.view = HomeView()
+            self.contents.set_contents(self.view)
+        else:
+            self.switch_view('no-internet')
 
     def switch_to_playlist_collection(self):
         self.prev_view = []
