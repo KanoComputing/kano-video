@@ -45,7 +45,7 @@ class MainWindow(Gtk.Window):
 
         self.connect('delete-event', self.on_close)
 
-    def switch_view(self, view, playlist=None, search_keyword=None, users=False, video=None):
+    def switch_view(self, view, playlist=None, search_keyword=None, users=False, video=None, page=1):
         views = {'home': self.switch_to_home,
                  'playlist-collection': self.switch_to_playlist_collection,
                  'playlist': self.switch_to_playlist,
@@ -58,7 +58,7 @@ class MainWindow(Gtk.Window):
         if view is 'playlist':
             views[view](playlist)
         elif view is 'youtube':
-            views[view](search_keyword=search_keyword, users=users)
+            views[view](search_keyword=search_keyword, users=users, page=page)
         elif view is 'detail':
             views[view](video=video, playlist_name=playlist)
         else:
@@ -82,7 +82,7 @@ class MainWindow(Gtk.Window):
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
 
-    def switch_to_youtube(self, search_keyword=None, users=False):
+    def switch_to_youtube(self, search_keyword=None, users=False, page=1):
         if is_internet():
             cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
             self.get_root_window().set_cursor(cursor)
@@ -91,7 +91,7 @@ class MainWindow(Gtk.Window):
 
             self.prev_view = []
 
-            self.view = YoutubeView(search_keyword, users)
+            self.view = YoutubeView(search_keyword, users, page=page)
             self.contents.set_contents(self.view)
 
             cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)

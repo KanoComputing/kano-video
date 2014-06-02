@@ -27,6 +27,7 @@
 @define-color green_button #91d064;
 @define-color grey_button #b9b9b9;
 @define-color grey_text_link #d6d6d6;
+@define-color disabled_button #999999;
 
 /* All */
 * {
@@ -97,6 +98,10 @@ GtkImage {
 GtkButton {
     border-radius: 3px;
     border-color: transparent;
+}
+
+GtkButton.green:insensitive {
+    background: @disabled_button;
 }
 
 GtkButton GtkLabel {

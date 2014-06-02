@@ -53,25 +53,47 @@ class LocalView(View):
 
 class YoutubeView(View):
 
-    def __init__(self, search_keyword=None, users=False):
+    def __init__(self, search_keyword=None, users=False, page=1):
         super(YoutubeView, self).__init__()
 
         if search_keyword and search_keyword.get_text():
             self._header = SearchResultsHeader(search_keyword.get_text(), '100,000')
 
             if users is False:
-                self._list = VideoListYoutube(keyword=search_keyword.get_text())
+                self._list = VideoListYoutube(keyword=search_keyword.get_text(), page=page)
             else:
                 self._list = VideoListYoutube(username=search_keyword.get_text())
         else:
             self._header = YoutubeHeader()
-            self._list = VideoListYoutube()
+            self._list = VideoListYoutube(page=page)
 
         self._grid.attach(self._header, 0, 0, 1, 1)
         self._grid.attach(self._list, 0, 2, 1, 1)
 
         self.play_mode = PlayModeBar()
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
+
+        if search_keyword and search_keyword.get_text() is not '':
+            navigation_grid = Gtk.Grid()
+            self._grid.attach(navigation_grid, 0, 3, 1, 1)
+
+            prev_button = Gtk.Button('Back')
+            prev_button.get_style_context().add_class('green')
+            prev_button.connect('clicked', self._switch_page, page - 1, search_keyword)
+            navigation_grid.attach(prev_button, 0, 0, 1, 1)
+            if page == 1:
+                prev_button.set_sensitive(False)
+
+            navigation_grid.attach(Gtk.Label('', hexpand=True), 1, 0, 1, 1)
+
+            next_button = Gtk.Button('Next')
+            next_button.get_style_context().add_class('green')
+            next_button.connect('clicked', self._switch_page, page + 1, search_keyword)
+            navigation_grid.attach(next_button, 2, 0, 1, 1)
+
+    def _switch_page(self, _, page, search_keyword=None):
+        win = self.get_toplevel()
+        win.switch_view('youtube', search_keyword=search_keyword, page=page)
 
 
 class DetailView(View):

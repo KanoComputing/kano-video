@@ -12,14 +12,15 @@ from kano.utils import requests_get_json, run_cmd
 tmp_dir = '/tmp/kano-video'
 
 
-def search_youtube_by_keyword(keyword=None, popular=False, max_results=10):
+def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1):
     url = 'http://gdata.youtube.com/feeds/api/videos'
     params = {
         'vq': keyword,
         'racy': 'exclude',
         'orderby': 'relevance',
         'alt': 'json',
-        'max-results': max_results
+        'max-results': max_results,
+        'start-index': start_index
     }
     if popular:
         params['orderby'] = 'viewCount'

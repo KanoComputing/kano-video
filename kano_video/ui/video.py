@@ -286,15 +286,16 @@ class VideoListLocal(VideoList):
 
 class VideoListYoutube(VideoList):
 
-    def __init__(self, keyword=None, username=None, playlist=None):
+    def __init__(self, keyword=None, username=None, playlist=None, page=1):
         super(VideoListYoutube, self).__init__()
 
         self.get_style_context().add_class('video_list_youtube')
 
+        start_index = ((page - 1) * 10) + page
         entries = None
 
         if keyword:
-            entries = search_youtube_by_keyword(keyword)
+            entries = search_youtube_by_keyword(keyword, start_index=start_index)
             print 'searching by keyword: ' + keyword
         elif username:
             entries = search_youtube_by_user(username)
