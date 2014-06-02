@@ -37,7 +37,7 @@ class PlaylistEntry(Gtk.Button):
 
         remove = Gtk.Button('REMOVE')
         remove.get_style_context().add_class('grey_linktext')
-        remove.set_alignment(1, 0)
+        remove.set_alignment(1, 0.5)
         remove.connect('clicked', self._remove_handler, name)
         button_grid.attach(remove, 1, 0, 1, 1)
 
