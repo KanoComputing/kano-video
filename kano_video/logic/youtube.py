@@ -12,6 +12,10 @@ from kano.utils import requests_get_json, run_cmd
 tmp_dir = '/tmp/kano-video'
 
 
+def page_to_index(page, max_results=10):
+    return ((page - 1) * max_results) + 1
+
+
 def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1):
     url = 'http://gdata.youtube.com/feeds/api/videos'
     params = {

@@ -1,6 +1,7 @@
 from gi.repository import Gtk
 
 from kano_video.logic.playlist import playlistCollection
+from kano_video.logic.youtube import page_to_index
 
 from .header import SearchResultsHeader, \
     LibraryHeader, PlaylistHeader, \
@@ -57,7 +58,7 @@ class YoutubeView(View):
         super(YoutubeView, self).__init__()
 
         if search_keyword and search_keyword.get_text():
-            index = ((page - 1) * 10) + 1
+            index = page_to_index(page)
             self._header = SearchResultsHeader(search_keyword.get_text(), '', start=index)
 
             if users is False:

@@ -8,7 +8,8 @@ from kano.gtk3.kano_dialog import KanoDialog
 
 from kano_video.logic.player import play_video
 from kano_video.logic.youtube import search_youtube_by_user, \
-    parse_youtube_entries, search_youtube_by_keyword, tmp_dir
+    parse_youtube_entries, search_youtube_by_keyword, tmp_dir, \
+    page_to_index
 from kano_video.logic.playlist import playlistCollection
 
 from .popup import AddToPlaylistPopup
@@ -291,7 +292,7 @@ class VideoListYoutube(VideoList):
 
         self.get_style_context().add_class('video_list_youtube')
 
-        start_index = ((page - 1) * 10) + 1
+        start_index = page_to_index(page)
         entries = None
 
         if keyword:
