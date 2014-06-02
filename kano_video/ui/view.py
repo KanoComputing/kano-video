@@ -25,7 +25,7 @@ class View(Gtk.EventBox):
         self._grid.set_column_spacing(0)
         self._grid.set_size_request(self._VIEW_WIDTH, self._VIEW_HEIGHT)
 
-        align = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
+        align = Gtk.Alignment(xalign=0.5, yalign=0, xscale=0, yscale=0)
         padding = 20
         align.set_padding(padding, padding, padding, padding)
         align.add(self._grid)
