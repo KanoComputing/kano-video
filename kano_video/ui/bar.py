@@ -54,7 +54,8 @@ class MenuBar(Gtk.EventBox):
         grid.attach(searchBar, 5, 1, 1, 1)
 
         # Close button
-        cross_icon = set_from_name('cross')
+        cross_icon = Gtk.Image()
+        cross_icon.set_from_file(image_dir + '/icons/close.png')
 
         self._close_button = Gtk.Button()
         self._close_button.set_image(cross_icon)
