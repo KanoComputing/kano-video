@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gdk, Pango
+from gi.repository import Gtk, Gdk
 
 from kano_video.paths import image_dir
 from kano_video.icons import set_from_name
@@ -78,7 +78,6 @@ class TopBar(Gtk.EventBox):
                                  hexpand=True)
         box.pack_start(self._header, True, True, 0)
 
-        self._header.modify_font(Pango.FontDescription('Bariol 13'))
         self._header.get_style_context().add_class('header')
 
         # Close button
