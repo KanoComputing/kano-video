@@ -30,7 +30,7 @@ class YoutubeHeader(HeaderBar):
 
     def __init__(self):
         self._title = 'Youtube'
-        self._count = len(playlistCollection.collection)
+        self._count = 10
         self._item = '{} video'
 
         super(YoutubeHeader, self).__init__()
