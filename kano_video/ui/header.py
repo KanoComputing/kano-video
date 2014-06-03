@@ -78,8 +78,12 @@ class SearchResultsHeader(HeaderBar):
 
     def __init__(self, search_keyword, result_count, start=1):
         self._title = 'Showing results for "{}"'.format(search_keyword)
-        self._count = result_count
-        self._item = 'Results {} - {} of {} video'.format(start, start + 9, '{}')
+        if result_count == 1000000:
+            self._item = 'Results {} - {} of many video'.format(start, start + 9)
+            self._count = ''
+        else:
+            self._item = 'Results {} - {} of {} video'.format(start, start + 9, '{}')
+            self._count = result_count
 
         super(SearchResultsHeader, self).__init__()
 
