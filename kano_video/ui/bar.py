@@ -61,8 +61,7 @@ class MenuBar(Gtk.EventBox):
         self._close_button.set_image(cross_icon)
         self._close_button.props.margin_right = 2
         self._close_button.set_can_focus(False)
-        self._close_button.get_style_context().add_class('top_bar_button')
-        self._close_button.get_style_context().add_class('no_border')
+        self._close_button.get_style_context().add_class('close')
 
         self._close_button.connect('clicked', self._close_button_click)
         self._close_button.connect('enter-notify-event',

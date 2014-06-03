@@ -134,10 +134,6 @@ GtkButton.grey {
     background: @grey_button;
 }
 
-.menu_bar .search_bar GtkButton {
-    background: #b6952d;
-}
-
 /**
  * Buttons which look like hyperlink text
  */
@@ -191,6 +187,14 @@ GtkEntry:insensitive {
     border-style: solid;
     border-width: 2px;
     border-radius:3px;
+}
+
+.menu_bar .search_bar GtkButton {
+    background: #b6952d;
+}
+
+.menu_bar GtkButton.close {
+    background: #e8bf2d;
 }
 
 /**
