@@ -16,8 +16,12 @@ class PlaylistEntry(Gtk.Button):
 
         self.connect('clicked', self._playlist_handler, name)
 
+        content = Gtk.Alignment()
+        content.set_padding(20, 20, 20, 20)
+        self.add(content)
+
         button_grid = Gtk.Grid()
-        self.add(button_grid)
+        content.add(button_grid)
 
         title = Gtk.Label(name, hexpand=True)
         title.set_alignment(0, 0.5)
