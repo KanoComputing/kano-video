@@ -16,12 +16,22 @@ class PlaylistPopup(Gtk.Dialog):
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
 
-        self.grid = Gtk.Grid()
+        popup_grid = Gtk.Grid()
 
         self._bar = TopBar('')
-        self.grid.attach(self._bar, 0, 0, 2, 1)
+        popup_grid.attach(self._bar, 0, 0, 1, 1)
 
-        self.get_content_area().add(self.grid)
+        content = Gtk.Alignment(xalign=0.5, yalign=0.5)
+        content.set_padding(30, 20, 50, 50)
+
+        self.grid = Gtk.Grid()
+        self.grid.set_row_spacing(10)
+        self.grid.set_column_spacing(20)
+        content.add(self.grid)
+
+        popup_grid.attach(content, 0, 1, 1, 1)
+
+        self.get_content_area().add(popup_grid)
 
         self._return = None
 
