@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 import os
 from shutil import rmtree
 
@@ -7,7 +7,7 @@ from kano_video.logic.playlist import playlistCollection
 from kano_video.logic.youtube import tmp_dir
 
 from .popup import LoadFilePopup, AddPlaylistPopup
-from .general import KanoWidget, Spacer
+from .general import KanoWidget, Spacer, Button
 
 
 class MenuBar(Gtk.EventBox):
@@ -26,7 +26,7 @@ class MenuBar(Gtk.EventBox):
 
         home_img = Gtk.Image()
         home_img.set_from_file(image_dir + '/icons/home.png')
-        button = Gtk.Button()
+        button = Button()
         button.add(home_img)
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.connect('clicked', self._switch_handler, 'home')
@@ -35,13 +35,13 @@ class MenuBar(Gtk.EventBox):
 
         self._active_button = None
 
-        button = Gtk.Button('LIBRARY')
+        button = Button('LIBRARY')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'library')
         grid.attach(button, 1, 0, 1, 3)
 
-        button = Gtk.Button('PLAYLISTS')
+        button = Button('PLAYLISTS')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'playlist-collection')
@@ -49,7 +49,7 @@ class MenuBar(Gtk.EventBox):
 
         grid.attach(Spacer(), 3, 0, 1, 3)
 
-        button = Gtk.Button('YOUTUBE')
+        button = Button('YOUTUBE')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
         button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'youtube')
@@ -62,17 +62,13 @@ class MenuBar(Gtk.EventBox):
         cross_icon = Gtk.Image()
         cross_icon.set_from_file(image_dir + '/icons/close.png')
 
-        self._close_button = Gtk.Button()
+        self._close_button = Button()
         self._close_button.set_image(cross_icon)
         self._close_button.props.margin_right = 2
         self._close_button.set_can_focus(False)
         self._close_button.get_style_context().add_class('close')
 
         self._close_button.connect('clicked', self._close_button_click)
-        self._close_button.connect('enter-notify-event',
-                                   self._close_button_mouse_enter)
-        self._close_button.connect('leave-notify-event',
-                                   self._close_button_mouse_leave)
 
         grid.attach(self._close_button, 6, 0, 1, 3)
 
@@ -87,21 +83,7 @@ class MenuBar(Gtk.EventBox):
         win = self.get_toplevel()
         win.switch_view(switchto)
 
-    def _close_button_mouse_enter(self, button, event):
-        # Change the cursor to hour Glass
-        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND1)
-        self.get_root_window().set_cursor(cursor)
-
-    def _close_button_mouse_leave(self, button, event):
-        # Set the cursor to normal Arrow
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
-
     def _close_button_click(self, event):
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
-        Gdk.flush()
-
         # Remove temp files
         if os.path.exists(tmp_dir):
             rmtree(tmp_dir)
@@ -127,7 +109,7 @@ class SearchBar(KanoWidget):
                                      search_keyword_entry, False)
         self._grid.attach(search_keyword_entry, 0, 0, 1, 1)
 
-        button = Gtk.Button('SEARCH')
+        button = Button('SEARCH')
         button.set_size_request(20, 20)
         button.connect('clicked', self.switch_to_youtube, search_keyword_entry, False)
         self._grid.attach(button, 1, 0, 1, 1)
@@ -173,7 +155,7 @@ class HorizontalBar(KanoWidget):
 class AddVideoBar(HorizontalBar):
 
     def __init__(self):
-        self.right_widget = Gtk.Button('ADD MEDIA')
+        self.right_widget = Button('ADD MEDIA')
         self.right_widget.get_style_context().add_class('green')
         self.right_widget.set_size_request(20, 20)
         self.right_widget.connect('clicked', self._add_handler)
@@ -189,7 +171,7 @@ class PlayModeBar(HorizontalBar):
 
     def __init__(self, back_button=False):
         if back_button:
-            self.left_widget = Gtk.Button('Back')
+            self.left_widget = Button('Back')
             self.left_widget.connect('clicked', self._back_handler)
             self.left_widget.set_alignment(0, 0.5)
             self.left_widget.get_style_context().add_class('grey')
@@ -225,7 +207,7 @@ class PlayModeBar(HorizontalBar):
 class PlaylistAddBar(HorizontalBar):
 
     def __init__(self):
-        self.right_widget = Gtk.Button('CREATE LIST')
+        self.right_widget = Button('CREATE LIST')
         self.right_widget.get_style_context().add_class('green')
         self.right_widget.set_size_request(20, 20)
         self.right_widget.connect('clicked', self._add_handler)

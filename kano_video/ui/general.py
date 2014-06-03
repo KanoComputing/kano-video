@@ -18,6 +18,41 @@ class KanoWidget(Gtk.EventBox):
         self.add(self._grid)
 
 
+class Button(Gtk.Button):
+
+    __gsignals__ = {
+        "enter": "override",
+        "leave": "override",
+        "clicked": "override"
+    }
+
+    def do_enter(self):
+        # Change the cursor to hour Glass
+        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND1)
+        self.get_root_window().set_cursor(cursor)
+
+        self.get_style_context().add_class('hover')
+
+        self.queue_draw()
+
+    def do_leave(self):
+        # Set the cursor to normal Arrow
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
+
+        self.get_style_context().remove_class('hover')
+
+        self.queue_draw()
+
+    def do_clicked(self):
+        self.get_style_context().remove_class('hover')
+
+        self.queue_draw()
+
+        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
+        self.get_root_window().set_cursor(cursor)
+
+
 class Spacer(Gtk.Label):
 
     def __init__(self):
@@ -115,7 +150,7 @@ class TopBar(Gtk.EventBox):
         self.get_toplevel().destroy()
 
 
-class RemoveButton(Gtk.Button):
+class RemoveButton(Button):
 
     def __init__(self):
         super(RemoveButton, self).__init__()

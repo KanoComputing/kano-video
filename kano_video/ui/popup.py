@@ -3,7 +3,7 @@ from gi.repository import Gtk
 
 from kano_video.logic.playlist import Playlist, playlistCollection
 
-from .general import TopBar
+from .general import TopBar, Button
 
 
 class PlaylistPopup(Gtk.Dialog):
@@ -53,12 +53,12 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.refresh()
         self.grid.attach(self._combo, 0, 1, 1, 1)
 
-        button = Gtk.Button('ADD')
+        button = Button('ADD')
         button.get_style_context().add_class('green')
         button.connect('clicked', self._add, self._combo)
         self.grid.attach(button, 1, 1, 1, 1)
 
-        button = Gtk.Button('CREATE NEW')
+        button = Button('CREATE NEW')
         button.get_style_context().add_class('orange_linktext')
         button.connect('clicked', self._new)
         self.grid.attach(button, 0, 2, 1, 1)
@@ -92,7 +92,7 @@ class AddPlaylistPopup(PlaylistPopup):
         entry = Gtk.Entry()
         self.grid.attach(entry, 0, 1, 1, 1)
 
-        button = Gtk.Button('ADD')
+        button = Button('ADD')
         button.get_style_context().add_class('green')
         button.connect('clicked', self._add, entry)
         self.grid.attach(button, 1, 1, 1, 1)

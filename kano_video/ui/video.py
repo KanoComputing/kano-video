@@ -13,7 +13,7 @@ from kano_video.logic.youtube import search_youtube_by_user, \
 from kano_video.logic.playlist import playlistCollection
 
 from .popup import AddToPlaylistPopup
-from .general import Spacer, RemoveButton
+from .general import Spacer, RemoveButton, Button
 
 
 class VideoEntry(Gtk.Button):
@@ -73,7 +73,7 @@ class VideoEntry(Gtk.Button):
         action_grid = Gtk.Grid()
         button_grid.attach(action_grid, 1, 3, 2, 1)
 
-        button = Gtk.Button('WATCH')
+        button = Button('WATCH')
         button.get_style_context().add_class('orange_linktext')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'])
         action_grid.attach(button, 0, 0, 1, 1)
@@ -81,7 +81,7 @@ class VideoEntry(Gtk.Button):
         if not playlist_name:
             action_grid.attach(Spacer(), 1, 0, 1, 1)
 
-            button = Gtk.Button('SAVE')
+            button = Button('SAVE')
             button.get_style_context().add_class('orange_linktext')
             self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
             action_grid.attach(button, 2, 0, 1, 1)
@@ -180,7 +180,7 @@ class VideoDetailEntry(Gtk.Button):
         action_grid = Gtk.Grid()
         info_grid.attach(action_grid, 0, 3, 2, 1)
 
-        button = Gtk.Button('WATCH')
+        button = Button('WATCH')
         button.get_style_context().add_class('orange_linktext')
         self._button_handler_id = button.connect('clicked', self._play_handler, e['video_url'], e['local_path'])
         action_grid.attach(button, 0, 0, 1, 1)
@@ -188,7 +188,7 @@ class VideoDetailEntry(Gtk.Button):
         if not playlist_name:
             action_grid.attach(Spacer(), 1, 0, 1, 1)
 
-            button = Gtk.Button('SAVE')
+            button = Button('SAVE')
             button.get_style_context().add_class('orange_linktext')
             self._button_handler_id = button.connect('clicked', self.add_to_playlist_handler, e)
             action_grid.attach(button, 2, 0, 1, 1)
@@ -331,7 +331,7 @@ class VideoListPopular(VideoList):
             for i, e in enumerate(parsed_entries):
                 img = Gtk.Image()
 
-                button = Gtk.Button()
+                button = Button()
                 if e['big_thumb']:
                     thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
                     urlretrieve(e['big_thumb'], thumbnail)
