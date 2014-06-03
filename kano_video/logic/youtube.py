@@ -23,9 +23,10 @@ def get_last_search_count():
     return last_search_count
 
 
-def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1):
+def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1, parent_control=False):
     url = 'http://gdata.youtube.com/feeds/api/videos'
     params = {
+        'v': 2,
         'vq': keyword,
         'racy': 'exclude',
         'orderby': 'relevance',
@@ -35,10 +36,14 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
     }
     if popular:
         params['orderby'] = 'viewCount'
+
+    if parent_control == True:
+        params['safeSearch'] = 'strict'
+
     success, error, data = requests_get_json(url, params=params)
 
     if not success:
-        sys.exit(error)
+        return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
         last_search_count = data['feed']['openSearch$totalResults']['$t']
@@ -46,16 +51,21 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
         return data['feed']['entry']
 
 
-def search_youtube_by_user(username):
+def search_youtube_by_user(username, parent_control=False):
     url = 'http://gdata.youtube.com/feeds/users/{}/uploads'.format(username)
     params = {
+        'v': 2,
         'alt': 'json',
         'orderby': 'viewCount',
         'max-results': 10
     }
+
+    if parent_control == True:
+        params['safeSearch'] = 'strict'
+
     success, error, data = requests_get_json(url, params=params)
     if not success:
-        sys.exit(error)
+        return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
         last_search_count = data['feed']['openSearch$totalResults']['$t']
@@ -85,11 +95,19 @@ def parse_youtube_entries(entries):
         author = e['author'][0]['name']['$t'].encode('utf-8')
         title = e['title']['$t'].encode('utf-8')
         description = e['media$group']['media$description']['$t'].encode('utf-8')
-        video_url = e['media$group']['media$player'][0]['url']
-        duration = int(e['media$group']['yt$duration']['seconds'])
+
+        video_url = e['media$group']['media$content'][0]['url']
+        duration  = e['media$group']['media$content'][0]['duration']
+
         duration_min = duration / 60
         duration_sec = duration % 60
-        viewcount = int(e['yt$statistics']['viewCount'])
+
+        # On youtube version 2, eventually the viewCount key is not returned
+        try:
+            viewcount = int (e['yt$statistics']['viewCount'])
+        except:
+            viewcount = 0
+
         entry_data = {
             'author': author,
             'title': title,
