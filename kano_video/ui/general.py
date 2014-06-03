@@ -1,7 +1,8 @@
 from gi.repository import Gtk, Gdk
 
 from kano_video.paths import image_dir
-from kano_video.icons import set_from_name
+
+from .icons import set_from_name
 
 
 class KanoWidget(Gtk.EventBox):
