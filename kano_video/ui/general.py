@@ -1,5 +1,6 @@
 from gi.repository import Gtk, Gdk, Pango
 
+from kano_video.paths import image_dir
 from kano_video.icons import set_from_name
 
 
@@ -112,3 +113,24 @@ class TopBar(Gtk.EventBox):
 
     def _close_button_click(self, event):
         self.get_toplevel().destroy()
+
+
+class RemoveButton(Gtk.Button):
+
+    def __init__(self):
+        super(RemoveButton, self).__init__()
+
+        remove_str = Gtk.Label('REMOVE')
+
+        remove_icon = Gtk.Image()
+        remove_icon.set_from_file(image_dir + '/icons/remove.png')
+
+        remove_contents = Gtk.Grid()
+        remove_contents.set_row_spacing(0)
+        remove_contents.set_column_spacing(0)
+        remove_contents.attach(remove_icon, 0, 0, 1, 1)
+        remove_contents.attach(remove_str, 1, 0, 1, 1)
+
+        self.add(remove_contents)
+        self.get_style_context().add_class('grey_linktext')
+        self.set_alignment(1, 0.5)

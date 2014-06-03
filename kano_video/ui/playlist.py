@@ -2,7 +2,7 @@ from gi.repository import Gtk
 
 from kano_video.logic.playlist import playlistCollection
 
-from .general import KanoWidget
+from .general import KanoWidget, RemoveButton
 
 from kano.gtk3.kano_dialog import KanoDialog
 
@@ -35,9 +35,7 @@ class PlaylistEntry(Gtk.Button):
         subtitle.get_style_context().add_class('subtitle')
         button_grid.attach(subtitle, 0, 1, 1, 1)
 
-        remove = Gtk.Button('REMOVE')
-        remove.get_style_context().add_class('grey_linktext')
-        remove.set_alignment(1, 0.5)
+        remove = RemoveButton()
         remove.connect('clicked', self._remove_handler, name)
         button_grid.attach(remove, 1, 0, 1, 1)
 

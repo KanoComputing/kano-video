@@ -13,7 +13,7 @@ from kano_video.logic.youtube import search_youtube_by_user, \
 from kano_video.logic.playlist import playlistCollection
 
 from .popup import AddToPlaylistPopup
-from .general import Spacer
+from .general import Spacer, RemoveButton
 
 
 class VideoEntry(Gtk.Button):
@@ -52,9 +52,7 @@ class VideoEntry(Gtk.Button):
         button_grid.attach(label, 1, 0, 1, 1)
 
         if playlist_name:
-            remove = Gtk.Button('REMOVE')
-            remove.get_style_context().add_class('grey_linktext')
-            remove.set_alignment(1, 0)
+            remove = RemoveButton()
             remove.connect('clicked', self._remove_from_playlist_handler, e, playlist_name)
             button_grid.attach(remove, 2, 0, 1, 1)
 
@@ -160,9 +158,7 @@ class VideoDetailEntry(Gtk.Button):
         info_grid.attach(label, 1, 0, 1, 1)
 
         if playlist_name:
-            remove = Gtk.Button('REMOVE')
-            remove.get_style_context().add_class('grey_linktext')
-            remove.set_alignment(1, 0)
+            remove = RemoveButton()
             remove.connect('clicked', self._remove_from_playlist_handler, e, playlist_name)
             button_grid.attach(remove, 2, 0, 1, 1)
 
