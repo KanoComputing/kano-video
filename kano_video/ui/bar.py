@@ -2,7 +2,7 @@ from gi.repository import Gtk, Gdk
 import os
 from shutil import rmtree
 
-from kano_video.icons import set_from_name
+from kano_video.paths import image_dir
 from kano_video.logic.playlist import playlistCollection
 from kano_video.logic.youtube import tmp_dir
 
@@ -25,7 +25,7 @@ class MenuBar(Gtk.EventBox):
         grid.set_size_request(-1, self._MENU_BAR_HEIGHT)
 
         home_img = Gtk.Image()
-        home_img.set_from_file('media/images/icons/home.png')
+        home_img.set_from_file(image_dir + '/icons/home.png')
         button = Gtk.Button()
         button.add(home_img)
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
