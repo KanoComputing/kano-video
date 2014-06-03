@@ -148,8 +148,13 @@ class HomeView(View):
     def __init__(self):
         super(HomeView, self).__init__()
 
+        title = Gtk.Label('Popular on Youtube')
+        title.set_alignment(0, 0.5)
+        title.get_style_context().add_class('title')
+        self._grid.attach(title, 0, 0, 1, 1)
+
         self._popular = VideoListPopular()
-        self._grid.attach(self._popular, 0, 0, 1, 1)
+        self._grid.attach(self._popular, 0, 1, 1, 1)
 
 
 class NoInternetView(View):
