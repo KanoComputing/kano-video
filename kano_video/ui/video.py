@@ -228,6 +228,16 @@ class VideoList(Gtk.EventBox):
     def __init__(self, videos=None, playlist=None):
         super(VideoList, self).__init__(hexpand=True)
 
+        # Try to get parental boolean flag from kano-settings
+        # By default we assume parental control is turned OFF
+        self.ParentalControl = False
+        try:
+            from kano_settings.config_file import get_setting
+            if get_setting('Parental-lock') == 'True':
+                self.ParentalControl = True
+        except Exception:
+            pass
+
         self.get_style_context().add_class('video_list')
 
         self._grid = Gtk.Grid()
@@ -292,16 +302,16 @@ class VideoListYoutube(VideoList):
         entries = None
 
         if keyword:
-            entries = search_youtube_by_keyword(keyword, start_index=start_index)
+            entries = search_youtube_by_keyword(keyword, start_index=start_index, parent_control=self.ParentalControl)
             print 'searching by keyword: ' + keyword
         elif username:
-            entries = search_youtube_by_user(username)
+            entries = search_youtube_by_user(username, parent_control=self.ParentalControl)
             print 'listing by username: ' + username
         elif playlist:
             entries = playlist
             print 'listing playlist: ' + playlist
         else:
-            entries = search_youtube_by_user('KanoComputing')
+            entries = search_youtube_by_user('KanoComputing', parent_control=self.ParentalControl)
             print 'listing default videos by KanoComputing'
 
         if entries:
@@ -322,7 +332,7 @@ class VideoListPopular(VideoList):
 
         self.get_style_context().add_class('video_list_popular')
 
-        entries = search_youtube_by_keyword(popular=True, max_results=3)
+        entries = search_youtube_by_keyword(popular=True, max_results=3, parent_control=self.ParentalControl)
 
         if entries:
             parsed_entries = parse_youtube_entries(entries)
