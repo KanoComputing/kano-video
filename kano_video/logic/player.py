@@ -55,6 +55,8 @@ def play_video(_button, video_url=None, localfile=None, fullscreen=False):
         else:
             player_cmd = 'vlc --width 700 --no-video-title-show "{link}"'.format(link=link)
 
+    player_cmd = '/usr/bin/kdesk -b \'{}\''.format(player_cmd)
+
     run_bg(player_cmd)
 
 

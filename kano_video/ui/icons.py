@@ -8,7 +8,7 @@
 # Creates pixbufs that we can use to make images from.  Uses a strip of icons, each 24px by 24px.
 
 from gi.repository import Gtk, GdkPixbuf
-from .paths import image_dir
+from kano_video.paths import image_dir
 
 # To make an image using the pixbuf icon, use the command below:
 # image.set_from_pixbuf(self.pixbuf)

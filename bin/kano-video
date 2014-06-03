@@ -13,7 +13,7 @@ if __name__ == '__main__' and __package__ is None:
     if dir_path != '/usr':
         sys.path.insert(1, dir_path)
 
-from kano_video.gui import MainWindow
+from kano_video.ui.main_window import MainWindow
 from kano_video.paths import css_dir
 
 
@@ -37,7 +37,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-

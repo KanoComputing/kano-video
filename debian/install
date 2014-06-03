@@ -1,6 +1,7 @@
 bin/* /usr/bin/
 kano_video /usr/lib/python2.7/dist-packages/
 media /usr/share/kano-video/
+playlists /usr/share/kano-video/
 
 kdesktop/kano-video.desktop /usr/share/applications/
 icon/video.png /usr/share/kano-desktop/icons/
