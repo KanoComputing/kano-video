@@ -28,6 +28,9 @@
 @define-color grey_button #b9b9b9;
 @define-color grey_text_link #d6d6d6;
 @define-color disabled_button #999999;
+@define-color close_button #e8bf2d;
+@define-color menu_button_hover #e8bf2d;
+@define-color menu_button_active #e8bf2d;
 
 /* All */
 * {
@@ -167,6 +170,14 @@ GtkButton.grey_linktext GtkLabel {
     padding: 0;
 }
 
+.menu_bar GtkButton.menu_link:hover {
+    background: @menu_button_hover;
+}
+
+.menu_bar GtkButton.menu_link.active {
+    background: @menu_button_active;
+}
+
 .menu_bar GtkButton * {
     color: @menu_bar_text;
 }
@@ -194,7 +205,7 @@ GtkEntry:insensitive {
 }
 
 .menu_bar GtkButton.close {
-    background: #e8bf2d;
+    background: @close_button;
 }
 
 /**

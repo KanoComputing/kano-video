@@ -33,13 +33,17 @@ class MenuBar(Gtk.EventBox):
         button.set_alignment(0, 0)
         grid.attach(button, 0, 0, 1, 3)
 
+        self._active_button = None
+
         button = Gtk.Button('LIBRARY')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
+        button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'library')
         grid.attach(button, 1, 0, 1, 3)
 
         button = Gtk.Button('PLAYLISTS')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
+        button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'playlist-collection')
         grid.attach(button, 2, 0, 1, 3)
 
@@ -47,6 +51,7 @@ class MenuBar(Gtk.EventBox):
 
         button = Gtk.Button('YOUTUBE')
         button.set_size_request(self._BUTTON_WIDTH, self._MENU_BAR_HEIGHT)
+        button.get_style_context().add_class('menu_link')
         button.connect('clicked', self._switch_handler, 'youtube')
         grid.attach(button, 4, 0, 1, 3)
 
@@ -74,6 +79,11 @@ class MenuBar(Gtk.EventBox):
         self.add(grid)
 
     def _switch_handler(self, _button, switchto):
+        if self._active_button:
+            self._active_button.get_style_context().remove_class('active')
+        self._active_button = _button
+        _button.get_style_context().add_class('active')
+
         win = self.get_toplevel()
         win.switch_view(switchto)
 
