@@ -10,10 +10,17 @@ from shutil import rmtree
 from kano.utils import requests_get_json, run_cmd
 
 tmp_dir = '/tmp/kano-video'
+last_search_count = 0
 
 
 def page_to_index(page, max_results=10):
     return ((page - 1) * max_results) + 1
+
+
+def get_last_search_count():
+    global last_search_count
+
+    return last_search_count
 
 
 def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1):
@@ -29,9 +36,13 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
     if popular:
         params['orderby'] = 'viewCount'
     success, error, data = requests_get_json(url, params=params)
+
     if not success:
         sys.exit(error)
     if 'feed' in data and 'entry' in data['feed']:
+        global last_search_count
+        last_search_count = data['feed']['openSearch$totalResults']['$t']
+
         return data['feed']['entry']
 
 
@@ -46,6 +57,9 @@ def search_youtube_by_user(username):
     if not success:
         sys.exit(error)
     if 'feed' in data and 'entry' in data['feed']:
+        global last_search_count
+        last_search_count = data['feed']['openSearch$totalResults']['$t']
+
         return data['feed']['entry']
 
 

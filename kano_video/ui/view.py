@@ -1,7 +1,7 @@
 from gi.repository import Gtk
 
 from kano_video.logic.playlist import playlistCollection
-from kano_video.logic.youtube import page_to_index
+from kano_video.logic.youtube import page_to_index, get_last_search_count
 
 from .header import SearchResultsHeader, \
     LibraryHeader, PlaylistHeader, \
@@ -59,12 +59,13 @@ class YoutubeView(View):
 
         if search_keyword and search_keyword.get_text():
             index = page_to_index(page)
-            self._header = SearchResultsHeader(search_keyword.get_text(), '', start=index)
 
             if users is False:
                 self._list = VideoListYoutube(keyword=search_keyword.get_text(), page=page)
             else:
                 self._list = VideoListYoutube(username=search_keyword.get_text())
+
+            self._header = SearchResultsHeader(search_keyword.get_text(), get_last_search_count(), start=index)
         else:
             self._header = YoutubeHeader()
             self._list = VideoListYoutube(page=page)
