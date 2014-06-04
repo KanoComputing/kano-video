@@ -11,7 +11,7 @@ dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # media dir
 media_local = os.path.join(dir_path, 'media')
-media_usr = '/usr/share/kano-media/videos/'
+media_usr = '/usr/share/kano-video/media/'
 
 if os.path.exists(media_local):
     media_dir = media_local
