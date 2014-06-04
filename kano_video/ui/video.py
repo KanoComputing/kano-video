@@ -267,7 +267,7 @@ class VideoListLocal(VideoList):
         if open_folder_dialog:
             local_dir = self.dir_dialog()
         else:
-            local_dir = '/usr/share/kano-video/media/videos'
+            local_dir = '/usr/share/kano-media/videos'
 
         files = list_dir(local_dir)
         files = [f for f in files if f[-3:] == 'mkv']
