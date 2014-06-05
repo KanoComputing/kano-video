@@ -4,7 +4,6 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 
-import sys
 import os
 from shutil import rmtree
 from kano.utils import requests_get_json, run_cmd
@@ -37,7 +36,7 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
     if popular:
         params['orderby'] = 'viewCount'
 
-    if parent_control == True:
+    if parent_control is True:
         params['safeSearch'] = 'strict'
 
     success, error, data = requests_get_json(url, params=params)
@@ -60,7 +59,7 @@ def search_youtube_by_user(username, parent_control=False):
         'max-results': 10
     }
 
-    if parent_control == True:
+    if parent_control is True:
         params['safeSearch'] = 'strict'
 
     success, error, data = requests_get_json(url, params=params)
@@ -97,15 +96,15 @@ def parse_youtube_entries(entries):
         description = e['media$group']['media$description']['$t'].encode('utf-8')
 
         video_url = e['media$group']['media$content'][0]['url']
-        duration  = e['media$group']['media$content'][0]['duration']
+        duration = e['media$group']['media$content'][0]['duration']
 
         duration_min = duration / 60
         duration_sec = duration % 60
 
         # On youtube version 2, eventually the viewCount key is not returned
         try:
-            viewcount = int (e['yt$statistics']['viewCount'])
-        except:
+            viewcount = int(e['yt$statistics']['viewCount'])
+        except Exception:
             viewcount = 0
 
         entry_data = {
