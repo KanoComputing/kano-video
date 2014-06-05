@@ -52,7 +52,7 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
 
 
 def search_youtube_by_user(username, parent_control=False):
-    url = 'http://gdata.youtube.com/feeds/users/{}/uploads'.format(username)
+    url = 'http://gdata.youtube.com/feeds/api/users/{}/uploads'.format(username)
     params = {
         'v': 2,
         'alt': 'json',
