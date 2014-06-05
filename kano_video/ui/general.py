@@ -1,5 +1,6 @@
 from gi.repository import Gtk, Gdk
 
+from kano.gtk3.cursor import attach_cursor_events
 from kano_video.paths import image_dir
 
 from .icons import set_from_name
@@ -20,37 +21,10 @@ class KanoWidget(Gtk.EventBox):
 
 class Button(Gtk.Button):
 
-    __gsignals__ = {
-        "enter": "override",
-        "leave": "override",
-        "clicked": "override"
-    }
+    def __init__(self, label=None, stock=None, use_underline=True):
+        super(Button, self).__init__(label=label, stock=stock, use_underline=use_underline)
 
-    def do_enter(self):
-        # Change the cursor to hour Glass
-        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND1)
-        self.get_root_window().set_cursor(cursor)
-
-        self.get_style_context().add_class('hover')
-
-        self.queue_draw()
-
-    def do_leave(self):
-        # Set the cursor to normal Arrow
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
-
-        self.get_style_context().remove_class('hover')
-
-        self.queue_draw()
-
-    def do_clicked(self):
-        self.get_style_context().remove_class('hover')
-
-        self.queue_draw()
-
-        cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
-        self.get_root_window().set_cursor(cursor)
+        attach_cursor_events(self)
 
 
 class Spacer(Gtk.Label):

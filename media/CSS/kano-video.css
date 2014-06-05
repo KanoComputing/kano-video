@@ -170,8 +170,7 @@ GtkButton.grey_linktext GtkLabel {
     padding: 0;
 }
 
-.menu_bar GtkButton.menu_link:hover,
-.menu_bar GtkButton.menu_link.hover {
+.menu_bar GtkButton.menu_link:hover {
     background: @menu_button_hover;
 }
 
