@@ -4,6 +4,7 @@ from urllib import urlretrieve
 from time import time
 
 from kano.utils import list_dir
+from kano.logging import logger
 from kano.gtk3.kano_dialog import KanoDialog
 
 from kano_video.logic.player import play_video
@@ -271,7 +272,7 @@ class VideoListLocal(VideoList):
 
         files = list_dir(local_dir)
         files = [f for f in files if f[-3:] == 'mkv']
-        print files
+        logger.info(files)
 
         if files:
             for i, f in enumerate(files):
@@ -303,16 +304,16 @@ class VideoListYoutube(VideoList):
 
         if keyword:
             entries = search_youtube_by_keyword(keyword, start_index=start_index, parent_control=self.ParentalControl)
-            print 'searching by keyword: ' + keyword
+            logger.info('searching by keyword: ' + keyword)
         elif username:
             entries = search_youtube_by_user(username, parent_control=self.ParentalControl)
-            print 'listing by username: ' + username
+            logger.info('listing by username: ' + username)
         elif playlist:
             entries = playlist
-            print 'listing playlist: ' + playlist
+            logger.info('listing playlist: ' + playlist)
         else:
             entries = search_youtube_by_user('KanoComputing', parent_control=self.ParentalControl)
-            print 'listing default videos by KanoComputing'
+            logger.info('listing default videos by KanoComputing')
 
         if entries:
             parsed_entries = parse_youtube_entries(entries)

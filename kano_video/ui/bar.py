@@ -164,7 +164,7 @@ class AddVideoBar(HorizontalBar):
 
     def _add_handler(self, _):
         popup = LoadFilePopup()
-        print popup.run()
+        popup.run()
 
 
 class PlayModeBar(HorizontalBar):

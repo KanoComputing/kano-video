@@ -7,6 +7,7 @@
 import os
 from shutil import rmtree
 from kano.utils import requests_get_json, run_cmd
+from kano.logging import logger
 
 tmp_dir = '/tmp/kano-video'
 last_search_count = 0
@@ -42,6 +43,7 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start
     success, error, data = requests_get_json(url, params=params)
 
     if not success:
+        logger.error('Searching Youtube by keyword failed: ' + error)
         return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
@@ -64,6 +66,7 @@ def search_youtube_by_user(username, parent_control=False):
 
     success, error, data = requests_get_json(url, params=params)
     if not success:
+        logger.error('Searching Youtube by keyword failed: ' + error)
         return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
@@ -106,6 +109,7 @@ def parse_youtube_entries(entries):
             viewcount = int(e['yt$statistics']['viewCount'])
         except Exception:
             viewcount = 0
+            logger.warning('Viewcount data couldn\'t be retrieved')
 
         entry_data = {
             'author': author,

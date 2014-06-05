@@ -7,6 +7,7 @@
 import sys
 
 from kano.utils import write_file_contents, is_installed, run_bg
+from kano.logging import logger
 from .youtube import get_video_file_url
 
 omxplayer_present = is_installed('omxplayer')
@@ -17,22 +18,22 @@ if not omxplayer_present and not vlc_present:
 
 def play_video(_button, video_url=None, localfile=None, fullscreen=False):
     if video_url:
-        print 'Getting video url: {}'.format(video_url)
+        logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
         if not success:
-            print 'Error with getting Youtube url: {}'.format(data)
+            logger.error('Error with getting Youtube url: {}'.format(data))
             return
         link = data
 
     if localfile:
         link = localfile
 
-    print 'Launching player...'
+    logger.info('Launching player...')
     if omxplayer_present:
         HDMI = False
         try:
             from kano_settings.config_file import get_setting
-            print 'audio:', get_setting('Audio')
+            logger.info('audio:', get_setting('Audio'))
             HDMI = get_setting('Audio') == 'HDMI'
         except Exception:
             pass
