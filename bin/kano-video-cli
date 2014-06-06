@@ -10,12 +10,13 @@
 import os.path
 import sys
 import argparse
-from kano_video.logic.player import play_video
 
 if __name__ == '__main__' and __package__ is None:
     dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     if dir_path != '/usr':
         sys.path.insert(1, dir_path)
+
+from kano_video.logic.player import play_video
 
 if __name__ != '__main__':
     sys.exit("This is a script, do not import it as a module!")
@@ -31,4 +32,4 @@ if not os.path.isfile(args.video):
     sys.exit("Video file could not be found")
 
 # Play video
-play_video(_button=None, localfile=args.video, fullscreen=args.fullscreen)
+play_video(localfile=args.video, fullscreen=args.fullscreen)

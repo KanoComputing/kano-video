@@ -16,7 +16,7 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button, video_url=None, localfile=None, fullscreen=False):
+def play_video(_button=None, video_url=None, localfile=None, fullscreen=False):
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
@@ -61,7 +61,7 @@ def play_video(_button, video_url=None, localfile=None, fullscreen=False):
     run_bg(player_cmd)
 
 
-def stop_videos(_button):
+def stop_videos(_button=None):
     if omxplayer_present:
         run_bg('killall omxplayer.bin')
     else:
