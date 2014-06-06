@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+#
+# kano-video-cli
+#
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+
+import os.path
+import sys
+import argparse
+from kano_video.logic.player import play_video
+
+if __name__ == '__main__' and __package__ is None:
+    dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    if dir_path != '/usr':
+        sys.path.insert(1, dir_path)
+
+if __name__ != '__main__':
+    sys.exit("This is a script, do not import it as a module!")
+
+parser = argparse.ArgumentParser(description='Play a video.')
+parser.add_argument('video', metavar='video_path', type=str, help='Path to a video file')
+parser.add_argument('-f', '--fullscreen', action='store_true', help='Display fullscreen')
+
+args = parser.parse_args()
+
+# Check if file exists
+if not os.path.isfile(args.video):
+    sys.exit("Video file could not be found")
+
+# Play video
+play_video(_button=None, localfile=args.video, fullscreen=args.fullscreen)
