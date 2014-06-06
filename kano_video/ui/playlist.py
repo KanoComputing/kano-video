@@ -51,7 +51,7 @@ class PlaylistEntry(Gtk.Button):
     def _remove_handler(self, _button, _name):
         confirm = KanoDialog('Are you sure?',
                              'You are about to delete the playlist called "{}"'.format(_name),
-                             {'OK': True, 'CANCEL': False})
+                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}})
         response = confirm.run()
         if response:
             playlistCollection.delete(_name)
