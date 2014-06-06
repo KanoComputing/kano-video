@@ -109,7 +109,7 @@ def parse_youtube_entries(entries):
             viewcount = int(e['yt$statistics']['viewCount'])
         except Exception:
             viewcount = 0
-            logger.warning('Viewcount data couldn\'t be retrieved')
+            logger.warn('Viewcount data couldn\'t be retrieved')
 
         entry_data = {
             'author': author,
