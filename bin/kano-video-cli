@@ -32,4 +32,4 @@ if not os.path.isfile(args.video):
     sys.exit("Video file could not be found")
 
 # Play video
-play_video(localfile=args.video, fullscreen=args.fullscreen)
+play_video(localfile=args.video, fullscreen=args.fullscreen, wait=True)

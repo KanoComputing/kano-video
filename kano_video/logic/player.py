@@ -6,7 +6,7 @@
 
 import sys
 
-from kano.utils import write_file_contents, is_installed, run_bg, is_running
+from kano.utils import write_file_contents, is_installed, run_bg, is_running, run_cmd
 from kano.logging import logger
 from .youtube import get_video_file_url
 
@@ -16,7 +16,7 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button=None, video_url=None, localfile=None, fullscreen=False):
+def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, wait=False):
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
@@ -59,7 +59,10 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False):
     if not fullscreen and is_running('kdesk'):
         player_cmd = '/usr/bin/kdesk -b \'{}\''.format(player_cmd)
 
-    run_bg(player_cmd)
+    if wait:
+        run_cmd(player_cmd)
+    else:
+        run_bg(player_cmd)
 
 
 def stop_videos(_button=None):
