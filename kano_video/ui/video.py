@@ -272,7 +272,7 @@ class VideoListLocal(VideoList):
 
         files = list_dir(local_dir)
         files = [f for f in files if f[-3:] == 'mkv']
-        logger.info(files)
+        logger.info("Found these local videos: {}".format(" ".join(files)))
 
         if files:
             for i, f in enumerate(files):
