@@ -6,7 +6,7 @@
 
 import sys
 
-from kano.utils import write_file_contents, is_installed, run_bg
+from kano.utils import write_file_contents, is_installed, run_bg, is_running
 from kano.logging import logger
 from .youtube import get_video_file_url
 
@@ -56,7 +56,8 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False):
         else:
             player_cmd = 'vlc --width 700 --no-video-title-show "{link}"'.format(link=link)
 
-    player_cmd = '/usr/bin/kdesk -b \'{}\''.format(player_cmd)
+    if not fullscreen and is_running('kdesk'):
+        player_cmd = '/usr/bin/kdesk -b \'{}\''.format(player_cmd)
 
     run_bg(player_cmd)
 
