@@ -23,7 +23,7 @@ class VideoEntry(Gtk.Button):
     _DESC_HEIGHT = 15
     _INFO_HEIGHT = 15
 
-    def __init__(self, e, playlist_name=None):
+    def __init__(self, e, playlist_name=None, permanent=False):
         super(VideoEntry, self).__init__(hexpand=True)
 
         self.get_style_context().add_class('entry_item')
@@ -52,7 +52,7 @@ class VideoEntry(Gtk.Button):
         label.get_style_context().add_class('title')
         button_grid.attach(label, 1, 0, 1, 1)
 
-        if playlist_name:
+        if playlist_name and not permanent:
             remove = RemoveButton()
             remove.connect('clicked', self._remove_from_playlist_handler, e, playlist_name)
             button_grid.attach(remove, 2, 0, 1, 1)
@@ -127,7 +127,7 @@ class VideoDetailEntry(Gtk.Button):
     _DESC_HEIGHT = 15
     _INFO_HEIGHT = 15
 
-    def __init__(self, e, playlist_name=None):
+    def __init__(self, e, playlist_name=None, permanent=False):
         super(VideoDetailEntry, self).__init__(hexpand=True)
 
         self.get_style_context().add_class('entry_item')
@@ -158,7 +158,7 @@ class VideoDetailEntry(Gtk.Button):
         label.get_style_context().add_class('title')
         info_grid.attach(label, 1, 0, 1, 1)
 
-        if playlist_name:
+        if playlist_name and not permanent:
             remove = RemoveButton()
             remove.connect('clicked', self._remove_from_playlist_handler, e, playlist_name)
             button_grid.attach(remove, 2, 0, 1, 1)
@@ -226,7 +226,7 @@ class VideoDetailEntry(Gtk.Button):
 
 class VideoList(Gtk.EventBox):
 
-    def __init__(self, videos=None, playlist=None):
+    def __init__(self, videos=None, playlist=None, permanent=False):
         super(VideoList, self).__init__(hexpand=True)
 
         # Try to get parental boolean flag from kano-settings
@@ -253,7 +253,7 @@ class VideoList(Gtk.EventBox):
         if videos is not None:
             i = 0
             for v in videos:
-                entry = VideoEntry(v, playlist)
+                entry = VideoEntry(v, playlist_name=playlist, permanent=permanent)
                 self._grid.attach(entry, 0, i, 1, 1)
                 i += 1
 

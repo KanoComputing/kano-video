@@ -16,19 +16,31 @@ class Playlist(object):
 
     def load_from_file(self, filepath):
         with open(filepath) as openfile:
-            data = openfile.read()
-            self.playlist = json.loads(data)
+            raw_data = openfile.read()
+
+            data = json.loads(raw_data)
+
+            if len(data) is not 0 and 'permanent' in data[0]:
+                self.permanent = data[0]['permanent']
+                del data[0]
+            else:
+                self.permanent = False
+
+            self.playlist = data
 
     def load(self):
         try:
             self.load_from_file(self.filename)
         except IOError:
             self.playlist = []
+            self.permanent = False
             self.save()
 
     def save_to_file(self, filepath):
         with open(filepath, 'w') as savefile:
-            json.dump(self.playlist, savefile)
+            data = self.playlist[:]
+            data.insert(0, {'permanent': self.permanent})
+            json.dump(data, savefile)
 
     def save(self):
         self.save_to_file(self.filename)

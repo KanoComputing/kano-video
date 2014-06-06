@@ -9,7 +9,7 @@ from kano.gtk3.kano_dialog import KanoDialog
 
 class PlaylistEntry(Gtk.Button):
 
-    def __init__(self, name):
+    def __init__(self, name, permanent=False):
         super(PlaylistEntry, self).__init__(hexpand=True)
 
         self.get_style_context().add_class('entry_item')
@@ -39,9 +39,10 @@ class PlaylistEntry(Gtk.Button):
         subtitle.get_style_context().add_class('subtitle')
         button_grid.attach(subtitle, 0, 1, 1, 1)
 
-        remove = RemoveButton()
-        remove.connect('clicked', self._remove_handler, name)
-        button_grid.attach(remove, 1, 0, 1, 1)
+        if not permanent:
+            remove = RemoveButton()
+            remove.connect('clicked', self._remove_handler, name)
+            button_grid.attach(remove, 1, 0, 1, 1)
 
     def _playlist_handler(self, _button, name):
         win = self.get_toplevel()
@@ -65,6 +66,6 @@ class PlaylistList(KanoWidget):
 
         i = 0
         for name, p in playlists.iteritems():
-            playlist = PlaylistEntry(name)
+            playlist = PlaylistEntry(name, permanent=p.permanent)
             self._grid.attach(playlist, 0, i, 1, 1)
             i += 1

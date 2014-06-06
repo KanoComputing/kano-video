@@ -139,7 +139,8 @@ class PlaylistView(View):
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
         self._vids = VideoList(videos=playlist.playlist,
-                               playlist=playlist_name)
+                               playlist=playlist_name,
+                               permanent=playlist.permanent)
         self._grid.attach(self._vids, 0, 2, 1, 1)
 
 
