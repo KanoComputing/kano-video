@@ -10,7 +10,7 @@ Architecture: all
 Conflicts: make-video, youtube-dl, kano-youtube
 Provides: make-video, youtube-dl, kano-youtube
 Replaces: make-video, youtube-dl, kano-youtube
-Depends: ${misc:Depends}, kano-toolset
+Depends: ${misc:Depends}, kano-toolset, python
 Suggests: kano-profile, kano-settings
 Recommends: omxplayer
 Description: A small video player for Kano OS
