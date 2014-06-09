@@ -70,7 +70,8 @@ class PlaylistCollection(object):
 
         for file in os.listdir(dir):
             filename = os.path.splitext(file)[0]
-            self.add(Playlist(filename))
+            if filename != 'Library':
+                self.add(Playlist(filename))
 
     def add(self, playlist):
         self.collection[playlist.name] = playlist
@@ -85,3 +86,4 @@ class PlaylistCollection(object):
 
 
 playlistCollection = PlaylistCollection('playlists')
+library_playlist = Playlist('Library')

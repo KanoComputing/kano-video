@@ -7,7 +7,8 @@
 from gi.repository import Gtk, Gdk
 
 from kano.network import is_internet
-from kano_video.logic.playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection, \
+    library_playlist
 
 from .general import Contents
 from .bar import MenuBar
@@ -128,4 +129,6 @@ class MainWindow(Gtk.Window):
 
     def on_close(self, widget=None, event=None):
         playlistCollection.save()
+        library_playlist.save()
+
         Gtk.main_quit()
