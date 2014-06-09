@@ -114,8 +114,6 @@ class LoadFilePopup(Gtk.FileChooserDialog):
             "Please select a folder", self, Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
-        self.set_action(Gtk.FileChooserAction.SELECT_FOLDER)
-
         # Set up file filters
         filter_text = Gtk.FileFilter()
         filter_text.set_name("Video files")

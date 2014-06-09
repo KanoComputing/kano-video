@@ -3,7 +3,8 @@ import os
 from shutil import rmtree
 
 from kano_video.paths import image_dir
-from kano_video.logic.playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection, \
+    library_playlist
 from kano_video.logic.youtube import tmp_dir
 
 from .popup import LoadFilePopup, AddPlaylistPopup
@@ -89,6 +90,7 @@ class MenuBar(Gtk.EventBox):
             rmtree(tmp_dir)
 
         playlistCollection.save()
+        library_playlist.save()
 
         Gtk.main_quit()
 
@@ -164,7 +166,25 @@ class AddVideoBar(HorizontalBar):
 
     def _add_handler(self, _):
         popup = LoadFilePopup()
-        popup.run()
+        fullpath = popup.run()
+
+        if fullpath and os.path.isfile(fullpath):
+            filename = os.path.basename(fullpath)
+            filename = os.path.splitext(filename)[0]
+
+            title_str = filename if len(filename) <= 40 else filename[:37] + '...'
+
+            e = {'title': title_str,
+                 'video_url': None,
+                 'local_path': fullpath,
+                 'thumbnail': None,
+                 'big_thumb': None}
+
+            library_playlist.add(e)
+
+            # Refresh
+            win = self.get_toplevel()
+            win.switch_view('library')
 
 
 class PlayModeBar(HorizontalBar):

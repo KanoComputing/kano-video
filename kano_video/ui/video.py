@@ -3,7 +3,6 @@ from gi.repository import Gtk, Gdk
 from urllib import urlretrieve
 from time import time
 
-from kano.utils import list_dir
 from kano.logging import logger
 from kano.gtk3.kano_dialog import KanoDialog
 
@@ -11,7 +10,8 @@ from kano_video.logic.player import play_video
 from kano_video.logic.youtube import search_youtube_by_user, \
     parse_youtube_entries, search_youtube_by_keyword, tmp_dir, \
     page_to_index
-from kano_video.logic.playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection, \
+    library_playlist
 
 from .popup import AddToPlaylistPopup
 from .general import Spacer, RemoveButton, Button
@@ -265,27 +265,8 @@ class VideoListLocal(VideoList):
 
         self.get_style_context().add_class('video_list_local')
 
-        if open_folder_dialog:
-            local_dir = self.dir_dialog()
-        else:
-            local_dir = '/usr/share/kano-media/videos'
-
-        files = list_dir(local_dir)
-        files = [f for f in files if f[-3:] == 'mkv']
-        logger.info("Found these local videos: {}".format(" ".join(files)))
-
-        if files:
-            for i, f in enumerate(files):
-                fullpath = os.path.join(local_dir, f)
-                filename = os.path.splitext(f)[0]
-
-                title_str = filename if len(filename) <= 40 else filename[:37] + '...'
-                e = {'title': title_str,
-                     'video_url': None,
-                     'local_path': fullpath,
-                     'thumbnail': None,
-                     'big_thumb': None}
-
+        if library_playlist.playlist:
+            for i, e in enumerate(library_playlist.playlist):
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i + 1, 1, 1)
         else:

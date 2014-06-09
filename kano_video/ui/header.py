@@ -2,7 +2,8 @@ from gi.repository import Gtk
 
 from .general import KanoWidget
 
-from kano_video.logic.playlist import playlistCollection
+from kano_video.logic.playlist import playlistCollection, \
+    library_playlist
 
 
 class HeaderBar(KanoWidget):
@@ -42,7 +43,7 @@ class LibraryHeader(HeaderBar):
 
     def __init__(self):
         self._title = 'Library'
-        self._count = len(playlistCollection.collection)
+        self._count = len(library_playlist.playlist)
         self._item = '{} video'
 
         super(LibraryHeader, self).__init__()
