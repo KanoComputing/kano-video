@@ -206,6 +206,7 @@ class PlayModeBar(HorizontalBar):
         grid.attach(fullscreen, 0, 0, 1, 1)
 
         self._switch = Gtk.Switch()
+        self._switch.set_active(True)
         self._switch.set_size_request(20, 20)
         grid.attach(self._switch, 1, 0, 1, 1)
 
