@@ -5,7 +5,6 @@
 #
 
 import sys
-from gi.repository import Gdk
 
 from kano.utils import write_file_contents, is_installed, run_bg, is_running, run_cmd
 from kano.logging import logger
@@ -35,7 +34,6 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
     height = 270
 
     if omxplayer_present:
-        x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
         HDMI = False
         try:
             from kano_settings.config_file import get_setting
@@ -51,6 +49,8 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
         if fullscreen:
             player_cmd = 'lxterminal -e "omxplayer {hdmi_str} -b \\"{link}\\""'.format(link=link, hdmi_str=hdmi_str)
         else:
+            x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
+
             file_str = 'kano-window-tool -dno -t ' \
                 'omxplayer -x {x} -y {y} -w {width} -h {height}\n'.format(x=x1, y=y1, width=width, height=height)
             file_str += 'omxplayer {hdmi_str} ' \
@@ -75,6 +75,8 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
 
 
 def get_centred_coords(width, height):
+    from gi.repository import Gdk
+
     taskbar_height = 44
 
     monitor = {
