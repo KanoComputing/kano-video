@@ -66,7 +66,7 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
             player_cmd = 'vlc --width {width} --no-video-title-show "{link}"'.format(link=link, width=width)
 
     if not fullscreen and is_running('kdesk'):
-        player_cmd = '/usr/bin/kdesk -b \'{}\''.format(player_cmd)
+        player_cmd = '/usr/bin/kdesk-blur \'{}\''.format(player_cmd)
 
     if wait:
         run_cmd(player_cmd)
