@@ -1,5 +1,9 @@
 import os
 import json
+import errno
+import shutil
+
+from kano_video.paths import playlist_path
 
 playlist_dir = 'playlists'
 
@@ -65,8 +69,7 @@ class PlaylistCollection(object):
 
         self.collection = {}
 
-        if not os.path.exists(playlist_dir):
-            os.makedirs(playlist_dir)
+        self.init_playlists()
 
         for file in os.listdir(dir):
             filename = os.path.splitext(file)[0]
@@ -83,6 +86,21 @@ class PlaylistCollection(object):
     def save(self):
         for _, playlist in self.collection.iteritems():
             playlist.save()
+
+    def init_playlists(self):
+        try:
+            os.makedirs(playlist_dir)
+        except OSError as e:
+            if e.errno == errno.EEXIST and os.path.isdir(playlist_dir):
+                pass
+            else:
+                raise
+
+        try:
+            shutil.copy(playlist_path + '/Library.json', playlist_dir)
+            shutil.copy(playlist_path + '/Kano.json', playlist_dir)
+        except shutil.Error:
+            pass
 
 
 playlistCollection = PlaylistCollection('playlists')

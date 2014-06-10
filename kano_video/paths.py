@@ -8,17 +8,21 @@ import os
 
 # setting up directories
 dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+usr_path = '/usr/share/kano-video'
 
-# media dir
-media_local = os.path.join(dir_path, 'media')
-media_usr = '/usr/share/kano-video/media/'
 
-if os.path.exists(media_local):
-    media_dir = media_local
-elif os.path.exists(media_usr):
-    media_dir = media_usr
-else:
-    raise Exception('Neither local nor usr media dir found!')
+def get_dir_path(dir):
+    local = os.path.join(dir_path, dir)
+    usr = os.path.join(usr_path, dir)
 
+    if os.path.exists(local):
+        return local
+    elif os.path.exists(usr):
+        return usr
+    else:
+        raise Exception('Neither local nor usr {dir} dir found!'.format(dir=dir))
+
+playlist_path = get_dir_path('playlists')
+media_dir = get_dir_path('media')
 image_dir = os.path.join(media_dir, 'images')
 css_dir = os.path.join(media_dir, 'CSS')
