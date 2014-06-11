@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import os
 from shutil import rmtree
 
@@ -78,6 +78,8 @@ class MenuBar(Gtk.EventBox):
     def _switch_handler(self, _button, switchto):
         if self._active_button:
             self._active_button.get_style_context().remove_class('active')
+            # This is to fix bug in Gtk 3.4, otherwise the colour doesn't update when we change the class
+            self._active_button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("green"))
         self._active_button = _button
         _button.get_style_context().add_class('active')
 
