@@ -98,15 +98,25 @@ def get_centred_coords(width, height):
 
 
 def show_controls():
+    import json
+
     home_dir = os.path.expanduser('~')
     conf_file = '{}/.kano-video.json'.format(home_dir)
 
     if not os.path.isfile(conf_file):
+        # Create a blank config and return
+        with open(conf_file, 'w+') as f:
+            f.write(json.dumps({'display_controls': True}))
+        return
+
+    with open(conf_file, 'r') as f:
+        conf = json.loads(f.read())
+
+    if conf['display_controls']:
         try:
             from gi.repository import Gtk
             from kano.gtk3.kano_dialog import KanoDialog
             from kano.gtk3 import cursor
-            import json
 
             widget = Gtk.EventBox()
             grid = Gtk.Grid()
@@ -125,7 +135,7 @@ def show_controls():
             confirm.run()
 
             if checkbox.get_active():
-                with open(conf_file, 'w+') as f:
+                with open(conf_file, 'w') as f:
                     f.write(json.dumps({'display_controls': False}))
 
         except Exception as e:
