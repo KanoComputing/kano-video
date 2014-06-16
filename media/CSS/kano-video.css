@@ -224,10 +224,6 @@ GtkButton.entry_item {
     background: #ffffff;
 }
 
-GtkEventBox.thumb {
-    background: #ffc092;
-}
-
 /********************************************************
  * Scrollbars                                           *
  * The design was taken from the UN5 gtk-3.0 theme      *

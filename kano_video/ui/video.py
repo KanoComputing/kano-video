@@ -14,6 +14,7 @@ from time import time
 from kano.logging import logger
 from kano.gtk3.kano_dialog import KanoDialog
 
+from kano_video.paths import image_dir
 from kano_video.logic.player import play_video
 from kano_video.logic.youtube import search_youtube_by_user, \
     parse_youtube_entries, search_youtube_by_keyword, tmp_dir, \
@@ -42,14 +43,15 @@ class VideoEntry(Gtk.Button):
         button_grid.set_column_spacing(30)
         self.add(button_grid)
 
-        if e['thumbnail']:
-            img = Gtk.Image()
+        img = Gtk.Image()
 
+        if e['thumbnail']:
             thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
             urlretrieve(e['thumbnail'], thumbnail)
             img.set_from_file(thumbnail)
         else:
-            img = Gtk.EventBox()
+            img.set_from_file('{}/icons/no_thumbnail.png'.format(image_dir))
+
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
         button_grid.attach(img, 0, 0, 1, 4)
@@ -144,14 +146,15 @@ class VideoDetailEntry(Gtk.Button):
         button_grid.set_column_spacing(30)
         self.add(button_grid)
 
-        if e['big_thumb']:
-            img = Gtk.Image()
+        img = Gtk.Image()
 
+        if e['big_thumb']:
             big_thumb = '{}/video_large_{}.jpg'.format(tmp_dir, time())
             urlretrieve(e['big_thumb'], big_thumb)
             img.set_from_file(big_thumb)
         else:
-            img = Gtk.EventBox()
+            img.set_from_file('{}/icons/no_thumbnail.png'.format(image_dir))
+
         img.set_size_request(self._ENTRY_HEIGHT, self._ENTRY_HEIGHT)
         img.get_style_context().add_class('thumb')
         button_grid.attach(img, 0, 0, 1, 1)
