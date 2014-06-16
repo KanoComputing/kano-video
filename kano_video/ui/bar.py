@@ -21,7 +21,7 @@ from .general import KanoWidget, Spacer, Button
 
 class MenuBar(Gtk.EventBox):
     _MENU_BAR_HEIGHT = 66
-    _BUTTON_WIDTH = 150
+    _BUTTON_WIDTH = 100
 
     def __init__(self):
         Gtk.EventBox.__init__(self)
