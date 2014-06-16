@@ -76,6 +76,7 @@ class MenuBar(Gtk.EventBox):
         self._close_button.props.margin_right = 2
         self._close_button.set_can_focus(False)
         self._close_button.get_style_context().add_class('close')
+        self._close_button.set_size_request(44, 66)
 
         self._close_button.connect('clicked', self._close_button_click)
 
