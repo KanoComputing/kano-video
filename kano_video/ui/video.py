@@ -10,6 +10,7 @@ import os
 from gi.repository import Gtk, Gdk
 from urllib import urlretrieve
 from time import time
+from random import randint
 
 from kano.logging import logger
 from kano.gtk3.kano_dialog import KanoDialog
@@ -325,7 +326,9 @@ class VideoListPopular(VideoList):
 
         self.get_style_context().add_class('video_list_popular')
 
-        entries = search_youtube_by_keyword(popular=True, max_results=3, parent_control=self.ParentalControl)
+        entries = search_youtube_by_keyword(popular=True, max_results=3,
+                                            parent_control=self.ParentalControl,
+                                            start_index=randint(1, 20))
 
         if entries:
             parsed_entries = parse_youtube_entries(entries)
