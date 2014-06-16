@@ -73,6 +73,8 @@ class Contents(Gtk.ScrolledWindow):
         Gtk.Container.add(self._box, obj)
         self._show_all(obj)
 
+        self.get_vadjustment().set_value(0)
+
     def _show_all(self, w):
         w.show()
         if hasattr(w, '__iter__'):
