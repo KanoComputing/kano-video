@@ -246,7 +246,7 @@ class VideoList(Gtk.EventBox):
         self.ParentalControl = False
         try:
             from kano_settings.config_file import get_setting
-            if get_setting('Parental-lock') == 'True':
+            if get_setting('Parental-lock'):
                 self.ParentalControl = True
         except Exception:
             pass
