@@ -7,6 +7,7 @@
 #
 
 import sys
+import os
 
 from kano.utils import write_file_contents, is_installed, run_bg, is_running, run_cmd
 from kano.logging import logger
@@ -70,6 +71,8 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
     if not fullscreen and is_running('kdesk'):
         player_cmd = '/usr/bin/kdesk-blur \'{}\''.format(player_cmd)
 
+    show_controls()
+
     if wait:
         run_cmd(player_cmd)
     else:
@@ -92,6 +95,41 @@ def get_centred_coords(width, height):
     y2 = y1 + height
 
     return x1, y1, x2, y2
+
+
+def show_controls():
+    home_dir = os.path.expanduser('~')
+    conf_file = '{}/.kano-video.json'.format(home_dir)
+
+    if not os.path.isfile(conf_file):
+        try:
+            from gi.repository import Gtk
+            from kano.gtk3.kano_dialog import KanoDialog
+            from kano.gtk3 import cursor
+            import json
+
+            widget = Gtk.EventBox()
+            grid = Gtk.Grid()
+            widget.add(grid)
+
+            checkbox = Gtk.CheckButton()
+            check_label = Gtk.Label('Don\'t show this again')
+            checkbox.add(check_label)
+            checkbox.set_can_focus(False)
+            cursor.attach_cursor_events(checkbox)
+
+            confirm = KanoDialog(title_text='Video Controls',
+                                 description_text='Q will stop the video - SPACE pauses and starts',
+                                 button_dict={'GOT IT!': {'return_value': True}},
+                                 widget=checkbox)
+            confirm.run()
+
+            if checkbox.get_active():
+                with open(conf_file, 'w+') as f:
+                    f.write(json.dumps({'display_controls': False}))
+
+        except Exception as e:
+            logger.warn('Video controls window could not be displayed: {}'.format(e))
 
 
 def stop_videos(_button=None):
