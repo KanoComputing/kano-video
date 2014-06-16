@@ -1,9 +1,9 @@
 # popup.py
-# 
+#
 # Copyright (C) 2014 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# 
+#
 
 
 import os
@@ -98,6 +98,7 @@ class AddPlaylistPopup(PlaylistPopup):
         super(AddPlaylistPopup, self).__init__()
 
         entry = Gtk.Entry()
+        entry.connect('activate', self._add, entry)
         self.grid.attach(entry, 0, 1, 1, 1)
 
         button = Button('ADD')
