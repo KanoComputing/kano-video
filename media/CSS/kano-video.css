@@ -190,8 +190,8 @@ GtkEntry {
     border-style: solid;
     border-width: 2px;
     border-radius:3px;
-    padding: 10px;
-    font: Bariol 14;
+    padding: 12px;
+    font: Bariol 12;
 }
 
 GtkEntry:insensitive {
@@ -200,6 +200,10 @@ GtkEntry:insensitive {
     border-style: solid;
     border-width: 2px;
     border-radius:3px;
+}
+
+.menu_bar .search_bar GtkEntry {
+    border: none;
 }
 
 .menu_bar .search_bar GtkButton {
