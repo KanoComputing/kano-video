@@ -53,9 +53,17 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
         volume_percent, _ = get_volume()
         volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
 
+        subtitles = '--subtitle "/usr/share/kano-media/videos/subtitles/controls.srt" ' \
+            '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
+            '--font-size 35 ' \
+            '--align center'
+
         if fullscreen:
-            player_cmd = 'lxterminal -e "omxplayer {hdmi_str} {volume_str} -b \\"{link}\\""'.format(
-                link=link, hdmi_str=hdmi_str, volume_str=volume_str)
+            player_cmd = 'lxterminal -e "omxplayer {hdmi_str} {volume_str} ' \
+                '{subtitles} -b ' \
+                '\\"{link}\\""'.format(link=link, hdmi_str=hdmi_str,
+                                       volume_str=volume_str,
+                                       subtitles=subtitles)
         else:
             x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
 
@@ -63,7 +71,11 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
                 'omxplayer -x {x} -y {y} -w {width} -h {height}\n'.format(x=x1, y=y1, width=width, height=height)
             file_str += 'omxplayer {hdmi_str} {volume_str} ' \
                 '--win "{x1} {y1} {x2} {y2}" ' \
-                '"{link}"\n'.format(link=link, hdmi_str=hdmi_str, volume_str=volume_str, x1=x1, y1=y1, x2=x2, y2=y2)
+                '{subtitles} ' \
+                '"{link}"\n'.format(link=link, hdmi_str=hdmi_str,
+                                    volume_str=volume_str,
+                                    x1=x1, y1=y1, x2=x2, y2=y2,
+                                    subtitles=subtitles)
             file_path = '/tmp/omxplayer.sh'
             write_file_contents(file_path, file_str)
             player_cmd = 'lxterminal -t omxplayer -e "bash {}"'.format(file_path)
@@ -75,8 +87,6 @@ def play_video(_button=None, video_url=None, localfile=None, fullscreen=False, w
 
     if not fullscreen and is_running('kdesk'):
         player_cmd = '/usr/bin/kdesk-blur \'{}\''.format(player_cmd)
-
-    show_controls()
 
     if wait:
         run_cmd(player_cmd)
@@ -100,51 +110,6 @@ def get_centred_coords(width, height):
     y2 = y1 + height
 
     return x1, y1, x2, y2
-
-
-def show_controls():
-    import json
-
-    home_dir = os.path.expanduser('~')
-    conf_file = '{}/.kano-video.json'.format(home_dir)
-
-    if not os.path.isfile(conf_file):
-        # Create a blank config and return
-        with open(conf_file, 'w+') as f:
-            f.write(json.dumps({'display_controls': True}))
-        return
-
-    with open(conf_file, 'r') as f:
-        conf = json.loads(f.read())
-
-    if conf['display_controls']:
-        try:
-            from gi.repository import Gtk
-            from kano.gtk3.kano_dialog import KanoDialog
-            from kano.gtk3 import cursor
-
-            widget = Gtk.EventBox()
-            grid = Gtk.Grid()
-            widget.add(grid)
-
-            checkbox = Gtk.CheckButton()
-            check_label = Gtk.Label('Don\'t show this again')
-            checkbox.add(check_label)
-            checkbox.set_can_focus(False)
-            cursor.attach_cursor_events(checkbox)
-
-            confirm = KanoDialog(title_text='Video Controls',
-                                 description_text='Q will stop the video - SPACE pauses and starts',
-                                 button_dict={'GOT IT!': {'return_value': True}},
-                                 widget=checkbox)
-            confirm.run()
-
-            if checkbox.get_active():
-                with open(conf_file, 'w') as f:
-                    f.write(json.dumps({'display_controls': False}))
-
-        except Exception as e:
-            logger.warn('Video controls window could not be displayed: {}'.format(e))
 
 
 def stop_videos(_button=None):
