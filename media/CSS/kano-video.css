@@ -228,6 +228,40 @@ GtkButton.entry_item {
     background: #ffffff;
 }
 
+/**
+ * Standard dropdown lists
+ */
+GtkComboBox {
+    /* font effect arrow size */
+    font: Bariol 5;
+}
+
+GtkComboBox GtkButton {
+    border-color: @active_border;
+    border-style: solid;
+    border-width: 2px;
+    border-radius:3px;
+    padding: 10px;
+    background: #ffffff;
+}
+
+GtkComboBox GtkCellView {
+    color: @active_writing;
+    font: Bariol 14;
+}
+
+GtkComboBox .menu {
+    border-style: solid;
+    border-color: @active_border;
+    border-width: 2px;
+    border-radius: 3px;
+}
+
+GtkComboBox .separator {
+    /* This removes lines in combotextbox*/
+    -GtkWidget-wide-separators: true;
+}
+
 /********************************************************
  * Scrollbars                                           *
  * The design was taken from the UN5 gtk-3.0 theme      *

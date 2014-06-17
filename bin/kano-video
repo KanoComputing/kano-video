@@ -15,7 +15,6 @@ if __name__ == '__main__' and __package__ is None:
 
 from kano_video.ui.main_window import MainWindow
 from kano_video.paths import css_dir
-from kano.gtk3.apply_styles import apply_styles
 
 
 def main():
@@ -25,8 +24,6 @@ def main():
     if not os.path.exists(css_file):
         sys.exit('CSS file missing!')
     cssProvider.load_from_path(css_file)
-
-    apply_styles()
 
     screen = Gdk.Screen.get_default()
     styleContext = Gtk.StyleContext()
