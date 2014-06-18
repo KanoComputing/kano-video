@@ -37,12 +37,10 @@ class MainWindow(Gtk.Window):
         menu_bar = MenuBar()
         self.grid.attach(menu_bar, 0, 0, 1, 1)
 
-        self.view = HomeView()
-        self.prev_view = []
-
         self.contents = Contents(self.grid)
-        self.contents.set_contents(self.view)
         self.contents.set_size_request(self._win_width, self._contents_height)
+
+        self.switch_view('home')
 
         self.grid.attach(self.contents, 0, 1, 1, 1)
 
