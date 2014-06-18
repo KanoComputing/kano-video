@@ -54,7 +54,8 @@ def play_video(_button=None, video_url=None, localfile=None,
             hdmi_str = '-o hdmi'
 
         volume_percent, _ = get_volume()
-        volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
+        volume_str = '--vol {}'.format(
+            percent_to_millibel(volume_percent, raspberry_mod=True))
 
         if not subtitles or not os.path.isfile(subtitles):
             subtitles = None
