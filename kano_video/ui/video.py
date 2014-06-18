@@ -118,7 +118,7 @@ class VideoEntry(Gtk.Button):
     def _remove_from_playlist_handler(self, _button, video, name):
         confirm = KanoDialog('Are you sure?',
                              'You are about to delete this video from the playlist called "{}"'.format(name),
-                             {'OK': True, 'CANCEL': False})
+                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}})
         response = confirm.run()
         if response:
             playlistCollection.collection[name].remove(video)
@@ -226,7 +226,7 @@ class VideoDetailEntry(Gtk.Button):
     def _remove_from_playlist_handler(self, _button, video, name):
         confirm = KanoDialog('Are you sure?',
                              'You are about to delete this video from the playlist called "{}"'.format(name),
-                             {'OK': True, 'CANCEL': False})
+                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}})
         response = confirm.run()
         if response:
             playlistCollection.collection[name].remove(video)
