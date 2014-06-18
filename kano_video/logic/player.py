@@ -14,6 +14,8 @@ from kano.utils import write_file_contents, is_installed, \
 from kano.logging import logger
 from .youtube import get_video_file_url
 
+subtitles_dir = '/usr/share/kano-media/videos/subtitles'
+
 omxplayer_present = is_installed('omxplayer')
 vlc_present = is_installed('vlc')
 if not omxplayer_present and not vlc_present:
@@ -54,21 +56,18 @@ def play_video(_button=None, video_url=None, localfile=None,
         volume_percent, _ = get_volume()
         volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
 
-        if not os.path.isfile(subtitles):
+        if not subtitles or not os.path.isfile(subtitles):
             subtitles = None
-
-        if not subtitles:
-            subtitles_dir = '/usr/share/kano-media/videos/subtitles'
 
             if localfile:
                 filename = os.path.basename(localfile)
                 filename = os.path.splitext(filename)[0]
+                fullpath = os.path.join(subtitles_dir, filename + '.srt')
+                if os.path.exists(fullpath):
+                    subtitles = fullpath
 
-                subtitles = '{dir}/{file}.srt'.format(dir=subtitles_dir,
-                                                      file=filename)
-
-            if not subtitles or not os.path.isfile(subtitles):
-                subtitles = '{dir}/controls.srt'.format(dir=subtitles_dir)
+            if not subtitles:
+                subtitles = os.path.join(subtitles_dir, 'controls.srt')
 
         subtitles_str = '--subtitle "{subtitles}" ' \
             '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
