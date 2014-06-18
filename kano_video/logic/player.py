@@ -14,6 +14,8 @@ from kano.utils import write_file_contents, is_installed, \
 from kano.logging import logger
 from .youtube import get_video_file_url
 
+subtitles_dir = '/usr/share/kano-media/videos/subtitles'
+
 omxplayer_present = is_installed('omxplayer')
 vlc_present = is_installed('vlc')
 if not omxplayer_present and not vlc_present:
@@ -58,7 +60,6 @@ def play_video(_button=None, video_url=None, localfile=None,
             subtitles = None
 
             if localfile:
-                subtitles_dir = '/usr/share/kano-media/videos/subtitles'
                 filename = os.path.basename(localfile)
                 filename = os.path.splitext(filename)[0]
                 fullpath = '{dir}/{file}.srt'.format(
