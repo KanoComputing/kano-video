@@ -7,6 +7,7 @@
 #
 
 import sys
+import os
 
 from kano.utils import write_file_contents, is_installed, \
     run_bg, is_running, run_cmd, get_volume, percent_to_millibel
@@ -54,7 +55,17 @@ def play_video(_button=None, video_url=None, localfile=None,
         volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
 
         if not subtitles:
-            subtitles = '/usr/share/kano-media/videos/subtitles/controls.srt'
+            subtitles_dir = '/usr/share/kano-media/videos/subtitles'
+
+            if localfile:
+                filename = os.path.basename(localfile)
+                filename = os.path.splitext(filename)[0]
+
+                subtitles = '{dir}/{file}.srt'.format(dir=subtitles_dir,
+                                                      file=filename)
+
+            if not subtitles or not os.path.isfile(subtitles):
+                subtitles = '{dir}/controls.srt'.format(dir=subtitles_dir)
 
         subtitles_str = '--subtitle "{subtitles}" ' \
             '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
