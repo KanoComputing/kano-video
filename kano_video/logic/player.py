@@ -54,20 +54,19 @@ def play_video(_button=None, video_url=None, localfile=None,
         volume_percent, _ = get_volume()
         volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
 
-        if not os.path.isfile(subtitles):
+        if not subtitles or not os.path.isfile(subtitles):
             subtitles = None
 
-        if not subtitles:
-            subtitles_dir = '/usr/share/kano-media/videos/subtitles'
-
             if localfile:
+                subtitles_dir = '/usr/share/kano-media/videos/subtitles'
                 filename = os.path.basename(localfile)
                 filename = os.path.splitext(filename)[0]
+                fullpath = '{dir}/{file}.srt'.format(
+                    dir=subtitles_dir, file=filename)  # next time use os.path.join
+                if os.path.exists(fullpath):
+                    subtitles = fullpath
 
-                subtitles = '{dir}/{file}.srt'.format(dir=subtitles_dir,
-                                                      file=filename)
-
-            if not subtitles or not os.path.isfile(subtitles):
+            if not subtitles:
                 subtitles = '{dir}/controls.srt'.format(dir=subtitles_dir)
 
         subtitles_str = '--subtitle "{subtitles}" ' \
