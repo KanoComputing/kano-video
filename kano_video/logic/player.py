@@ -62,13 +62,12 @@ def play_video(_button=None, video_url=None, localfile=None,
             if localfile:
                 filename = os.path.basename(localfile)
                 filename = os.path.splitext(filename)[0]
-                fullpath = '{dir}/{file}.srt'.format(
-                    dir=subtitles_dir, file=filename)  # next time use os.path.join
+                fullpath = os.path.join(subtitles_dir, filename + '.srt')
                 if os.path.exists(fullpath):
                     subtitles = fullpath
 
             if not subtitles:
-                subtitles = '{dir}/controls.srt'.format(dir=subtitles_dir)
+                subtitles = os.path.join(subtitles_dir, 'controls.srt')
 
         subtitles_str = '--subtitle "{subtitles}" ' \
             '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
