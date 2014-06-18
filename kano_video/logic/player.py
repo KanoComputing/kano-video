@@ -7,6 +7,7 @@
 #
 
 import sys
+import os
 
 from kano.utils import write_file_contents, is_installed, \
     run_bg, is_running, run_cmd, get_volume, percent_to_millibel
@@ -20,7 +21,7 @@ if not omxplayer_present and not vlc_present:
 
 
 def play_video(_button=None, video_url=None, localfile=None,
-               fullscreen=False, wait=False):
+               fullscreen=False, wait=False, subtitles=None):
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
@@ -53,17 +54,33 @@ def play_video(_button=None, video_url=None, localfile=None,
         volume_percent, _ = get_volume()
         volume_str = '--vol {}'.format(percent_to_millibel(volume_percent, raspberry_mod=True))
 
-        subtitles = '--subtitle "/usr/share/kano-media/videos/subtitles/controls.srt" ' \
+        if not os.path.isfile(subtitles):
+            subtitles = None
+
+        if not subtitles:
+            subtitles_dir = '/usr/share/kano-media/videos/subtitles'
+
+            if localfile:
+                filename = os.path.basename(localfile)
+                filename = os.path.splitext(filename)[0]
+
+                subtitles = '{dir}/{file}.srt'.format(dir=subtitles_dir,
+                                                      file=filename)
+
+            if not subtitles or not os.path.isfile(subtitles):
+                subtitles = '{dir}/controls.srt'.format(dir=subtitles_dir)
+
+        subtitles_str = '--subtitle "{subtitles}" ' \
             '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
             '--font-size 35 ' \
-            '--align center'
+            '--align center'.format(subtitles=subtitles)
 
         if fullscreen:
             player_cmd = 'lxterminal -e "omxplayer {hdmi_str} {volume_str} ' \
                 '{subtitles} -b ' \
                 '\\"{link}\\""'.format(link=link, hdmi_str=hdmi_str,
                                        volume_str=volume_str,
-                                       subtitles=subtitles)
+                                       subtitles=subtitles_str)
         else:
             x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
 
@@ -77,7 +94,7 @@ def play_video(_button=None, video_url=None, localfile=None,
                 '"{link}"\n'.format(link=link, hdmi_str=hdmi_str,
                                     volume_str=volume_str,
                                     x1=x1, y1=y1, x2=x2, y2=y2,
-                                    subtitles=subtitles)
+                                    subtitles=subtitles_str)
             file_path = '/tmp/omxplayer.sh'
             write_file_contents(file_path, file_str)
             player_cmd = 'lxterminal -t omxplayer ' \
