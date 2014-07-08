@@ -84,6 +84,12 @@ def parse_youtube_entries(entries):
 
     my_entries = list()
     for e in entries:
+        try:
+            if e['app$control']['yt$state']['name'] == 'restricted':
+                continue
+        except Exception:
+            pass
+
         # Small thumbnail
         for thumb in e['media$group']['media$thumbnail']:
             if thumb['width'] == 120 and thumb['height'] == 90:
