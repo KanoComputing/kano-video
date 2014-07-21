@@ -14,6 +14,8 @@ from kano.utils import write_file_contents, is_installed, \
 from kano.logging import logger
 from .youtube import get_video_file_url
 
+import playudev
+
 subtitles_dir = '/usr/share/kano-media/videos/subtitles'
 
 omxplayer_present = is_installed('omxplayer')
@@ -76,11 +78,11 @@ def play_video(_button=None, video_url=None, localfile=None,
             '--align center'.format(subtitles=subtitles)
 
         if fullscreen:
-            player_cmd = 'lxterminal -e "omxplayer {hdmi_str} {volume_str} ' \
+            player_cmd = 'omxplayer {hdmi_str} {volume_str} ' \
                 '{subtitles} -b ' \
-                '\\"{link}\\""'.format(link=link, hdmi_str=hdmi_str,
-                                       volume_str=volume_str,
-                                       subtitles=subtitles_str)
+                '"{link}"'.format(link=link, hdmi_str=hdmi_str,
+                                  volume_str=volume_str,
+                                  subtitles=subtitles_str)
         else:
             x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
 
@@ -113,7 +115,12 @@ def play_video(_button=None, video_url=None, localfile=None,
         player_cmd = '/usr/bin/kdesk-blur \'{}\''.format(player_cmd)
 
     if wait:
-        run_cmd(player_cmd)
+        if fullscreen and omxplayer_present:
+            # Play with keyboard interaction coming from udev directly
+            # so that we do not lose focus and capture all key presses
+            playudev.run_player(player_cmd)
+        else:
+            run_cmd(player_cmd)
     else:
         run_bg(player_cmd)
 
