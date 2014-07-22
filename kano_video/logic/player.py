@@ -87,6 +87,10 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
     # so that we do not lose focus and capture all key presses
     playudev.run_player(player_cmd)
 
+    # finally, enable the button back again
+    if _button:
+        _button.set_sensitive(True)
+
 
 def get_centred_coords(width, height):
     from gi.repository import Gdk

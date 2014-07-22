@@ -6,7 +6,9 @@
 #
 
 
-from gi.repository import Gtk, Gdk
+import threading
+
+from gi.repository import Gtk, Gdk, GObject
 from urllib import urlretrieve
 from time import time
 from random import randint
@@ -24,6 +26,9 @@ from kano_video.logic.playlist import playlistCollection, \
 
 from .popup import AddToPlaylistPopup
 from .general import Spacer, RemoveButton, Button
+
+
+GObject.threads_init()
 
 
 class VideoEntry(Gtk.Button):
@@ -103,7 +108,13 @@ class VideoEntry(Gtk.Button):
 
         Gtk.main_iteration_do(True)
 
-        play_video(_button, _url, _localfile)
+        # disable the button so it is not triggered while the video is playing
+        _button.set_sensitive(False)
+
+        # start the video playing thread - this will enable the button back again
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile,))
+        t.daemon = True
+        t.start()
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -208,7 +219,13 @@ class VideoDetailEntry(Gtk.Button):
 
         Gtk.main_iteration_do(True)
 
-        play_video(_button, _url, _localfile)
+        # disable the button so it is not triggered while the video is playing
+        _button.set_sensitive(False)
+
+        # start the video playing thread - this will enable the button back again
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile,))
+        t.daemon = True
+        t.start()
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -342,4 +359,10 @@ class VideoListPopular(VideoList):
                 x_pos += 1
 
     def _play(self, _button, _url):
-        play_video(_button, video_url=_url)
+        # disable the button so it is not triggered while the video is playing
+        _button.set_sensitive(False)
+
+        # start the video playing thread - this will enable the button back again
+        t = threading.Thread(target=play_video, args=(_button, _url,))
+        t.daemon = True
+        t.start()
