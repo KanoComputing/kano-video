@@ -211,25 +211,7 @@ class PlayModeBar(HorizontalBar):
         grid = Gtk.Grid()
         self.right_widget.add(grid)
 
-        fullscreen_str = 'PLAYER'
-        fullscreen = Gtk.Label(fullscreen_str)
-        fullscreen.set_size_request(70, 20)
-        grid.attach(fullscreen, 0, 0, 1, 1)
-
-        self._switch = Gtk.Switch()
-        self._switch.set_active(True)
-        self._switch.set_size_request(20, 20)
-        grid.attach(self._switch, 1, 0, 1, 1)
-
-        windowed_str = 'FULLSCREEN'
-        windowed = Gtk.Label(windowed_str)
-        windowed.set_size_request(70, 20)
-        grid.attach(windowed, 2, 0, 1, 1)
-
         super(PlayModeBar, self).__init__()
-
-    def is_fullscreen(self):
-        return self._switch.get_active()
 
     def _back_handler(self, _):
         win = self.get_toplevel()

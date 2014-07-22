@@ -9,8 +9,7 @@
 import sys
 import os
 
-from kano.utils import write_file_contents, is_installed, \
-    run_bg, is_running, run_cmd, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
 
@@ -24,23 +23,23 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button=None, video_url=None, localfile=None,
-               fullscreen=False, wait=False, subtitles=None):
+def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
+
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
+            _button.set_sensitive(True)
             return
         link = data
 
-    if localfile:
+    elif localfile:
         link = localfile
+    else:
+        return
 
     logger.info('Launching player...')
-
-    width = 480
-    height = 270
 
     if omxplayer_present:
         HDMI = False
@@ -73,56 +72,20 @@ def play_video(_button=None, video_url=None, localfile=None,
                 subtitles = os.path.join(subtitles_dir, 'controls.srt')
 
         subtitles_str = '--subtitle "{subtitles}" ' \
-            '--font "/usr/share/fonts/kano/Bariol_Regular.otf" ' \
-            '--font-size 35 ' \
+            '--font "/usr/share/fonts/kano/Bariol_Regular.otf" --font-size 35 ' \
             '--align center'.format(subtitles=subtitles)
 
-        if fullscreen:
-            player_cmd = 'omxplayer {hdmi_str} {volume_str} ' \
-                '{subtitles} -b ' \
-                '"{link}"'.format(link=link, hdmi_str=hdmi_str,
-                                  volume_str=volume_str,
-                                  subtitles=subtitles_str)
-        else:
-            x1, y1, x2, y2 = get_centred_coords(width=width, height=height)
-
-            file_str = 'kano-window-tool -dno -t ' \
-                'omxplayer -x {x} -y {y} ' \
-                '-w {width} -h {height}\n'.format(x=x1, y=y1,
-                                                  width=width, height=height)
-            file_str += 'omxplayer {hdmi_str} {volume_str} ' \
-                '--win "{x1} {y1} {x2} {y2}" ' \
-                '{subtitles} ' \
-                '"{link}"\n'.format(link=link, hdmi_str=hdmi_str,
-                                    volume_str=volume_str,
-                                    x1=x1, y1=y1, x2=x2, y2=y2,
-                                    subtitles=subtitles_str)
-            file_path = '/tmp/omxplayer.sh'
-            write_file_contents(file_path, file_str)
-            player_cmd = 'lxterminal -t omxplayer ' \
-                '-e "bash {}"'.format(file_path)
-
+        player_cmd = 'omxplayer {hdmi_str} {volume_str} {subtitles} -b ' \
+                     '"{link}"'.format(link=link, hdmi_str=hdmi_str,
+                                       volume_str=volume_str,
+                                       subtitles=subtitles_str)
     else:
-        if fullscreen:
-            player_cmd = 'vlc -f --no-video-title-show ' \
-                '"{link}"'.format(link=link)
-        else:
-            player_cmd = 'vlc --width {width} ' \
-                '--no-video-title-show ' \
-                '"{link}"'.format(link=link, width=width)
+        player_cmd = 'vlc -f --no-video-title-show ' \
+            '"{link}"'.format(link=link)
 
-    if not fullscreen and is_running('kdesk'):
-        player_cmd = '/usr/bin/kdesk-blur \'{}\''.format(player_cmd)
-
-    if wait:
-        if fullscreen and omxplayer_present:
-            # Play with keyboard interaction coming from udev directly
-            # so that we do not lose focus and capture all key presses
-            playudev.run_player(player_cmd)
-        else:
-            run_cmd(player_cmd)
-    else:
-        run_bg(player_cmd)
+    # Play with keyboard interaction coming from udev directly
+    # so that we do not lose focus and capture all key presses
+    playudev.run_player(player_cmd)
 
 
 def get_centred_coords(width, height):

@@ -23,7 +23,6 @@ if __name__ != '__main__':
 
 parser = argparse.ArgumentParser(description='Play a video.')
 parser.add_argument('video', metavar='video_path', type=str, help='Path to a video file')
-parser.add_argument('-f', '--fullscreen', action='store_true', help='Display fullscreen')
 
 args = parser.parse_args()
 
@@ -32,4 +31,4 @@ if not os.path.isfile(args.video):
     sys.exit("Video file could not be found")
 
 # Play video
-play_video(localfile=args.video, fullscreen=args.fullscreen, wait=True)
+play_video(localfile=args.video)
