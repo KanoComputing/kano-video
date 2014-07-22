@@ -213,9 +213,6 @@ class PlayModeBar(HorizontalBar):
 
         super(PlayModeBar, self).__init__()
 
-    #def is_fullscreen(self):
-    #    return self._switch.get_active()
-
     def _back_handler(self, _):
         win = self.get_toplevel()
         win.switch_view('previous')

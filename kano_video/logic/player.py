@@ -9,8 +9,7 @@
 import sys
 import os
 
-from kano.utils import is_installed, \
-    run_bg, run_cmd, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
 
@@ -87,11 +86,6 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
     playudev.run_player(player_cmd)
-
-
-def run_video_in_bg(_button, cmd):
-    run_cmd(cmd)
-    _button.set_sensitive(True)
 
 
 def get_centred_coords(width, height):
