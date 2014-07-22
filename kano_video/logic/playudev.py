@@ -11,6 +11,36 @@
 import struct
 import subprocess
 import threading
+import csv
+
+def get_keyboard_input_device(fdevice_list = '/proc/bus/input/devices'):
+    '''
+    Most keyboards send data to /dev/input/event0, but some use a different device.
+    This function heuristically finds the correct device name that the kernel decides to map.
+    We are reading /proc/bus/input/devices in search for an entry H: (handler)
+    that says "kbd" alone. The field following that *should* be the device name mapped to keyboard keys.
+    Any other combination seems to point to other devices (trackpads and various other goodies)
+
+    "H: Handlers=kbd event0"
+
+    https://www.kernel.org/doc/Documentation/input/input.txt
+    '''
+
+    # If we can't find the device, we default to most commonly used
+    keyboard_input_device = '/dev/input/event0'
+
+    with open (fdevice_list, 'r') as csvfile:
+        input_devices = csv.reader(csvfile, delimiter=' ', lineterminator='\n', skipinitialspace=True)
+        for ndevice,device_info in enumerate(input_devices):
+            if len (device_info) > 2 and \
+                    device_info[0] == 'H:' and \
+                    device_info[1] == 'Handlers=kbd' and \
+                    len (device_info[2]) and device_info[2].startswith ('event'):
+
+                keyboard_input_device = '/dev/input/%s' % device_info[2]
+                break
+
+    return keyboard_input_device
 
 
 def wait_for_keys(pomx):
@@ -20,8 +50,8 @@ def wait_for_keys(pomx):
     pomx is a subprocess Popen object.
     '''
 
-    # FIXME: Eventually event0 is eventX on some keyboards
-    infile_path = "/dev/input/event0"
+    # Ask the kernel which device is mapping the input keyboard
+    infile_path = get_keyboard_input_device()
 
     #long int, long int, unsigned short, unsigned short, unsigned int
     FORMAT = 'llHHI'
