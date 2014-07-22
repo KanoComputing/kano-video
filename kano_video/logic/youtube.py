@@ -137,15 +137,13 @@ def parse_youtube_entries(entries):
 
 
 def get_video_file_url(video_url):
-    # also supports [-f best]
-    cmd = 'quvi "{}"'.format(video_url)
-    output, error, _ = run_cmd(cmd)
-
-    # quvi outputs to error when there are no errors
-    # so, to actually detect an error, try to load the json from the output
     try:
-        quvi_json = json.loads(output)
-        file_url = quvi_json['link'][0]['url']
-        return True, file_url
+        logger.info('Starting youtube-dl with url: %s ' % video_url)
+        cmd_youtube = 'youtube-dl -g "{}"'.format(video_url)
+        output, error, rc = run_cmd(cmd_youtube)
+        logger.info('Youtube-dl returns with rc=%d' % rc)
+        output = output.strip('\n')
+        assert (rc==0)
+        return True, output
     except:
         return False, error
