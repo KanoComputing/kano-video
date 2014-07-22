@@ -83,8 +83,6 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
         player_cmd = 'vlc -f --no-video-title-show ' \
             '"{link}"'.format(link=link)
 
-    print "player_cmd: {}".format(player_cmd)
-
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
     playudev.run_player(player_cmd)
