@@ -103,10 +103,7 @@ class VideoEntry(Gtk.Button):
 
         Gtk.main_iteration_do(True)
 
-        win = self.get_toplevel()
-
-        fullscreen = win.view.play_mode.is_fullscreen()
-        play_video(_button, _url, _localfile, fullscreen, wait=True)
+        play_video(_button, _url, _localfile)
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -211,10 +208,7 @@ class VideoDetailEntry(Gtk.Button):
 
         Gtk.main_iteration_do(True)
 
-        win = self.get_toplevel()
-
-        fullscreen = win.view.play_mode.is_fullscreen()
-        play_video(_button, _url, _localfile, fullscreen, wait=True)
+        play_video(_button, _url, _localfile)
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -348,4 +342,4 @@ class VideoListPopular(VideoList):
                 x_pos += 1
 
     def _play(self, _button, _url):
-        play_video(_button, video_url=_url, fullscreen=True, wait=True)
+        play_video(_button, video_url=_url)

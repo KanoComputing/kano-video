@@ -53,9 +53,6 @@ class LocalView(View):
         self._add = AddVideoBar()
         self._grid.attach(self._add, 0, 1, 1, 1)
 
-        self.play_mode = PlayModeBar()
-        self._grid.attach(self.play_mode, 0, 2, 1, 1)
-
         self._list = VideoListLocal()
         self._grid.attach(self._list, 0, 3, 1, 1)
 
@@ -80,9 +77,6 @@ class YoutubeView(View):
 
         self._grid.attach(self._header, 0, 0, 1, 1)
         self._grid.attach(self._list, 0, 2, 1, 1)
-
-        self.play_mode = PlayModeBar()
-        self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
         if search_keyword and search_keyword.get_text() is not '':
             navigation_grid = Gtk.Grid()
