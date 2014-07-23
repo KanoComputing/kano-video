@@ -31,6 +31,8 @@ class MainWindow(Gtk.Window):
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
 
+        self.set_icon_from_file("/usr/share/kano-desktop/icons/video.png")
+
         self.grid = Gtk.Grid()
         self.add(self.grid)
 

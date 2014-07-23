@@ -7,7 +7,6 @@
 #
 
 import os
-import json
 from shutil import rmtree
 from kano.utils import requests_get_json, run_cmd
 from kano.logging import logger
@@ -85,11 +84,6 @@ def parse_youtube_entries(entries):
 
     my_entries = list()
     for e in entries:
-        try:
-            if e['app$control']['yt$state']['name'] == 'restricted':
-                continue
-        except Exception:
-            pass
 
         # Small thumbnail
         for thumb in e['media$group']['media$thumbnail']:
@@ -143,7 +137,7 @@ def get_video_file_url(video_url):
         output, error, rc = run_cmd(cmd_youtube)
         logger.info('Youtube-dl returns with rc=%d' % rc)
         output = output.strip('\n')
-        assert (rc==0)
+        assert (rc == 0)
         return True, output
     except:
         return False, error
