@@ -17,7 +17,8 @@ from gi.repository import Gtk, Gdk, GObject
 
 GObject.threads_init()
 
-def get_keyboard_input_device(fdevice_list = '/proc/bus/input/devices'):
+
+def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     '''
     Most keyboards send data to /dev/input/event0, but some use a different device.
     This function heuristically finds the correct device name that the kernel decides to map.
@@ -33,13 +34,13 @@ def get_keyboard_input_device(fdevice_list = '/proc/bus/input/devices'):
     # If we can't find the device, we default to most commonly used
     keyboard_input_device = '/dev/input/event0'
 
-    with open (fdevice_list, 'r') as csvfile:
+    with open(fdevice_list, 'r') as csvfile:
         input_devices = csv.reader(csvfile, delimiter=' ', lineterminator='\n', skipinitialspace=True)
-        for ndevice,device_info in enumerate(input_devices):
-            if len (device_info) > 2 and \
-                    device_info[0] == 'H:' and \
-                    device_info[1] == 'Handlers=kbd' and \
-                    len (device_info[2]) and device_info[2].startswith ('event'):
+        for ndevice, device_info in enumerate(input_devices):
+            if len(device_info) > 2 and \
+               device_info[0] == 'H:' and \
+               device_info[1] == 'Handlers=kbd' and \
+               len(device_info[2]) and device_info[2].startswith('event'):
 
                 keyboard_input_device = '/dev/input/%s' % device_info[2]
                 break
@@ -102,12 +103,12 @@ def wait_for_keys(pomx):
     in_file.close()
 
 
-def run_video (win, cmdline):
+def run_video(win, cmdline):
     '''
     Start omxplayer along with a thread to watch the keyboard
     '''
     pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-        
+
     # A thread will listen for key events and send them to OMXPlayer
     t = threading.Thread(target=wait_for_keys, args=(pomx,))
     t.daemon = True
@@ -123,17 +124,16 @@ class VideoKeyboardEngulfer(Gtk.Window):
     Omxplayer will position itself on top of it.
     '''
     def __init__(self, cmdline):
-        print 'two'
         Gtk.Window.__init__(self, title='FullScreen Video')
-        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0,0,0,0))
+        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0, 0, 0, 0))
         self.fullscreen()
-        self.play_video (cmdline)
+        self.play_video(cmdline)
 
     def play_video(self, cmdline):
         '''
         Detach a thread to launch omxplayer and a keyboard event watcher
         '''
-        t = threading.Thread(target=run_video, args=(self,cmdline,))
+        t = threading.Thread(target=run_video, args=(self, cmdline,))
         t.daemon = True
         t.start()
 
