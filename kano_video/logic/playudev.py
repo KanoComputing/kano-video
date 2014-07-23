@@ -13,6 +13,10 @@ import subprocess
 import threading
 import csv
 
+from gi.repository import Gtk, Gdk, GObject
+
+GObject.threads_init()
+
 def get_keyboard_input_device(fdevice_list = '/proc/bus/input/devices'):
     '''
     Most keyboards send data to /dev/input/event0, but some use a different device.
@@ -98,16 +102,49 @@ def wait_for_keys(pomx):
     in_file.close()
 
 
-def run_player(cmdline):
+def run_video (win, cmdline):
     '''
-    Start omxplayer giving us the stdin pipe to speak to him.
+    Start omxplayer along with a thread to watch the keyboard
     '''
-    pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, shell=True)
-
+    pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+        
     # A thread will listen for key events and send them to OMXPlayer
     t = threading.Thread(target=wait_for_keys, args=(pomx,))
     t.daemon = True
     t.start()
 
-    rc = pomx.wait()
-    return rc
+    win.rc = pomx.wait()
+    win.destroy()
+
+
+class VideoKeyboardEngulfer(Gtk.Window):
+    '''
+    Show a fullscreen video to capture all keyboard / Mouse events
+    Omxplayer will position itself on top of it.
+    '''
+    def __init__(self, cmdline):
+        print 'two'
+        Gtk.Window.__init__(self, title='FullScreen Video')
+        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0,0,0,0))
+        self.fullscreen()
+        self.play_video (cmdline)
+
+    def play_video(self, cmdline):
+        '''
+        Detach a thread to launch omxplayer and a keyboard event watcher
+        '''
+        t = threading.Thread(target=run_video, args=(self,cmdline,))
+        t.daemon = True
+        t.start()
+
+
+def run_player(cmdline):
+    '''
+    A popup window in full screen mode will engulf all key and mouse events
+    so that underlying windows do not get unintentional input.
+    '''
+    win = VideoKeyboardEngulfer(cmdline)
+    win.connect("destroy", Gtk.main_quit)
+    win.show_all()
+    Gtk.main()
+    return win.rc
