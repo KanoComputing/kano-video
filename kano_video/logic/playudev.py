@@ -98,6 +98,14 @@ def wait_for_keys(pomx):
             pomx.stdin.write('+')
             pomx.stdin.flush()
 
+        try:
+            event = in_file.read(EVENT_SIZE)
+        except IOError:
+            # OMXplayer terminated and the pipe is not valid anymore. Terminate this thread
+            # FIXME: A more robust signal needs be put in place
+            event = None
+            return
+
         event = in_file.read(EVENT_SIZE)
 
     in_file.close()
