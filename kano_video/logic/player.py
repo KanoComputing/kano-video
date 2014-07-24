@@ -9,11 +9,10 @@
 import sys
 import os
 
-from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, \
+    run_cmd, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
-
-import playudev
 
 subtitles_dir = '/usr/share/kano-media/videos/subtitles'
 
@@ -85,7 +84,11 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    playudev.run_player(player_cmd)
+    try:
+        import playudev
+        playudev.run_player(player_cmd)
+    except ImportError:
+        run_cmd(player_cmd)
 
     # finally, enable the button back again
     if _button:
