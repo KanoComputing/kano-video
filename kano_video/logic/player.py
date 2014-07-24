@@ -14,6 +14,8 @@ from kano.utils import is_installed, run_bg, \
 from kano.logging import logger
 from .youtube import get_video_file_url
 
+import playudev
+
 subtitles_dir = '/usr/share/kano-media/videos/subtitles'
 
 omxplayer_present = is_installed('omxplayer')
@@ -84,11 +86,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    try:
-        import playudev
-        playudev.run_player(player_cmd)
-    except ImportError:
-        run_cmd(player_cmd)
+    playudev.run_player(player_cmd)
 
     # finally, enable the button back again
     if _button:
