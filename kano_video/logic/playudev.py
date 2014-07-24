@@ -18,7 +18,7 @@ import csv
 #
 try:
     from gi.repository import Gtk, Gdk, GObject
-except ImportError as e:
+except ImportError:
     import gtk as Gtk
     import gtk.gdk as Gdk
     import gobject as GObject
