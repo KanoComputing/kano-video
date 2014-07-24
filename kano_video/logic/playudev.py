@@ -13,7 +13,15 @@ import subprocess
 import threading
 import csv
 
-from gi.repository import Gtk, Gdk, GObject
+#
+# We need to play well with Gtk version 2 and version 3 clients
+#
+try:
+    from gi.repository import Gtk, Gdk, GObject
+except ImportError:
+    import gtk as Gtk
+    import gtk.gdk as Gdk
+    import gobject as GObject
 
 GObject.threads_init()
 
@@ -132,8 +140,7 @@ class VideoKeyboardEngulfer(Gtk.Window):
     Omxplayer will position itself on top of it.
     '''
     def __init__(self, cmdline):
-        Gtk.Window.__init__(self, title='FullScreen Video')
-        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0, 0, 0, 0))
+        Gtk.Window.__init__(self)
         self.fullscreen()
         self.play_video(cmdline)
 

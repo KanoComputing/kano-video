@@ -9,7 +9,8 @@
 import sys
 import os
 
-from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, \
+    run_cmd, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
 
