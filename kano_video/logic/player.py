@@ -9,10 +9,17 @@
 import sys
 import os
 
-from kano.utils import is_installed, run_bg, \
-    run_cmd, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
+
+# Support for Gtk versions 3 and 2
+try:
+    from gi.repository import Gtk, Gdk, GObject
+except ImportError:
+    import gtk as Gtk
+    import gtk.gdk as Gdk
+    import gobject as GObject
 
 import playudev
 
@@ -31,13 +38,16 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
         success, data = get_video_file_url(video_url)
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
-            _button.set_sensitive(True)
+            if _button:
+                GObject.idle_add (_button.set_sensitive, True)
             return
         link = data
 
     elif localfile:
         link = localfile
     else:
+        if _button:
+            GObject.idle_add (_button.set_sensitive, True)
         return
 
     logger.info('Launching player...')
@@ -90,7 +100,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
 
     # finally, enable the button back again
     if _button:
-        _button.set_sensitive(True)
+        GObject.idle_add (_button.set_sensitive, True)
 
 
 def get_centred_coords(width, height):

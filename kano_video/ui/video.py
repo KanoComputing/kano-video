@@ -106,8 +106,6 @@ class VideoEntry(Gtk.Button):
         cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
         self.get_root_window().set_cursor(cursor)
 
-        Gtk.main_iteration_do(True)
-
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
 
@@ -216,8 +214,6 @@ class VideoDetailEntry(Gtk.Button):
     def _play_handler(self, _button, _url, _localfile):
         cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
         self.get_root_window().set_cursor(cursor)
-
-        Gtk.main_iteration_do(True)
 
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
