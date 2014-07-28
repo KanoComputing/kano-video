@@ -8,7 +8,7 @@
 
 import threading
 
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, Gdk
 from urllib import urlretrieve
 from time import time
 from random import randint
@@ -26,9 +26,6 @@ from kano_video.logic.playlist import playlistCollection, \
 
 from .popup import AddToPlaylistPopup
 from .general import Spacer, RemoveButton, Button
-
-
-GObject.threads_init()
 
 
 class VideoEntry(Gtk.Button):
@@ -110,7 +107,7 @@ class VideoEntry(Gtk.Button):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile,))
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
         t.daemon = True
         t.start()
 
@@ -219,7 +216,7 @@ class VideoDetailEntry(Gtk.Button):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile,))
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
         t.daemon = True
         t.start()
 
@@ -359,6 +356,6 @@ class VideoListPopular(VideoList):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url,))
+        t = threading.Thread(target=play_video, args=(_button, _url, None, False))
         t.daemon = True
         t.start()

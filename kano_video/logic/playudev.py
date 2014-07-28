@@ -23,8 +23,6 @@ except ImportError:
     import gtk.gdk as Gdk
     import gobject as GObject
 
-GObject.threads_init()
-
 
 def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     '''
@@ -153,11 +151,14 @@ class VideoKeyboardEngulfer(Gtk.Window):
         t.start()
 
 
-def run_player(cmdline):
+def run_player(cmdline, init_threads=True):
     '''
     A popup window in full screen mode will engulf all key and mouse events
     so that underlying windows do not get unintentional input.
     '''
+    if init_threads:
+        GObject.threads_init()
+
     win = VideoKeyboardEngulfer(cmdline)
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
