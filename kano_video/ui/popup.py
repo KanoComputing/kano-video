@@ -58,18 +58,19 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.video = video
 
         self._combo = Gtk.ComboBoxText.new()
-        self.refresh()
         self.grid.attach(self._combo, 0, 1, 1, 1)
 
-        button = Button('ADD')
-        button.get_style_context().add_class('green')
-        button.connect('clicked', self._add, self._combo)
-        self.grid.attach(button, 1, 1, 1, 1)
+        self._add_button = Button('ADD')
+        self._add_button.get_style_context().add_class('green')
+        self._add_button.connect('clicked', self._add, self._combo)
+        self.grid.attach(self._add_button, 1, 1, 1, 1)
 
         button = Button('CREATE NEW')
         button.get_style_context().add_class('orange_linktext')
         button.connect('clicked', self._new)
         self.grid.attach(button, 0, 2, 1, 1)
+
+        self.refresh()
 
     def _add(self, _, playlist_entry):
         playlist_name = playlist_entry.get_active_text()
@@ -85,11 +86,19 @@ class AddToPlaylistPopup(PlaylistPopup):
             self._combo.prepend_text(res)
             self._combo.set_active(0)
 
+            self._add_button.set_sensitive(True)
+            self._combo.set_button_sensitivity(Gtk.SensitivityType.ON)
+
     def refresh(self):
         model = self._combo.get_model()
         model.clear()
         for name, _ in playlistCollection.collection.iteritems():
-            self._combo.append_text(name)
+            if name != 'Kano':
+                self._combo.append_text(name)
+
+        if len(playlistCollection.collection) is 1:
+            self._add_button.set_sensitive(False)
+            self._combo.set_button_sensitivity(Gtk.SensitivityType.OFF)
 
 
 class AddPlaylistPopup(PlaylistPopup):
