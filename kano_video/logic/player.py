@@ -9,10 +9,17 @@
 import sys
 import os
 
-from kano.utils import is_installed, run_bg, \
-    run_cmd, get_volume, percent_to_millibel
+from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
+
+# Support for Gtk versions 3 and 2
+try:
+    from gi.repository import Gtk, Gdk, GObject
+except ImportError:
+    import gtk as Gtk
+    import gtk.gdk as Gdk
+    import gobject as GObject
 
 import playudev
 
@@ -24,20 +31,23 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
+def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
 
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
-            _button.set_sensitive(True)
+            if _button:
+                GObject.idle_add (_button.set_sensitive, True)
             return
         link = data
 
     elif localfile:
         link = localfile
     else:
+        if _button:
+            GObject.idle_add (_button.set_sensitive, True)
         return
 
     logger.info('Launching player...')
@@ -86,11 +96,11 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None):
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    playudev.run_player(player_cmd)
+    playudev.run_player(player_cmd, init_threads)
 
     # finally, enable the button back again
     if _button:
-        _button.set_sensitive(True)
+        GObject.idle_add (_button.set_sensitive, True)
 
 
 def get_centred_coords(width, height):
