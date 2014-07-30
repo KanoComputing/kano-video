@@ -48,7 +48,8 @@ class MainWindow(Gtk.Window):
 
         self.connect('delete-event', self.on_close)
 
-    def switch_view(self, view, playlist=None, search_keyword=None, users=False, video=None, page=1):
+    def switch_view(self, view, playlist=None, search_keyword=None,
+                    permanent=False, users=False, video=None, page=1):
         views = {'home': self.switch_to_home,
                  'playlist-collection': self.switch_to_playlist_collection,
                  'playlist': self.switch_to_playlist,
@@ -63,7 +64,8 @@ class MainWindow(Gtk.Window):
         elif view is 'youtube':
             views[view](search_keyword=search_keyword, users=users, page=page)
         elif view is 'detail':
-            views[view](video=video, playlist_name=playlist)
+            views[view](video=video, playlist_name=playlist,
+                        permanent=permanent)
         else:
             views[view]()
 
@@ -111,10 +113,11 @@ class MainWindow(Gtk.Window):
         self.view = LocalView()
         self.contents.set_contents(self.view)
 
-    def switch_to_detail(self, video, playlist_name=None):
+    def switch_to_detail(self, video, playlist_name=None, permanent=False):
         self.prev_view.append(self.view)
 
-        self.view = DetailView(video, playlist_name=playlist_name)
+        self.view = DetailView(video, playlist_name=playlist_name,
+                               permanent=permanent)
         self.contents.set_contents(self.view)
 
     def switch_to_no_internet(self):

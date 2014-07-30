@@ -37,9 +37,12 @@ class VideoEntry(Gtk.Button):
     def __init__(self, e, playlist_name=None, permanent=False):
         super(VideoEntry, self).__init__(hexpand=True)
 
+        self._playlist_name = playlist_name
+        self._permanent = permanent
+
         self.get_style_context().add_class('entry_item')
 
-        self.connect('clicked', self._detail_view_handler, e, playlist_name)
+        self.connect('clicked', self._detail_view_handler, e)
 
         button_grid = Gtk.Grid()
         button_grid.set_column_spacing(30)
@@ -129,9 +132,11 @@ class VideoEntry(Gtk.Button):
             win = self.get_toplevel()
             win.switch_view('playlist', name)
 
-    def _detail_view_handler(self, _, video, playlist_name=None):
+    def _detail_view_handler(self, _, video):
         win = self.get_toplevel()
-        win.switch_view('detail', video=video, playlist=playlist_name)
+        win.switch_view('detail', video=video,
+                        playlist=self._playlist_name,
+                        permanent=self._permanent)
 
 
 class VideoDetailEntry(Gtk.Button):
