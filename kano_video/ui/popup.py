@@ -9,6 +9,7 @@
 import os
 from gi.repository import Gtk
 
+from kano.gtk3.kano_dialog import KanoDialog
 from kano_video.logic.playlist import Playlist, playlistCollection
 
 from .general import TopBar, Button
@@ -117,6 +118,24 @@ class AddPlaylistPopup(PlaylistPopup):
 
     def _add(self, _, playlist_entry):
         playlist_name = playlist_entry.get_text()
+
+        if playlist_name == 'Kano':
+            confirm = KanoDialog('You can\'t add to the "Kano" playlist',
+                                 '',
+                                 {'BACK': {'return_value': True,
+                                           'color': 'red'}})
+            confirm.run()
+            return
+
+        if playlist_name in playlistCollection.collection:
+            confirm = KanoDialog(
+                'The playlist "{}" already exists!'.format(playlist_name),
+                'Do you want to add the video to this playlist or try again?',
+                {'USE PLAYLIST': {'return_value': True},
+                 'TRY AGAIN': {'return_value': False, 'color': 'red'}})
+            response = confirm.run()
+            if not response:
+                return
 
         playlist = Playlist(playlist_name)
         playlistCollection.add(playlist)
