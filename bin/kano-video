@@ -16,7 +16,7 @@ if __name__ == '__main__' and __package__ is None:
 from kano_video.ui.main_window import MainWindow
 from kano_video.paths import css_dir
 from kano_profile.tracker import Tracker
-t = Tracker()
+kanotracker = Tracker()
 
 
 def main():
