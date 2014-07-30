@@ -302,29 +302,39 @@ class VideoListYoutube(VideoList):
 
         start_index = page_to_index(page)
         entries = None
+        self._parsed_entries = None
 
         if keyword:
-            entries = search_youtube_by_keyword(keyword, start_index=start_index, parent_control=self.ParentalControl)
+            entries = search_youtube_by_keyword(
+                keyword, start_index=start_index,
+                parent_control=self.ParentalControl)
             logger.info('searching by keyword: ' + keyword)
         elif username:
-            entries = search_youtube_by_user(username, parent_control=self.ParentalControl)
+            entries = search_youtube_by_user(
+                username, parent_control=self.ParentalControl)
             logger.info('listing by username: ' + username)
         elif playlist:
             entries = playlist
             logger.info('listing playlist: ' + playlist)
         else:
-            entries = search_youtube_by_user('KanoComputing', parent_control=self.ParentalControl)
+            entries = search_youtube_by_user(
+                'KanoComputing', parent_control=self.ParentalControl)
             logger.info('listing default videos by KanoComputing')
 
         if entries:
-            parsed_entries = parse_youtube_entries(entries)
-            for i, e in enumerate(parsed_entries):
+            self._parsed_entries = parse_youtube_entries(entries)
+        else:
+            self._grid.attach(self._no_results, 0, 0, 1, 1)
+
+        self.refresh()
+
+    def refresh(self):
+        if self._parsed_entries:
+            for i, e in enumerate(self._parsed_entries):
                 e['local_path'] = None
 
                 entry = VideoEntry(e)
                 self._grid.attach(entry, 0, i, 1, 1)
-        else:
-            self._grid.attach(self._no_results, 0, 0, 1, 1)
 
 
 class VideoListPopular(VideoList):

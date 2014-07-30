@@ -47,6 +47,13 @@ class LocalView(View):
     def __init__(self):
         super(LocalView, self).__init__()
 
+        self._header = None
+        self._add = None
+        self._list = None
+
+        self.refresh()
+
+    def refresh(self):
         self._header = LibraryHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
@@ -66,17 +73,17 @@ class YoutubeView(View):
             index = page_to_index(page)
 
             if users is False:
-                self._list = VideoListYoutube(keyword=search_keyword.get_text(), page=page)
+                self._list = VideoListYoutube(
+                    keyword=search_keyword.get_text(), page=page)
             else:
-                self._list = VideoListYoutube(username=search_keyword.get_text())
+                self._list = VideoListYoutube(
+                    username=search_keyword.get_text())
 
-            self._header = SearchResultsHeader(search_keyword.get_text(), get_last_search_count(), start=index)
+            self._header = SearchResultsHeader(
+                search_keyword.get_text(), get_last_search_count(), start=index)
         else:
             self._header = YoutubeHeader()
             self._list = VideoListYoutube(page=page)
-
-        self._grid.attach(self._header, 0, 0, 1, 1)
-        self._grid.attach(self._list, 0, 2, 1, 1)
 
         if search_keyword and search_keyword.get_text() is not '':
             navigation_grid = Gtk.Grid()
@@ -84,7 +91,8 @@ class YoutubeView(View):
 
             prev_button = Gtk.Button('Back')
             prev_button.get_style_context().add_class('green')
-            prev_button.connect('clicked', self._switch_page, page - 1, search_keyword)
+            prev_button.connect('clicked', self._switch_page,
+                                page - 1, search_keyword)
             navigation_grid.attach(prev_button, 0, 0, 1, 1)
             if page == 1:
                 prev_button.set_sensitive(False)
@@ -93,8 +101,17 @@ class YoutubeView(View):
 
             next_button = Gtk.Button('Next')
             next_button.get_style_context().add_class('green')
-            next_button.connect('clicked', self._switch_page, page + 1, search_keyword)
+            next_button.connect('clicked', self._switch_page,
+                                page + 1, search_keyword)
             navigation_grid.attach(next_button, 2, 0, 1, 1)
+
+        self.refresh()
+
+    def refresh(self):
+        self._list.refresh()
+
+        self._grid.attach(self._header, 0, 0, 1, 1)
+        self._grid.attach(self._list, 0, 2, 1, 1)
 
     def _switch_page(self, _, page, search_keyword=None):
         win = self.get_toplevel()
@@ -106,11 +123,19 @@ class DetailView(View):
     def __init__(self, video, playlist_name=None, permanent=False):
         super(DetailView, self).__init__()
 
+        self._video = video
+        self._playlist_name = playlist_name
+        self._permanent = permanent
+
+        self.refresh()
+
+    def refresh(self):
         self.play_mode = PlayModeBar(back_button=True)
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
-        self._list = VideoDetailEntry(video, playlist_name=playlist_name,
-                                      permanent=permanent)
+        self._list = VideoDetailEntry(self._video,
+                                      playlist_name=self._playlist_name,
+                                      permanent=self._permanent)
         self._grid.attach(self._list, 0, 2, 1, 1)
 
 
@@ -119,6 +144,13 @@ class PlaylistCollectionView(View):
     def __init__(self):
         super(PlaylistCollectionView, self).__init__()
 
+        self._header = None
+        self._add = None
+        self._vids = None
+
+        self.refresh()
+
+    def refresh(self):
         self._header = PlaylistCollectionHeader()
         self._grid.attach(self._header, 0, 0, 1, 1)
 
@@ -134,16 +166,25 @@ class PlaylistView(View):
     def __init__(self, playlist_name):
         super(PlaylistView, self).__init__()
 
-        playlist = playlistCollection.collection[playlist_name]
-        self._header = PlaylistHeader(playlist)
+        self._playlist_name = playlist_name
+        self._playlist = playlistCollection.collection[playlist_name]
+
+        self._header = None
+        self.play_mode = None
+        self._vids = None
+
+        self.refresh()
+
+    def refresh(self):
+        self._header = PlaylistHeader(self._playlist)
         self._grid.attach(self._header, 0, 0, 1, 1)
 
         self.play_mode = PlayModeBar(back_button=True)
         self._grid.attach(self.play_mode, 0, 1, 1, 1)
 
-        self._vids = VideoList(videos=playlist.playlist,
-                               playlist=playlist_name,
-                               permanent=playlist.permanent)
+        self._vids = VideoList(videos=self._playlist.playlist,
+                               playlist=self._playlist_name,
+                               permanent=self._playlist.permanent)
         self._grid.attach(self._vids, 0, 2, 1, 1)
 
 

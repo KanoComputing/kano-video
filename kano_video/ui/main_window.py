@@ -130,6 +130,10 @@ class MainWindow(Gtk.Window):
         prev = self.prev_view.pop()
         if prev:
             self.view = prev
+
+            if hasattr(prev, 'refresh'):
+                prev.refresh()
+
             self.contents.set_contents(self.view)
 
     def on_close(self, widget=None, event=None):
