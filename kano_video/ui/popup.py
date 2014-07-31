@@ -59,10 +59,12 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.video = video
 
         self._combo = Gtk.ComboBoxText.new()
+        self._combo.connect('changed', self._enable_add)
         self.grid.attach(self._combo, 0, 1, 1, 1)
 
         self._add_button = Button('ADD')
         self._add_button.get_style_context().add_class('green')
+        self._add_button.set_sensitive(False)
         self._add_button.connect('clicked', self._add, self._combo)
         self.grid.attach(self._add_button, 1, 1, 1, 1)
 
@@ -72,6 +74,9 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.grid.attach(button, 0, 2, 1, 1)
 
         self.refresh()
+
+    def _enable_add(self, _):
+        self._add_button.set_sensitive(True)
 
     def _add(self, _, playlist_entry):
         playlist_name = playlist_entry.get_active_text()
@@ -87,7 +92,6 @@ class AddToPlaylistPopup(PlaylistPopup):
             self._combo.prepend_text(res)
             self._combo.set_active(0)
 
-            self._add_button.set_sensitive(True)
             self._combo.set_button_sensitivity(Gtk.SensitivityType.ON)
 
     def refresh(self):
@@ -98,7 +102,6 @@ class AddToPlaylistPopup(PlaylistPopup):
                 self._combo.append_text(name)
 
         if len(playlistCollection.collection) is 1:
-            self._add_button.set_sensitive(False)
             self._combo.set_button_sensitivity(Gtk.SensitivityType.OFF)
 
 
@@ -109,12 +112,14 @@ class AddPlaylistPopup(PlaylistPopup):
 
         entry = Gtk.Entry()
         entry.connect('activate', self._add, entry)
+        entry.connect('key-release-event', self._validate_entry, entry)
         self.grid.attach(entry, 0, 1, 1, 1)
 
-        button = Button('ADD')
-        button.get_style_context().add_class('green')
-        button.connect('clicked', self._add, entry)
-        self.grid.attach(button, 1, 1, 1, 1)
+        self._add_button = Button('ADD')
+        self._add_button.get_style_context().add_class('green')
+        self._add_button.set_sensitive(False)
+        self._add_button.connect('clicked', self._add, entry)
+        self.grid.attach(self._add_button, 1, 1, 1, 1)
 
     def _add(self, _, playlist_entry):
         playlist_name = playlist_entry.get_text()
@@ -142,6 +147,16 @@ class AddPlaylistPopup(PlaylistPopup):
 
         self._return = playlist_name
         self.destroy()
+
+    def _validate_entry(self, _, __, playlist_entry):
+        playlist_name = playlist_entry.get_text()
+
+        if playlist_name == '':
+            enabled = False
+        else:
+            enabled = True
+
+        self._add_button.set_sensitive(enabled)
 
 
 class LoadFilePopup(Gtk.FileChooserDialog):
