@@ -85,10 +85,13 @@ class MainWindow(Gtk.Window):
         self.contents.set_contents(self.view)
 
     def switch_to_playlist(self, playlist):
-        self.prev_view.append(self.view)
+        prev_view_ = self.view
 
         self.view = PlaylistView(playlist)
         self.contents.set_contents(self.view)
+
+        if type(self.view) is not type(prev_view_):
+            self.prev_view.append(prev_view_)
 
     def switch_to_youtube(self, search_keyword=None, users=False, page=1):
         if is_internet():
