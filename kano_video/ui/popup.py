@@ -141,9 +141,9 @@ class AddPlaylistPopup(PlaylistPopup):
             response = confirm.run()
             if not response:
                 return
-
-        playlist = Playlist(playlist_name)
-        playlistCollection.add(playlist)
+        else:
+            playlist = Playlist(playlist_name)
+            playlistCollection.add(playlist)
 
         self._return = playlist_name
         self.destroy()
