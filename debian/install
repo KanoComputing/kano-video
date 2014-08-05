@@ -3,4 +3,6 @@ kano_video /usr/lib/python2.7/dist-packages/
 media /usr/share/kano-video/
 playlists /usr/share/kano-video/
 icon/video.png /usr/share/kano-video/
+icon/video.png /usr/share/icons/Kano/88x88/apps
+icon/youtube.app /usr/share/applications
 kdesktop/kano-video.desktop /usr/share/applications/
