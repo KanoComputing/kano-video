@@ -51,7 +51,7 @@ def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
                len(device_info[2]) and device_info[2].startswith('event'):
 
                 keyboard_input_device = '/dev/input/%s' % device_info[2]
-                logger.info ('keyboard input device discovered is %s' % keyboard_input_device)
+                logger.info('keyboard input device discovered is %s' % keyboard_input_device)
                 break
 
     return keyboard_input_device
@@ -66,7 +66,7 @@ def wait_for_keys(pomx):
 
     # Ask the kernel which device is mapping the input keyboard
     infile_path = get_keyboard_input_device()
-    logger.info ('wait_for_keys is using keyboard input device: %s' % infile_path)
+    logger.info('wait_for_keys is using keyboard input device: %s' % infile_path)
 
     #long int, long int, unsigned short, unsigned short, unsigned int
     FORMAT = 'llHHI'
@@ -87,7 +87,7 @@ def wait_for_keys(pomx):
 
         if (type == 1 and code == 1 and value == 0) or (type == 1 and code == 16 and value == 0):
 
-            logger.info ('keyboard Esc/Q has been detected, terminating omxplayer')
+            logger.info('keyboard Esc/Q has been detected, terminating omxplayer')
 
             # The key "esc" or "q" has been released, quit omxplayer
             pomx.stdin.write('q')
@@ -128,7 +128,7 @@ def run_video(win, cmdline):
     '''
     Start omxplayer along with a thread to watch the keyboard
     '''
-    logger.info ('playudev starting video Popen object along with Keyboard event thread')
+    logger.info('playudev starting video Popen object along with Keyboard event thread')
     pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
 
     # A thread will listen for key events and send them to OMXPlayer
@@ -137,7 +137,7 @@ def run_video(win, cmdline):
     t.start()
 
     win.rc = pomx.wait()
-    logger.info ('playudev omxplayer process has terminated')
+    logger.info('playudev omxplayer process has terminated')
 
     win.destroy()
 
