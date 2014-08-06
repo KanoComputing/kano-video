@@ -1,6 +1,7 @@
 {
     "title": "Youtube",
     "tagline": "Watch Youtube videos with ease",
+    "description": "",
     "slug": "youtube",
 
     "icon": "video",
@@ -11,5 +12,6 @@
     "packages": [],
     "dependencies": ["kano-video"],
     "launch_command": "kano-video",
-    "overrides": []
+    "overrides": [],
+    "desktop": false
 }
