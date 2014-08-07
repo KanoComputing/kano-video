@@ -15,9 +15,12 @@ if __name__ == '__main__' and __package__ is None:
 
 from kano_video.ui.main_window import MainWindow
 from kano_video.paths import css_dir
-from kano_profile.tracker import Tracker
-kanotracker = Tracker()
 
+try:
+    from kano_profile.tracker import Tracker
+    kanotracker = Tracker()
+except:
+    pass
 
 def main():
     # Create style sheet
