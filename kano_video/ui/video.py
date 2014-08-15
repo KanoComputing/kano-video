@@ -118,13 +118,14 @@ class VideoEntry(Gtk.Button):
         self.get_root_window().set_cursor(cursor)
 
     def add_to_playlist_handler(self, _, video):
-        popup = AddToPlaylistPopup(video)
-        popup.show_all()
+        popup = AddToPlaylistPopup(video, self.get_toplevel())
+        popup.run()
 
     def _remove_from_playlist_handler(self, _button, video, name):
         confirm = KanoDialog('Are you sure?',
                              'You are about to delete this video from the playlist called "{}"'.format(name),
-                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}})
+                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}},
+                             parent_window=self.get_toplevel())
         response = confirm.run()
         if response:
             playlistCollection.collection[name].remove(video)
@@ -229,13 +230,14 @@ class VideoDetailEntry(Gtk.Button):
         self.get_root_window().set_cursor(cursor)
 
     def add_to_playlist_handler(self, _, video):
-        popup = AddToPlaylistPopup(video)
+        popup = AddToPlaylistPopup(video, self.get_toplevel())
         popup.show_all()
 
     def _remove_from_playlist_handler(self, _button, video, name):
         confirm = KanoDialog('Are you sure?',
                              'You are about to delete this video from the playlist called "{}"'.format(name),
-                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}})
+                             {'OK': {'return_value': True}, 'CANCEL': {'return_value': False}},
+                             parent_window=self.get_toplevel())
         response = confirm.run()
         if response:
             playlistCollection.collection[name].remove(video)

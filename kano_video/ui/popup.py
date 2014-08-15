@@ -17,8 +17,10 @@ from .general import TopBar, Button
 
 class PlaylistPopup(Gtk.Dialog):
 
-    def __init__(self):
+    def __init__(self, main=None):
         super(PlaylistPopup, self).__init__(title='Kano Video')
+
+        self._main_win=main
 
         self.get_style_context().add_class('popup')
         self.set_decorated(False)
@@ -45,16 +47,25 @@ class PlaylistPopup(Gtk.Dialog):
         self._return = None
 
     def run(self):
+        if self._main_win:
+            self._main_win.blur()
+            self._main_win.blur()
+            self._main_win.blur()
+            self._main_win.blur()
+
         self.show_all()
         super(PlaylistPopup, self).run()
+
+        if self._main_win:
+            self._main_win.unblur()
 
         return self._return
 
 
 class AddToPlaylistPopup(PlaylistPopup):
 
-    def __init__(self, video):
-        super(AddToPlaylistPopup, self).__init__()
+    def __init__(self, video, main=None):
+        super(AddToPlaylistPopup, self).__init__(main)
 
         self.video = video
 
@@ -86,7 +97,7 @@ class AddToPlaylistPopup(PlaylistPopup):
         self.destroy()
 
     def _new(self, _):
-        popup = AddPlaylistPopup()
+        popup = AddPlaylistPopup(self._main_win)
         res = popup.run()
         if res:
             self._combo.prepend_text(res)
@@ -107,8 +118,8 @@ class AddToPlaylistPopup(PlaylistPopup):
 
 class AddPlaylistPopup(PlaylistPopup):
 
-    def __init__(self):
-        super(AddPlaylistPopup, self).__init__()
+    def __init__(self, main=None):
+        super(AddPlaylistPopup, self).__init__(main)
 
         entry = Gtk.Entry()
         entry.connect('activate', self._add, entry)
@@ -128,7 +139,8 @@ class AddPlaylistPopup(PlaylistPopup):
             confirm = KanoDialog('You can\'t add to the "Kano" playlist',
                                  '',
                                  {'BACK': {'return_value': True,
-                                           'color': 'red'}})
+                                           'color': 'red'}},
+                                 parent_window=self._main_win)
             confirm.run()
             return
 
@@ -137,7 +149,8 @@ class AddPlaylistPopup(PlaylistPopup):
                 'The playlist "{}" already exists!'.format(playlist_name),
                 'Do you want to add the video to this playlist or try again?',
                 {'USE PLAYLIST': {'return_value': True},
-                 'TRY AGAIN': {'return_value': False, 'color': 'red'}})
+                 'TRY AGAIN': {'return_value': False, 'color': 'red'}},
+                 parent_window=self._main_win)
             response = confirm.run()
             if not response:
                 return
@@ -161,10 +174,12 @@ class AddPlaylistPopup(PlaylistPopup):
 
 class LoadFilePopup(Gtk.FileChooserDialog):
 
-    def __init__(self):
+    def __init__(self, main=None):
         super(LoadFilePopup, self).__init__(
             "Please select a folder", self, Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        self._main_win = main
 
         # Set up file filters
         filter_text = Gtk.FileFilter()
@@ -175,7 +190,9 @@ class LoadFilePopup(Gtk.FileChooserDialog):
         self.set_current_folder(os.path.expanduser('~'))
 
     def run(self):
+        self._main_win.blur()
         response = super(LoadFilePopup, self).run()
+        self._main_win.unblur()
 
         dir_path = None
         if response == Gtk.ResponseType.OK:

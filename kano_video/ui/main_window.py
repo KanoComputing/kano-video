@@ -11,6 +11,7 @@ from gi.repository import Gtk, Gdk
 from kano.network import is_internet
 from kano_video.logic.playlist import playlistCollection, \
     library_playlist
+from kano.gtk3.application_window import ApplicationWindow
 
 from .general import Contents
 from .bar import MenuBar
@@ -19,28 +20,21 @@ from .view import HomeView, LocalView, YoutubeView, \
     NoInternetView
 
 
-class MainWindow(Gtk.Window):
+class MainWindow(ApplicationWindow):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title='Kano Video')
-
-        self._win_width = 920
-        self._contents_height = 570
-
-        self.set_decorated(False)
-        self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.CENTER)
+        ApplicationWindow.__init__(self, 'Kano Video', 920, 0)
 
         self.set_icon_from_file("/usr/share/kano-video/video.png")
 
         self.grid = Gtk.Grid()
-        self.add(self.grid)
+        self.set_main_widget(self.grid)
 
         menu_bar = MenuBar()
         self.grid.attach(menu_bar, 0, 0, 1, 1)
 
         self.contents = Contents(self.grid)
-        self.contents.set_size_request(self._win_width, self._contents_height)
+        self.contents.set_size_request(self._win_width, 570)
 
         self.switch_view('home')
 
