@@ -176,7 +176,7 @@ class AddVideoBar(HorizontalBar):
         super(AddVideoBar, self).__init__()
 
     def _add_handler(self, _):
-        popup = LoadFilePopup()
+        popup = LoadFilePopup(self.get_toplevel())
         fullpath = popup.run()
 
         if fullpath and os.path.isfile(fullpath):
@@ -229,7 +229,7 @@ class PlaylistAddBar(HorizontalBar):
         super(PlaylistAddBar, self).__init__()
 
     def _add_handler(self, button):
-        popup = AddPlaylistPopup()
+        popup = AddPlaylistPopup(self.get_toplevel())
         res = popup.run()
         if res:
             win = self.get_toplevel()
