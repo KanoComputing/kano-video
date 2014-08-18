@@ -49,9 +49,6 @@ class PlaylistPopup(Gtk.Dialog):
     def run(self):
         if self._main_win:
             self._main_win.blur()
-            self._main_win.blur()
-            self._main_win.blur()
-            self._main_win.blur()
 
         self.show_all()
         super(PlaylistPopup, self).run()
