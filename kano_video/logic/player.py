@@ -31,6 +31,15 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
+def is_HDMI_audio():
+    rc_local_path = "/etc/rc.audio"
+    f = open(rc_local_path, 'r')
+    file_string = str(f.read())
+    hdmi_string = "amixer -c 0 cset numid=3 2"
+
+    return (file_string.find(hdmi_string) != -1)
+
+
 def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
 
     if video_url:
@@ -53,16 +62,9 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
     logger.info('Launching player...')
 
     if omxplayer_present:
-        HDMI = False
-        try:
-            from kano_settings.config_file import get_setting
-            logger.info('audio:', get_setting('Audio'))
-            HDMI = get_setting('Audio') == 'HDMI'
-        except Exception:
-            pass
 
         hdmi_str = ''
-        if HDMI:
+        if is_HDMI_audio():
             hdmi_str = '-o hdmi'
 
         volume_percent, _ = get_volume()
