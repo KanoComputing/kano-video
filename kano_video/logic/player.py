@@ -31,6 +31,15 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
+def is_HDMI_audio():
+    rc_local_path = "/etc/rc.audio"
+    f = open(rc_local_path, 'r')
+    file_string = str(f.read())
+    hdmi_string = "amixer -c 0 cset numid=3 2"
+
+    return (file_string.find(hdmi_string) != -1)
+
+
 def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
 
     if video_url:
@@ -39,7 +48,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
             if _button:
-                GObject.idle_add (_button.set_sensitive, True)
+                GObject.idle_add(_button.set_sensitive, True)
             return
         link = data
 
@@ -47,22 +56,15 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
         link = localfile
     else:
         if _button:
-            GObject.idle_add (_button.set_sensitive, True)
+            GObject.idle_add(_button.set_sensitive, True)
         return
 
     logger.info('Launching player...')
 
     if omxplayer_present:
-        HDMI = False
-        try:
-            from kano_settings.config_file import get_setting
-            logger.info('audio:', get_setting('Audio'))
-            HDMI = get_setting('Audio') == 'HDMI'
-        except Exception:
-            pass
 
         hdmi_str = ''
-        if HDMI:
+        if is_HDMI_audio():
             hdmi_str = '-o hdmi'
 
         volume_percent, _ = get_volume()
@@ -100,7 +102,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
 
     # finally, enable the button back again
     if _button:
-        GObject.idle_add (_button.set_sensitive, True)
+        GObject.idle_add(_button.set_sensitive, True)
 
 
 def get_centred_coords(width, height):

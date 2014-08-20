@@ -22,6 +22,7 @@ try:
 except:
     pass
 
+
 def main():
     # Create style sheet
     cssProvider = Gtk.CssProvider()
