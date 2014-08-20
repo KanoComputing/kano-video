@@ -13,6 +13,7 @@ from kano.utils import is_installed, run_bg, get_volume, percent_to_millibel
 from kano.logging import logger
 from .youtube import get_video_file_url
 
+
 # Support for Gtk versions 3 and 2
 try:
     from gi.repository import Gtk, Gdk, GObject
@@ -84,9 +85,15 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
             if not subtitles:
                 subtitles = os.path.join(subtitles_dir, 'controls.srt')
 
-        subtitles_str = '--subtitle "{subtitles}" ' \
-            '--font "/usr/share/fonts/kano/Bariol_Regular.otf" --font-size 35 ' \
-            '--align center'.format(subtitles=subtitles)
+        subtitles_str = ''
+        try:
+            from kano_settings.display.functions import is_overscan
+            if not is_overscan():
+                subtitles_str = '--subtitle "{subtitles}" ' \
+                    '--font "/usr/share/fonts/kano/Bariol_Regular.otf" --font-size 35 ' \
+                    '--align center'.format(subtitles=subtitles)
+        except Exception:
+            pass
 
         player_cmd = 'omxplayer {hdmi_str} {volume_str} {subtitles} -b ' \
                      '"{link}"'.format(link=link, hdmi_str=hdmi_str,
