@@ -32,15 +32,6 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def is_HDMI_audio():
-    rc_local_path = "/etc/rc.audio"
-    f = open(rc_local_path, 'r')
-    file_string = str(f.read())
-    hdmi_string = "amixer -c 0 cset numid=3 2"
-
-    return (file_string.find(hdmi_string) != -1)
-
-
 def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
 
     if video_url:
@@ -63,10 +54,6 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
     logger.info('Launching player...')
 
     if omxplayer_present:
-
-        hdmi_str = ''
-        if is_HDMI_audio():
-            hdmi_str = '-o hdmi'
 
         volume_percent, _ = get_volume()
         volume_str = '--vol {}'.format(
@@ -95,9 +82,8 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
         except Exception:
             pass
 
-        player_cmd = 'omxplayer {hdmi_str} {volume_str} {subtitles} -b ' \
-                     '"{link}"'.format(link=link, hdmi_str=hdmi_str,
-                                       volume_str=volume_str,
+        player_cmd = 'omxplayer -o both {volume_str} {subtitles} -b ' \
+                     '"{link}"'.format(link=link, volume_str=volume_str,
                                        subtitles=subtitles_str)
     else:
         player_cmd = 'vlc -f --no-video-title-show ' \
