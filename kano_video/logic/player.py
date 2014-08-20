@@ -48,7 +48,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
             if _button:
-                GObject.idle_add (_button.set_sensitive, True)
+                GObject.idle_add(_button.set_sensitive, True)
             return
         link = data
 
@@ -56,7 +56,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
         link = localfile
     else:
         if _button:
-            GObject.idle_add (_button.set_sensitive, True)
+            GObject.idle_add(_button.set_sensitive, True)
         return
 
     logger.info('Launching player...')
@@ -102,7 +102,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
 
     # finally, enable the button back again
     if _button:
-        GObject.idle_add (_button.set_sensitive, True)
+        GObject.idle_add(_button.set_sensitive, True)
 
 
 def get_centred_coords(width, height):
