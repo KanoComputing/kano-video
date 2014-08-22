@@ -133,7 +133,22 @@ def parse_youtube_entries(entries):
 def get_video_file_url(video_url):
     try:
         logger.info('Starting youtube-dl with url: %s ' % video_url)
-        cmd_youtube = 'youtube-dl -g "{}"'.format(video_url)
+
+        try:
+            from kano_settings.system.proxy import generate_proxy_url, \
+                get_all_proxies
+
+            is_proxy, proxy = get_all_proxies()
+            if is_proxy:
+                proxy_url = generate_proxy_url(
+                    proxy['host'], proxy['port'],
+                    proxy['username'], proxy['password'])
+                proxy_arg = '--proxy "{}"'.format(proxy_url)
+        except ImportError:
+            proxy_arg = ''
+
+        cmd_youtube = 'youtube-dl -g "{}" {}'.format(video_url, proxy_arg)
+
         output, error, rc = run_cmd(cmd_youtube)
         logger.info('Youtube-dl returns with rc=%d' % rc)
         output = output.strip('\n')
