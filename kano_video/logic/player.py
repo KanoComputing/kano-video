@@ -16,10 +16,8 @@ from .youtube import get_video_file_url
 
 # Support for Gtk versions 3 and 2
 try:
-    from gi.repository import Gtk, Gdk, GObject
+    from gi.repository import GObject
 except ImportError:
-    import gtk as Gtk
-    import gtk.gdk as Gdk
     import gobject as GObject
 
 import playudev
@@ -74,7 +72,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
 
         subtitles_str = ''
         try:
-            from kano_settings.display.functions import is_overscan
+            from kano_settings.system.display import is_overscan
             if not is_overscan():
                 subtitles_str = '--subtitle "{subtitles}" ' \
                     '--font "/usr/share/fonts/kano/Bariol_Regular.otf" --font-size 35 ' \
