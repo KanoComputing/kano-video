@@ -9,12 +9,12 @@
 import threading
 
 from gi.repository import Gtk, Gdk
-from urllib import urlretrieve
 from time import time
 from random import randint
 
 from kano.logging import logger
 from kano.gtk3.kano_dialog import KanoDialog
+from kano.utils import download_url
 
 from kano_video.paths import image_dir
 from kano_video.logic.player import play_video
@@ -52,7 +52,7 @@ class VideoEntry(Gtk.Button):
 
         if e['thumbnail']:
             thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
-            urlretrieve(e['thumbnail'], thumbnail)
+            download_url(e['thumbnail'], thumbnail)
             img.set_from_file(thumbnail)
         else:
             img.set_from_file('{}/icons/no_thumbnail.png'.format(image_dir))
@@ -158,7 +158,7 @@ class VideoDetailEntry(Gtk.Button):
 
         if e['big_thumb']:
             big_thumb = '{}/video_large_{}.jpg'.format(tmp_dir, time())
-            urlretrieve(e['big_thumb'], big_thumb)
+            download_url(e['big_thumb'], big_thumb)
             img.set_from_file(big_thumb)
         else:
             img.set_from_file('{}/icons/no_thumbnail.png'.format(image_dir))
@@ -358,7 +358,7 @@ class VideoListPopular(VideoList):
                 button = Button()
                 if e['big_thumb']:
                     thumbnail = '{}/video_{}.jpg'.format(tmp_dir, time())
-                    urlretrieve(e['big_thumb'], thumbnail)
+                    download_url(e['big_thumb'], thumbnail)
                     img.set_from_file(thumbnail)
                 button.add(img)
                 button.connect('clicked', self._play, e['video_url'])
