@@ -138,7 +138,7 @@ def get_video_file_url(video_url):
             from kano_settings.system.proxy import generate_proxy_url, \
                 get_all_proxies
 
-            is_proxy, proxy = get_all_proxies()
+            is_proxy, proxy, _ = get_all_proxies()
             if is_proxy:
                 proxy_url = generate_proxy_url(
                     proxy['host'], proxy['port'],
