@@ -10,6 +10,7 @@ import os
 from gi.repository import Gtk
 
 from kano.gtk3.kano_dialog import KanoDialog
+from kano.gtk3.kano_combobox import KanoComboBox
 from kano_video.logic.playlist import Playlist, playlistCollection
 
 from .general import TopBar, Button
@@ -20,7 +21,7 @@ class PlaylistPopup(Gtk.Dialog):
     def __init__(self, main=None):
         super(PlaylistPopup, self).__init__(title='Kano Video')
 
-        self._main_win=main
+        self._main_win = main
 
         self.get_style_context().add_class('popup')
         self.set_decorated(False)
@@ -66,7 +67,7 @@ class AddToPlaylistPopup(PlaylistPopup):
 
         self.video = video
 
-        self._combo = Gtk.ComboBoxText.new()
+        self._combo = KanoComboBox(max_display_items=7)
         self._combo.connect('changed', self._enable_add)
         self.grid.attach(self._combo, 0, 1, 1, 1)
 
@@ -86,8 +87,8 @@ class AddToPlaylistPopup(PlaylistPopup):
     def _enable_add(self, _):
         self._add_button.set_sensitive(True)
 
-    def _add(self, _, playlist_entry):
-        playlist_name = playlist_entry.get_active_text()
+    def _add(self, _, combo):
+        playlist_name = combo.get_selected_item_text()
         playlistCollection.collection[playlist_name].add(self.video)
 
         self._return = playlist_name
@@ -97,20 +98,19 @@ class AddToPlaylistPopup(PlaylistPopup):
         popup = AddPlaylistPopup(self._main_win)
         res = popup.run()
         if res:
-            self._combo.prepend_text(res)
-            self._combo.set_active(0)
+            self._combo.append(res)
+            self._combo.set_selected_item_index(0)
 
-            self._combo.set_button_sensitivity(Gtk.SensitivityType.ON)
+            self._combo.set_sensitive(True)
 
     def refresh(self):
-        model = self._combo.get_model()
-        model.clear()
+        self._combo.remove_all()
         for name, _ in playlistCollection.collection.iteritems():
             if name != 'Kano':
-                self._combo.append_text(name)
+                self._combo.append(name)
 
         if len(playlistCollection.collection) is 1:
-            self._combo.set_button_sensitivity(Gtk.SensitivityType.OFF)
+            self._combo.set_sensitive(False)
 
 
 class AddPlaylistPopup(PlaylistPopup):
@@ -147,7 +147,7 @@ class AddPlaylistPopup(PlaylistPopup):
                 'Do you want to add the video to this playlist or try again?',
                 {'USE PLAYLIST': {'return_value': True},
                  'TRY AGAIN': {'return_value': False, 'color': 'red'}},
-                 parent_window=self._main_win)
+                parent_window=self._main_win)
             response = confirm.run()
             if not response:
                 return
