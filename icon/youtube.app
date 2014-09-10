@@ -13,5 +13,5 @@
     "dependencies": ["kano-video"],
     "launch_command": "kano-video",
     "overrides": [],
-    "desktop": false
+    "desktop": true
 }
