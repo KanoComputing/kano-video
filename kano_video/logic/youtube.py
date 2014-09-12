@@ -14,6 +14,8 @@ from kano.logging import logger
 tmp_dir = '/tmp/kano-video'
 last_search_count = 0
 
+proxy_arg = ''
+
 try:
     from kano_settings.system.proxy import generate_proxy_url, \
         get_all_proxies
@@ -25,7 +27,7 @@ try:
             proxy['username'], proxy['password'])
         proxy_arg = '--proxy "{}"'.format(proxy_url)
 except ImportError:
-    proxy_arg = ''
+    pass
 
 
 def page_to_index(page, max_results=10):
