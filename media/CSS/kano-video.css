@@ -323,29 +323,6 @@ GtkComboBox .separator {
     background-color: mix(@scrollbar_slider, @scrollbar_trough, 0.8);
 }
 
-.scrollbar.button.top:hover {
-    box-shadow: inset 0px -1px mix(@scrollbar_slider, @scrollbar_trough, 0.8);
-}
-
-.scrollbar.button.bottom:hover {
-    box-shadow: inset 0px 1px mix(@scrollbar_slider, @scrollbar_trough, 0.8);
-}
-
-.scrollbar.button.right:hover {
-    box-shadow: inset 1px 0px mix(@scrollbar_slider, @scrollbar_trough, 0.8);
-}
-
-.scrollbar.button.left:hover {
-    box-shadow: inset -1px 0px mix(@scrollbar_slider, @scrollbar_trough, 0.8);
-}
-
-.scrollbar.button.top:hover:backdrop,
-.scrollbar.button.bottom:hover:backdrop,
-.scrollbar.button.right:hover:backdrop,
-.scrollbar.button.left:hover:backdrop {
-    box-shadow: none;
-}
-
 .scrollbar.button {
     color: @scrollbar_slider;
 }
