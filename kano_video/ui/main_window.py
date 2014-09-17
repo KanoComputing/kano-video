@@ -6,6 +6,7 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 
+import os
 from gi.repository import Gtk, Gdk
 
 from kano.network import is_internet
@@ -18,6 +19,7 @@ from .bar import MenuBar
 from .view import HomeView, LocalView, YoutubeView, \
     PlaylistView, PlaylistCollectionView, DetailView, \
     NoInternetView
+from kano_video.paths import icon_dir
 
 
 class MainWindow(ApplicationWindow):
@@ -25,7 +27,7 @@ class MainWindow(ApplicationWindow):
     def __init__(self):
         ApplicationWindow.__init__(self, 'Kano Video', 920, 0)
 
-        self.set_icon_from_file("/usr/share/kano-video/video.png")
+        self.set_icon_from_file(os.path.join(icon_dir, 'video.png'))
 
         self.grid = Gtk.Grid()
         self.set_main_widget(self.grid)
