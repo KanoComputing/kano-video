@@ -181,7 +181,20 @@ class LoadFilePopup(Gtk.FileChooserDialog):
         # Set up file filters
         filter_text = Gtk.FileFilter()
         filter_text.set_name("Video files")
-        filter_text.add_pattern('*.mkv')
+
+        file_extensions = ['mkv',
+                           'm4v',
+                           'mp4',
+                           'avi',
+                           'flv',
+                           'mov',
+                           'ogg',
+                           'wmv'
+                          ]
+
+        for ext in file_extensions:
+            filter_text.add_pattern('*.{}'.format(ext))
+
         self.add_filter(filter_text)
 
         self.set_current_folder(os.path.expanduser('~'))
