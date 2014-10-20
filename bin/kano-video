@@ -5,6 +5,8 @@
 #
 
 from gi.repository import Gtk, Gdk, GObject
+from kano.gtk3.kano_dialog import KanoDialog
+from kano.utils import run_cmd
 import os
 import sys
 
@@ -44,4 +46,15 @@ def main():
 
 
 if __name__ == '__main__':
+
+    # If there are VNC connected clients, show a warning message
+    if os.path.isfile('/usr/bin/kano-vnc'):
+        _,_,rc=run_cmd('/usr/bin/kano-vnc clients')
+        if rc==0:
+            msg='Youtube videos cannot be displayed remotely over a VNC session'
+            kdialog = KanoDialog(
+                title_text='VNC Warning',
+                description_text=msg)
+            response = kdialog.run()
+
     main()
