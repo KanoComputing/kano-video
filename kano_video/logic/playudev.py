@@ -85,40 +85,43 @@ def wait_for_keys(pomx):
 
         #print "type {} | code {} | value {}".format(type, code, value)
 
-        if (type == 1 and code == 1 and value == 0) or (type == 1 and code == 16 and value == 0):
-
-            logger.info('keyboard Esc/Q has been detected, terminating omxplayer')
-
-            # The key "esc" or "q" has been released, quit omxplayer
-            pomx.stdin.write('q')
-            pomx.stdin.flush()
-
-            # finish the thread
-            break
-
-        elif (type == 1 and code == 25 and value == 0) or (type == 1 and code == 57 and value == 0):
-            # The key "p" or "space" has been released, pause/resume the media
-            pomx.stdin.write(' ')
-            pomx.stdin.flush()
-
-        elif type == 1 and code == 12 and value == 0:
-            # The key "-" has been released, decrease the volume
-            pomx.stdin.write('-')
-            pomx.stdin.flush()
-
-        elif type == 1 and code == 13 and value == 0:
-            # The key "+" has been released, increase the volume
-            pomx.stdin.write('+')
-            pomx.stdin.flush()
-
         try:
-            event = in_file.read(EVENT_SIZE)
+            if (type == 1 and code == 1 and value == 0) or (type == 1 and code == 16 and value == 0):
+
+                logger.info('keyboard Esc/Q has been detected, terminating omxplayer')
+
+                # The key "esc" or "q" has been released, quit omxplayer
+                pomx.stdin.write('q')
+                pomx.stdin.flush()
+                
+                # finish the thread
+                break
+
+            elif (type == 1 and code == 25 and value == 0) or (type == 1 and code == 57 and value == 0):
+                # The key "p" or "space" has been released, pause/resume the media
+                pomx.stdin.write(' ')
+                pomx.stdin.flush()
+
+            elif type == 1 and code == 12 and value == 0:
+                # The key "-" has been released, decrease the volume
+                pomx.stdin.write('-')
+                pomx.stdin.flush()
+
+            elif type == 1 and code == 13 and value == 0:
+                # The key "+" has been released, increase the volume
+                pomx.stdin.write('+')
+                pomx.stdin.flush()
+
         except IOError:
             # OMXplayer terminated and the pipe is not valid anymore. Terminate this thread
-            # FIXME: A more robust signal needs be put in place
-            event = None
+            in_file.close()
             return
 
+        except:
+            # We want to attend the user as much as we can, so blindfold on any unrelated problem
+            pass
+
+        # read the next event from the keyboard input stream
         event = in_file.read(EVENT_SIZE)
 
     in_file.close()
