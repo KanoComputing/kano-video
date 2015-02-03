@@ -2,8 +2,10 @@
 
 # youtube.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# Interracts with the Youtube API to retreive video links
 #
 
 import os
@@ -16,6 +18,7 @@ last_search_count = 0
 
 proxy_arg = ''
 
+# Set proxy settings for queries
 try:
     from kano_settings.system.proxy import generate_proxy_url, \
         get_all_proxies

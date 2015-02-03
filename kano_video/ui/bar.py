@@ -1,8 +1,9 @@
 # bar.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# Widgets for use as horizontal bars on views
 #
 
 
@@ -20,6 +21,9 @@ from .general import KanoWidget, Spacer, Button
 
 
 class MenuBar(Gtk.EventBox):
+    """
+    The main title bar for the application, containing navigation tools
+    """
     _MENU_BAR_HEIGHT = 66
     _BUTTON_WIDTH = 100
 
@@ -107,6 +111,9 @@ class MenuBar(Gtk.EventBox):
 
 
 class SearchBar(KanoWidget):
+    """
+    A search field with a search button
+    """
 
     def __init__(self):
         super(SearchBar, self).__init__()
@@ -133,6 +140,10 @@ class SearchBar(KanoWidget):
 
 
 class HorizontalBar(KanoWidget):
+    """
+    A general horizontal bar which allows placement of 3 widgets with left,
+    right and centre alignment
+    """
     left_widget = None
     centre_widget = None
     right_widget = None
@@ -166,6 +177,9 @@ class HorizontalBar(KanoWidget):
 
 
 class AddVideoBar(HorizontalBar):
+    """
+    A horizontal bar for adding a video to a playlist
+    """
 
     def __init__(self):
         self.right_widget = Button('ADD MEDIA')
@@ -199,6 +213,10 @@ class AddVideoBar(HorizontalBar):
 
 
 class PlayModeBar(HorizontalBar):
+    """
+    A horizontal bar for selecting whether a video appears fullscreen or
+    windowed
+    """
 
     def __init__(self, back_button=False):
         if back_button:
@@ -219,6 +237,9 @@ class PlayModeBar(HorizontalBar):
 
 
 class PlaylistAddBar(HorizontalBar):
+    """
+    A horizontal bar for adding a playlist to a playlist collection
+    """
 
     def __init__(self):
         self.right_widget = Button('CREATE LIST')

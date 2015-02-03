@@ -2,10 +2,12 @@
 
 # icons.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# Creates pixbufs that we can use to make images from.  Uses a strip of icons, each 24px by 24px.
+# Creates pixbufs that we can use to make images from.
+# Uses a strip of icons, each 24px by 24px.
+#
 
 from gi.repository import Gtk, GdkPixbuf
 from kano_video.paths import image_dir

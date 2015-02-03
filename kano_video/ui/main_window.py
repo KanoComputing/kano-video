@@ -2,8 +2,10 @@
 
 # main_window.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# The main application window setup and navigation
 #
 
 import os
@@ -23,6 +25,9 @@ from kano_video.paths import icon_dir
 
 
 class MainWindow(ApplicationWindow):
+    """
+    The main window
+    """
 
     def __init__(self):
         ApplicationWindow.__init__(self, 'Kano Video', 920, 0)
@@ -46,6 +51,10 @@ class MainWindow(ApplicationWindow):
 
     def switch_view(self, view, playlist=None, search_keyword=None,
                     permanent=False, users=False, video=None, page=1):
+        """
+        Switches the view of the main body by name
+        """
+
         views = {'home': self.switch_to_home,
                  'playlist-collection': self.switch_to_playlist_collection,
                  'playlist': self.switch_to_playlist,

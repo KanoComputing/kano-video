@@ -1,8 +1,9 @@
 # playlist.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# Widgets for playlist display
 #
 
 
@@ -16,6 +17,9 @@ from kano.gtk3.kano_dialog import KanoDialog
 
 
 class PlaylistEntry(Gtk.Button):
+    """
+    An individual playlist to be shown in a list of playlists
+    """
 
     def __init__(self, name, permanent=False):
         super(PlaylistEntry, self).__init__(hexpand=True)
@@ -69,6 +73,9 @@ class PlaylistEntry(Gtk.Button):
 
 
 class PlaylistList(KanoWidget):
+    """
+    A list of playlists
+    """
 
     def __init__(self, playlists):
         super(PlaylistList, self).__init__()

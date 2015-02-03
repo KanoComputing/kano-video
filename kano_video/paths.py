@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# Handles resolving directory paths for platform-independent use
 
 import os
 
@@ -12,6 +13,11 @@ usr_path = '/usr/share/kano-video'
 
 
 def get_dir_path(dir):
+    """
+    Gets the actual path for a relative directory.
+    Distinguishes between installs and development environments.
+    """
+
     local = os.path.join(dir_path, dir)
     usr = os.path.join(usr_path, dir)
 

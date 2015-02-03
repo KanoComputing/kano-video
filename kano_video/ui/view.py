@@ -1,8 +1,9 @@
 # view.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# The set of views available for the main body
 #
 
 
@@ -23,6 +24,9 @@ from .playlist import PlaylistList
 
 
 class View(Gtk.EventBox):
+    """
+    The base view which prepares the environment for the subclass views
+    """
     _VIEW_WIDTH = 750
     _VIEW_HEIGHT = 400
 
@@ -43,6 +47,9 @@ class View(Gtk.EventBox):
 
 
 class LocalView(View):
+    """
+    The view for showing the set of videos on the local device
+    """
 
     def __init__(self):
         super(LocalView, self).__init__()
@@ -65,6 +72,9 @@ class LocalView(View):
 
 
 class YoutubeView(View):
+    """
+    The view for browsing videos from Youtube
+    """
 
     def __init__(self, search_keyword=None, users=False, page=1):
         super(YoutubeView, self).__init__()
@@ -119,6 +129,9 @@ class YoutubeView(View):
 
 
 class DetailView(View):
+    """
+    The view for showing the extended information and description for a video
+    """
 
     def __init__(self, video, playlist_name=None, permanent=False):
         super(DetailView, self).__init__()
@@ -140,6 +153,9 @@ class DetailView(View):
 
 
 class PlaylistCollectionView(View):
+    """
+    The view of all the created playlists
+    """
 
     def __init__(self):
         super(PlaylistCollectionView, self).__init__()
@@ -162,6 +178,9 @@ class PlaylistCollectionView(View):
 
 
 class PlaylistView(View):
+    """
+    The view of the videos in a playlist
+    """
 
     def __init__(self, playlist_name):
         super(PlaylistView, self).__init__()
@@ -189,6 +208,9 @@ class PlaylistView(View):
 
 
 class HomeView(View):
+    """
+    The screen displayed when the application launches
+    """
 
     def __init__(self):
         super(HomeView, self).__init__()
@@ -203,6 +225,9 @@ class HomeView(View):
 
 
 class NoInternetView(View):
+    """
+    The screen displayed when internet is needed but not available
+    """
 
     def __init__(self):
         super(NoInternetView, self).__init__()
