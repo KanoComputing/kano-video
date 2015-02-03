@@ -26,7 +26,7 @@ class Playlist(object):
         super(Playlist, self).__init__()
 
         self.name = name
-        self.filename = playlist_dir + '/' + name + '.json'
+        self.filename = os.path.join(playlist_dir, name + '.json')
 
         self.load()
 
@@ -79,17 +79,19 @@ class PlaylistCollection(object):
     An object to manage a collection of playlists
     """
 
-    def __init__(self, dir):
+    def __init__(self, directory):
         super(PlaylistCollection, self).__init__()
 
         self.collection = {}
 
         self.init_playlists()
 
-        for file in os.listdir(dir):
-            filename = os.path.splitext(file)[0]
-            if filename != 'Library':
-                self.add(Playlist(filename))
+        for filename in os.listdir(directory):
+            playlist_name = os.path.splitext(filename)[0]
+
+            # 'Library' is a playlist which is handled separately
+            if playlist_name != 'Library':
+                self.add(Playlist(playlist_name))
 
     def add(self, playlist):
         self.collection[playlist.name] = playlist
@@ -112,8 +114,12 @@ class PlaylistCollection(object):
                 raise
 
         try:
-            shutil.copy(playlist_path + '/Library.json', playlist_dir)
-            shutil.copy(playlist_path + '/Kano.json', playlist_dir)
+            # Library contains videos included with the kano-video-files package
+            shutil.copy(os.path.join(playlist_path + '/Library.json'),
+                        playlist_dir)
+            # Kano contains online videos that are useful to users
+            shutil.copy(os.path.join(playlist_path, '/Kano.json'),
+                        playlist_dir)
         except shutil.Error:
             pass
 

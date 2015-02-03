@@ -55,14 +55,16 @@ class MainWindow(ApplicationWindow):
         Switches the view of the main body by name
         """
 
-        views = {'home': self.switch_to_home,
-                 'playlist-collection': self.switch_to_playlist_collection,
-                 'playlist': self.switch_to_playlist,
-                 'youtube': self.switch_to_youtube,
-                 'library': self.switch_to_local,
-                 'detail': self.switch_to_detail,
-                 'no-internet': self.switch_to_no_internet,
-                 'previous': self.switch_to_previous}
+        views = {
+            'home': self.switch_to_home,
+            'playlist-collection': self.switch_to_playlist_collection,
+            'playlist': self.switch_to_playlist,
+            'youtube': self.switch_to_youtube,
+            'library': self.switch_to_local,
+            'detail': self.switch_to_detail,
+            'no-internet': self.switch_to_no_internet,
+            'previous': self.switch_to_previous
+        }
 
         if view is 'playlist':
             views[view](playlist)

@@ -43,7 +43,8 @@ def get_last_search_count():
     return last_search_count
 
 
-def search_youtube_by_keyword(keyword=None, popular=False, max_results=10, start_index=1, parent_control=False):
+def search_youtube_by_keyword(keyword=None, popular=False, max_results=10,
+                              start_index=1, parent_control=False):
     url = 'http://gdata.youtube.com/feeds/api/videos'
     params = {
         'v': 2,

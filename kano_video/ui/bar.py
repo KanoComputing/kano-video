@@ -197,15 +197,18 @@ class AddVideoBar(HorizontalBar):
             filename = os.path.basename(fullpath)
             filename = os.path.splitext(filename)[0]
 
-            title_str = filename if len(filename) <= 40 else filename[:37] + '...'
+            title_str = filename if len(filename) <= 40 \
+                else filename[:37] + '...'
 
-            e = {'title': title_str,
-                 'video_url': None,
-                 'local_path': fullpath,
-                 'thumbnail': None,
-                 'big_thumb': None}
+            entry = {
+                'title': title_str,
+                'video_url': None,
+                'local_path': fullpath,
+                'thumbnail': None,
+                'big_thumb': None
+            }
 
-            library_playlist.add(e)
+            library_playlist.add(entry)
 
             # Refresh
             win = self.get_toplevel()
@@ -225,7 +228,8 @@ class PlayModeBar(HorizontalBar):
             self.left_widget.set_alignment(0, 0.5)
             self.left_widget.get_style_context().add_class('grey')
 
-        self.right_widget = Gtk.Alignment(xalign=0.5, yalign=0.5, xscale=0, yscale=0)
+        self.right_widget = Gtk.Alignment(xalign=0.5, yalign=0.5,
+                                          xscale=0, yscale=0)
         grid = Gtk.Grid()
         self.right_widget.add(grid)
 

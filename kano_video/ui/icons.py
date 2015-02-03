@@ -35,8 +35,12 @@ def set_from_name(name):
     elif name == "unlocked":
         icon_number = 7
     # Create main window
-    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(image_dir + '/icons/systemsetup-icons.png', 192, 24)
-    subpixbuf = pixbuf.new_subpixbuf(24 * icon_number, 0, 24, 24).add_alpha(True, 255, 255, 255)
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+        image_dir + '/icons/systemsetup-icons.png', 192, 24)
+    subpixbuf = pixbuf.new_subpixbuf(
+        24 * icon_number, 0, 24, 24).add_alpha(True, 255, 255, 255)
+
     image = Gtk.Image()
     image.set_from_pixbuf(subpixbuf)
+
     return image
