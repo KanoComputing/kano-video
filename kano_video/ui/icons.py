@@ -2,10 +2,12 @@
 
 # icons.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# Creates pixbufs that we can use to make images from.  Uses a strip of icons, each 24px by 24px.
+# Creates pixbufs that we can use to make images from.
+# Uses a strip of icons, each 24px by 24px.
+#
 
 from gi.repository import Gtk, GdkPixbuf
 from kano_video.paths import image_dir
@@ -15,26 +17,34 @@ from kano_video.paths import image_dir
 
 
 def set_from_name(name):
-    icon_number = 0
-    if name == "badge":
-        icon_number = 0
-    elif name == "challenge":
-        icon_number = 1
-    elif name == "swag":
-        icon_number = 2
-    elif name == "next_arrow":
-        icon_number = 3
-    elif name == "prev_arrow":
-        icon_number = 4
-    elif name == "locked":
-        icon_number = 5
-    elif name == "cross":
-        icon_number = 6
-    elif name == "unlocked":
-        icon_number = 7
+    """
+    Get a Gtk Image widget from the name of the image
+    """
+
+    icons = {
+        "badge": 0,
+        "challenge": 1,
+        "swag": 2,
+        "next_arrow": 3,
+        "prev_arrow": 4,
+        "locked": 5,
+        "cross": 6,
+        "unlocked": 7
+    }
+
+    icon_number = icons[name] if name in icons else 0
+
     # Create main window
-    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(image_dir + '/icons/systemsetup-icons.png', 192, 24)
-    subpixbuf = pixbuf.new_subpixbuf(24 * icon_number, 0, 24, 24).add_alpha(True, 255, 255, 255)
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+        image_dir + '/icons/systemsetup-icons.png', 192, 24
+    )
+    subpixbuf = (
+        pixbuf
+        .new_subpixbuf(24 * icon_number, 0, 24, 24)
+        .add_alpha(True, 255, 255, 255)
+    )
+
     image = Gtk.Image()
     image.set_from_pixbuf(subpixbuf)
+
     return image

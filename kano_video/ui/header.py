@@ -1,8 +1,9 @@
 # header.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# Header widgets for views
 #
 
 
@@ -15,6 +16,9 @@ from kano_video.logic.playlist import playlistCollection, \
 
 
 class HeaderBar(KanoWidget):
+    """
+    Base header bar for subclassing
+    """
 
     def __init__(self):
         super(HeaderBar, self).__init__()
@@ -36,6 +40,9 @@ class HeaderBar(KanoWidget):
 
 
 class YoutubeHeader(HeaderBar):
+    """
+    Header bar for views of Youtube videos
+    """
 
     def __init__(self):
         self._title = 'Youtube'
@@ -48,6 +55,9 @@ class YoutubeHeader(HeaderBar):
 
 
 class LibraryHeader(HeaderBar):
+    """
+    Header bar for views of local videos
+    """
 
     def __init__(self):
         self._title = 'Library'
@@ -60,6 +70,9 @@ class LibraryHeader(HeaderBar):
 
 
 class PlaylistCollectionHeader(HeaderBar):
+    """
+    Header bar for views of playlist collections
+    """
 
     def __init__(self):
         self._title = 'Playlists'
@@ -72,6 +85,9 @@ class PlaylistCollectionHeader(HeaderBar):
 
 
 class PlaylistHeader(HeaderBar):
+    """
+    Header bar for views of playlists
+    """
 
     def __init__(self, playlist):
         self._title = playlist.name
@@ -84,6 +100,9 @@ class PlaylistHeader(HeaderBar):
 
 
 class SearchResultsHeader(HeaderBar):
+    """
+    Header bar for views of searched Youtube videos
+    """
 
     def __init__(self, search_keyword, result_count, start=1):
         self._title = 'Showing results for "{}"'.format(search_keyword)

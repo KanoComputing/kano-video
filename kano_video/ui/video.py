@@ -1,6 +1,6 @@
 # video.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 #
@@ -29,6 +29,9 @@ from .general import Spacer, RemoveButton, Button
 
 
 class VideoEntry(Gtk.Button):
+    """
+    A widget to display an individual video
+    """
     _ENTRY_HEIGHT = 110
     _TITLE_HEIGHT = 20
     _DESC_HEIGHT = 15
@@ -141,6 +144,9 @@ class VideoEntry(Gtk.Button):
 
 
 class VideoDetailEntry(Gtk.Button):
+    """
+    A widget that displays detailed information about a video
+    """
     _ENTRY_HEIGHT = 110
     _TITLE_HEIGHT = 20
     _DESC_HEIGHT = 15
@@ -247,6 +253,9 @@ class VideoDetailEntry(Gtk.Button):
 
 
 class VideoList(Gtk.EventBox):
+    """
+    A list of a collection of videos
+    """
 
     def __init__(self, videos=None, playlist=None, permanent=False):
         super(VideoList, self).__init__(hexpand=True)
@@ -281,6 +290,9 @@ class VideoList(Gtk.EventBox):
 
 
 class VideoListLocal(VideoList):
+    """
+    A video collection list used for locally stored videos
+    """
 
     def __init__(self, open_folder_dialog=False):
         super(VideoListLocal, self).__init__()
@@ -296,6 +308,9 @@ class VideoListLocal(VideoList):
 
 
 class VideoListYoutube(VideoList):
+    """
+    A video collection list used for videos on Youtube
+    """
 
     def __init__(self, keyword=None, username=None, playlist=None, page=1):
         super(VideoListYoutube, self).__init__()
@@ -340,6 +355,9 @@ class VideoListYoutube(VideoList):
 
 
 class VideoListPopular(VideoList):
+    """
+    A selection of videos that are popular on Youtube
+    """
 
     def __init__(self):
         super(VideoListPopular, self).__init__()

@@ -2,8 +2,10 @@
 
 # player.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# Manages playing of videos
 #
 
 import sys
@@ -31,6 +33,10 @@ if not omxplayer_present and not vlc_present:
 
 
 def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
+    """
+    Plays a local or remote video using the optimal video player found. Handles
+    sound settings and subtitles.
+    """
 
     if video_url:
         logger.info('Getting video url: {}'.format(video_url))
@@ -97,6 +103,11 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
 
 
 def get_centred_coords(width, height):
+    """
+    Calculates the top-left and bottom-right coordinates for a given window
+    size to be centred
+    """
+
     from gi.repository import Gdk
 
     taskbar_height = 44
@@ -115,6 +126,11 @@ def get_centred_coords(width, height):
 
 
 def stop_videos(_button=None):
+    """
+    Kills all videos that are currently playing
+    # TODO: Stop only videos which are managed by this module
+    """
+
     if omxplayer_present:
         run_bg('killall omxplayer.bin')
     else:

@@ -1,8 +1,9 @@
 # popup.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# The collection of popup widgets that might be used
 #
 
 
@@ -17,6 +18,9 @@ from .general import TopBar, Button
 
 
 class PlaylistPopup(Gtk.Dialog):
+    """
+    A basis from which playlist-related popups can draw from
+    """
 
     def __init__(self, main=None):
         super(PlaylistPopup, self).__init__(title='Kano Video')
@@ -61,6 +65,9 @@ class PlaylistPopup(Gtk.Dialog):
 
 
 class AddToPlaylistPopup(PlaylistPopup):
+    """
+    A popup for selecting a playlist
+    """
 
     def __init__(self, video, main=None):
         super(AddToPlaylistPopup, self).__init__(main)
@@ -114,6 +121,9 @@ class AddToPlaylistPopup(PlaylistPopup):
 
 
 class AddPlaylistPopup(PlaylistPopup):
+    """
+    A popup for playlist creation
+    """
 
     def __init__(self, main=None):
         super(AddPlaylistPopup, self).__init__(main)
@@ -170,6 +180,9 @@ class AddPlaylistPopup(PlaylistPopup):
 
 
 class LoadFilePopup(Gtk.FileChooserDialog):
+    """
+    A file selection dialog
+    """
 
     def __init__(self, main=None):
         super(LoadFilePopup, self).__init__(
@@ -182,15 +195,16 @@ class LoadFilePopup(Gtk.FileChooserDialog):
         filter_text = Gtk.FileFilter()
         filter_text.set_name("Video files")
 
-        file_extensions = ['mkv',
-                           'm4v',
-                           'mp4',
-                           'avi',
-                           'flv',
-                           'mov',
-                           'ogg',
-                           'wmv'
-                          ]
+        file_extensions = [
+            'mkv',
+            'm4v',
+            'mp4',
+            'avi',
+            'flv',
+            'mov',
+            'ogg',
+            'wmv'
+        ]
 
         for ext in file_extensions:
             filter_text.add_pattern('*.{}'.format(ext))
@@ -207,5 +221,7 @@ class LoadFilePopup(Gtk.FileChooserDialog):
         dir_path = None
         if response == Gtk.ResponseType.OK:
             dir_path = self.get_filename()
+
         self.destroy()
+
         return dir_path

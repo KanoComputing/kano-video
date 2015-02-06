@@ -1,8 +1,9 @@
 # general.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
+# A set of general purpose widgets
 #
 
 
@@ -15,6 +16,9 @@ from .icons import set_from_name
 
 
 class KanoWidget(Gtk.EventBox):
+    """
+    A general base widget to simplify construction of other widgets
+    """
 
     def __init__(self):
         super(KanoWidget, self).__init__(hexpand=True)
@@ -28,6 +32,9 @@ class KanoWidget(Gtk.EventBox):
 
 
 class Button(Gtk.Button):
+    """
+    A button with expected cursor events
+    """
 
     def __init__(self, label=None, stock=None, use_underline=True):
         super(Button, self).__init__(label=label, stock=stock, use_underline=use_underline)
@@ -36,6 +43,9 @@ class Button(Gtk.Button):
 
 
 class Spacer(Gtk.Label):
+    """
+    A simple '|' spacer for separation of horizontal list items
+    """
 
     def __init__(self):
         super(Spacer, self).__init__()
@@ -45,6 +55,9 @@ class Spacer(Gtk.Label):
 
 
 class Contents(Gtk.ScrolledWindow):
+    """
+    A widget to contain the main body of the app below the header
+    """
 
     def __init__(self, win):
         super(Contents, self).__init__(hexpand=True, vexpand=True)
@@ -83,6 +96,9 @@ class Contents(Gtk.ScrolledWindow):
 
 
 class TopBar(Gtk.EventBox):
+    """
+    The header widget - the replacement for the window title bar
+    """
     _TOP_BAR_HEIGHT = 44
 
     def __init__(self, title):
@@ -135,6 +151,9 @@ class TopBar(Gtk.EventBox):
 
 
 class RemoveButton(Button):
+    """
+    A button styled for use as a 'Remove' button
+    """
 
     def __init__(self):
         super(RemoveButton, self).__init__()
