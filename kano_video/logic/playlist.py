@@ -115,10 +115,10 @@ class PlaylistCollection(object):
 
         try:
             # Library contains videos included with the kano-video-files package
-            shutil.copy(os.path.join(playlist_path + '/Library.json'),
+            shutil.copy(os.path.join(playlist_path, 'Library.json'),
                         playlist_dir)
             # Kano contains online videos that are useful to users
-            shutil.copy(os.path.join(playlist_path + '/Kano.json'),
+            shutil.copy(os.path.join(playlist_path, 'Kano.json'),
                         playlist_dir)
         except shutil.Error:
             pass
