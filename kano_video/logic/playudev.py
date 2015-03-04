@@ -74,6 +74,7 @@ def wait_for_keys(pomx):
 
     #open file in binary mode
     in_file = open(infile_path, "rb")
+    logger.debug('Keyboard stream was successfully opened')
 
     event = in_file.read(EVENT_SIZE)
 
@@ -93,32 +94,40 @@ def wait_for_keys(pomx):
                 # The key "esc" or "q" has been released, quit omxplayer
                 pomx.stdin.write('q')
                 pomx.stdin.flush()
-                
+
                 # finish the thread
                 break
 
             elif (type == 1 and code == 25 and value == 0) or (type == 1 and code == 57 and value == 0):
+                logger.info('keyboard p/space has been detected, pausing media')
+
                 # The key "p" or "space" has been released, pause/resume the media
                 pomx.stdin.write(' ')
                 pomx.stdin.flush()
 
             elif type == 1 and code == 12 and value == 0:
+                logger.info('keyboard - has been detected, decreasing volume')
                 # The key "-" has been released, decrease the volume
                 pomx.stdin.write('-')
                 pomx.stdin.flush()
 
             elif type == 1 and code == 13 and value == 0:
+                logger.info('keyboard + has been detected, increasing volume')
                 # The key "+" has been released, increase the volume
                 pomx.stdin.write('+')
                 pomx.stdin.flush()
 
         except IOError:
             # OMXplayer terminated and the pipe is not valid anymore. Terminate this thread
+            logger.info('OMXplayer terminated, thread will exit')
             in_file.close()
             return
 
         except:
             # We want to attend the user as much as we can, so blindfold on any unrelated problem
+            # As per suggestion of the python documentation
+            ex_type, ex_value = sys.exc_info()[:2]
+            logger.warn('Exception occurred while trying to write to pipe; ({0}):{1}'.format(ex_type, ex_value))
             pass
 
         # read the next event from the keyboard input stream
@@ -131,7 +140,7 @@ def run_video(win, cmdline):
     '''
     Start omxplayer along with a thread to watch the keyboard
     '''
-    logger.info('playudev starting video Popen object along with Keyboard event thread')
+    logger.debug('playudev starting video Popen object along with Keyboard event thread')
     pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
 
     # A thread will listen for key events and send them to OMXPlayer
@@ -141,7 +150,6 @@ def run_video(win, cmdline):
 
     win.rc = pomx.wait()
     logger.info('playudev omxplayer process has terminated')
-
     win.destroy()
 
 
@@ -171,6 +179,7 @@ def run_player(cmdline, init_threads=True):
     '''
     if init_threads:
         GObject.threads_init()
+        logger.debug('XInitThreads was run')
 
     win = VideoKeyboardEngulfer(cmdline)
     win.connect("destroy", Gtk.main_quit)

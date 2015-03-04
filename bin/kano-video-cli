@@ -17,6 +17,7 @@ if __name__ == '__main__' and __package__ is None:
         sys.path.insert(1, dir_path)
 
 from kano_video.logic.player import play_video
+from kano.logging import logger
 
 if __name__ != '__main__':
     sys.exit("This is a script, do not import it as a module!")
@@ -32,3 +33,4 @@ if not os.path.isfile(args.video):
 
 # Play video
 play_video(localfile=args.video)
+logger.debug('media playback was successful, will exit gracefully')
