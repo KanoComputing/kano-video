@@ -133,9 +133,11 @@ def wait_for_keys(pomx):
             pass
 
         # read the next event from the keyboard input stream
+        logger.debug('Blocking for a read from the keyboard')
         event = in_file.read(EVENT_SIZE)
 
     in_file.close()
+    logger.debug('Exiting the key waiting fn')
 
 
 def run_video(win, cmdline):
@@ -153,6 +155,7 @@ def run_video(win, cmdline):
     win.rc = pomx.wait()
     logger.info('playudev omxplayer process has terminated')
     win.destroy()
+    logger.info('window destroy signal was sent')
 
 
 class VideoKeyboardEngulfer(Gtk.Window):
@@ -186,5 +189,7 @@ def run_player(cmdline, init_threads=True):
     win = VideoKeyboardEngulfer(cmdline)
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
+    logger.debug('Gtk main for fullscreen player started')
     Gtk.main()
+    logger.debug('Gtk main for fullscreen player finished')
     return win.rc

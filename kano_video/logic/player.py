@@ -98,6 +98,8 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
     # so that we do not lose focus and capture all key presses
     playudev.run_player(player_cmd, init_threads)
 
+    logger.debug('Command "{}" has finished executing'.format(player_cmd))
+
     # finally, enable the button back again
     if _button:
         GObject.idle_add(_button.set_sensitive, True)
