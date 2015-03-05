@@ -67,11 +67,11 @@ def wait_for_keys(pomx):
     infile_path = get_keyboard_input_device()
     logger.info('wait_for_keys is using keyboard input device: %s' % infile_path)
 
-    #long int, long int, unsigned short, unsigned short, unsigned int
+    # long int, long int, unsigned short, unsigned short, unsigned int
     FORMAT = 'llHHI'
     EVENT_SIZE = struct.calcsize(FORMAT)
 
-    #open file in binary mode
+    # open file in binary mode
     in_file = open(infile_path, "rb")
     logger.debug('Keyboard stream was successfully opened')
 
@@ -83,7 +83,7 @@ def wait_for_keys(pomx):
         # other keys you wish to send to omxplayer should be added here
         # future updates to omxplayer need to be taken into account here
 
-        #print "type {} | code {} | value {}".format(type, code, value)
+        # print "type {} | code {} | value {}".format(type, code, value)
 
         try:
             if (type == 1 and code == 1 and value == 0) or (type == 1 and code == 16 and value == 0):
@@ -125,6 +125,9 @@ def wait_for_keys(pomx):
         except:
             # We want to attend the user as much as we can, so blindfold on any unrelated problem
             # As per suggestion of the python documentation
+
+            import sys
+
             ex_type, ex_value = sys.exc_info()[:2]
             logger.warn('Exception occurred while trying to write to pipe; ({0}):{1}'.format(ex_type, ex_value))
             pass
