@@ -19,10 +19,9 @@ from kano.logging import logger
 # We need to play well with Gtk version 2 and version 3 clients
 #
 try:
-    from gi.repository import Gtk, Gdk, GObject
+    from gi.repository import Gtk, GObject
 except ImportError:
     import gtk as Gtk
-    import gtk.gdk as Gdk
     import gobject as GObject
 
 
