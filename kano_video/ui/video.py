@@ -5,9 +5,6 @@
 #
 #
 
-
-import threading
-
 from gi.repository import Gtk, Gdk
 from time import time
 from random import randint
@@ -26,6 +23,13 @@ from kano_video.logic.playlist import playlistCollection, \
 
 from .popup import AddToPlaylistPopup
 from .general import Spacer, RemoveButton, Button
+
+
+def popup_video(button, url, localfile):
+    '''
+    Starts the actual video play on top of the app, synchronously.
+    '''
+    play_video(button, url, localfile, subtitles=None, init_threads=False, keyboard_engulfer=True)
 
 
 class VideoEntry(Gtk.Button):
@@ -112,10 +116,7 @@ class VideoEntry(Gtk.Button):
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
 
-        # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
-        t.daemon = True
-        t.start()
+        popup_video(_button, _url, _localfile)
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -227,10 +228,7 @@ class VideoDetailEntry(Gtk.Button):
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
 
-        # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
-        t.daemon = True
-        t.start()
+        popup_video(_button, _url, _localfile)
 
         cursor = Gdk.Cursor.new(Gdk.CursorType.ARROW)
         self.get_root_window().set_cursor(cursor)
@@ -390,7 +388,4 @@ class VideoListPopular(VideoList):
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
 
-        # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, None, False))
-        t.daemon = True
-        t.start()
+        popup_video(_button, _url, _localfile)
