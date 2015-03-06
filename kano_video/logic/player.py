@@ -32,7 +32,8 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button=None, video_url=None, localfile=None, subtitles=None, init_threads=True):
+def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
+                   init_threads=True, keyboard_engulfer=True):
     """
     Plays a local or remote video using the optimal video player found. Handles
     sound settings and subtitles.
@@ -95,7 +96,12 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, ini
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    playudev.run_player(player_cmd, init_threads)
+    #
+    # keyboard_engulfer set to True will also popup a fake full screen
+    # window being the player so that mouse events are captured and discarded
+
+    playudev.run_player(player_cmd, init_threads=init_threads, \
+                            keyboard_engulfer=keyboard_engulfer)
 
     # finally, enable the button back again
     if _button:

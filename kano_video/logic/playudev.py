@@ -129,7 +129,10 @@ def wait_for_keys(pomx):
 
 def run_video(win, cmdline):
     '''
-    Start omxplayer along with a thread to watch the keyboard
+    Start omxplayer along with a thread to watch and send special keyboard
+    keys like Q, Space, etc. If win is not None, it is meant to be a Gtk Window
+    which will be sent a "destroy" event asynchronously once omxplayer terminates.
+    Returns omxplayer error code.
     '''
     logger.info('playudev starting video Popen object along with Keyboard event thread')
     pomx = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
@@ -139,19 +142,23 @@ def run_video(win, cmdline):
     t.daemon = True
     t.start()
 
-    win.rc = pomx.wait()
-    logger.info('playudev omxplayer process has terminated')
+    # Wait for OMXPLayer to terminate
+    rc = pomx.wait()
 
-    win.destroy()
+    if win:
+        GObject.idle_add(win.destroy)
+
+    logger.info('playudev omxplayer process has terminated')
 
 
 class VideoKeyboardEngulfer(Gtk.Window):
     '''
-    Show a fullscreen video to capture all keyboard / Mouse events
-    Omxplayer will position itself on top of it.
+    Create a full screen empty window to capture and discard all keyboard and
+    mouse events. Omxplayer will be positioned itself on top of it.
     '''
     def __init__(self, cmdline):
         Gtk.Window.__init__(self)
+        self.rc = -1
         self.fullscreen()
         self.play_video(cmdline)
 
@@ -164,16 +171,29 @@ class VideoKeyboardEngulfer(Gtk.Window):
         t.start()
 
 
-def run_player(cmdline, init_threads=True):
+def run_player(cmdline, init_threads=True, keyboard_engulfer=True):
     '''
-    A popup window in full screen mode will engulf all key and mouse events
-    so that underlying windows do not get unintentional input.
+    This is the main function to play a video, cmdline is the omxplayer command.
+
+    Set init_threads to False if your app is multi-threaded and you 
+    already called GObject.threads_init().
+
+    If your app is multi-threaded you want to set keyboard_engulfer to False
+    and provide your own strategy to capture all mouse and keyboard events that
+    go through the omxplayer video window, otherwise this function will do that for you.
     '''
+    rc = -1
+
     if init_threads:
         GObject.threads_init()
 
-    win = VideoKeyboardEngulfer(cmdline)
-    win.connect("destroy", Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
-    return win.rc
+    if keyboard_engulfer:
+        win = VideoKeyboardEngulfer(cmdline)
+        win.connect("destroy", Gtk.main_quit)
+        win.show_all()
+        Gtk.main()
+        rc = win.rc
+    else:
+        rc = run_video(None, cmdline)
+
+    return rc

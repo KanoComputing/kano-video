@@ -113,7 +113,7 @@ class VideoEntry(Gtk.Button):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False, False))
         t.daemon = True
         t.start()
 
@@ -228,7 +228,7 @@ class VideoDetailEntry(Gtk.Button):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False))
+        t = threading.Thread(target=play_video, args=(_button, _url, _localfile, None, False, False))
         t.daemon = True
         t.start()
 
@@ -391,6 +391,6 @@ class VideoListPopular(VideoList):
         _button.set_sensitive(False)
 
         # start the video playing thread - this will enable the button back again
-        t = threading.Thread(target=play_video, args=(_button, _url, None, False))
+        t = threading.Thread(target=play_video, args=(_button, _url, None, False, False))
         t.daemon = True
         t.start()
