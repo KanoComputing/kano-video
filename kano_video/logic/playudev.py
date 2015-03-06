@@ -178,9 +178,12 @@ def run_player(cmdline, init_threads=True, keyboard_engulfer=True):
     Set init_threads to False if your app is multi-threaded and you 
     already called GObject.threads_init().
 
-    If your app is multi-threaded you want to set keyboard_engulfer to False
+    If your app is multi-threaded, you want to set keyboard_engulfer to False
     and provide your own strategy to capture all mouse and keyboard events that
-    go through the omxplayer video window, otherwise this function will do that for you.
+    traverse through the omxplayer video window.
+
+    Otherwise, setting keyboard_engulfer to True will do that for you,
+    by creating a fake full screen window that captures and discards all these events.
     '''
     rc = -1
 

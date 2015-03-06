@@ -35,8 +35,8 @@ if not omxplayer_present and not vlc_present:
 def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
                    init_threads=True, keyboard_engulfer=True):
     """
-    Plays a local or remote video using the optimal video player found. Handles
-    sound settings and subtitles.
+    Plays a local or remote video using the optimal video player found.
+    Handles sound settings and subtitles.
     """
 
     if video_url:
@@ -45,7 +45,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
         if not success:
             logger.error('Error with getting Youtube url: {}'.format(data))
             if _button:
-                GObject.idle_add(_button.set_sensitive, True)
+                _button.set_sensitive(True)
             return
         link = data
 
@@ -53,7 +53,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
         link = localfile
     else:
         if _button:
-            GObject.idle_add(_button.set_sensitive, True)
+            _button.set_sensitive(True)
         return
 
     logger.info('Launching player...')
@@ -96,16 +96,12 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    #
-    # keyboard_engulfer set to True will also popup a fake full screen
-    # window being the player so that mouse events are captured and discarded
-
     playudev.run_player(player_cmd, init_threads=init_threads, \
                             keyboard_engulfer=keyboard_engulfer)
 
     # finally, enable the button back again
     if _button:
-        GObject.idle_add(_button.set_sensitive, True)
+        _button.set_sensitive(True)
 
 
 def get_centred_coords(width, height):
