@@ -388,4 +388,5 @@ class VideoListPopular(VideoList):
         # disable the button so it is not triggered while the video is playing
         _button.set_sensitive(False)
 
+        _localfile = None
         popup_video(_button, _url, _localfile)
