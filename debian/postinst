@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# postinst
+#
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# postinst - things to do after installing the package
+#
+
+# File which tells LXDE which file extensions trigger what apps when double clicked
+associations_file=/usr/share/applications/defaults.list
+updated=0
+
+# Video formats that kano-video-cli should handle
+video_formats="
+3gpp
+3gpp2
+annodex
+dv
+isivideo
+mp2t
+mp4
+mpeg
+ogg
+quicktime
+vivo
+vnd.mpegurl
+vnd.rn-realvideo
+wavelet.xml
+webm
+anim
+flic
+flv
+javafx
+matroska
+mng
+ms-asf
+ms-wmv
+msvideo
+nsv
+ogm+ogg
+sgi-movie
+theora+ogg
+"
+
+case "$1" in
+    configure)
+        # associate video files to kano-video-cli, so double click will watch them
+        for v in $video_formats; do
+            pattern="video/$v=video-cli.desktop"
+            if [ `grep "$pattern" $associations_file | wc -l` -eq 0 ]; then
+                echo "Registering video format: $pattern"
+                echo "$pattern" >> $associations_file
+                updated=1
+            fi
+        done
+
+        if [ "$updated" == "1" ] && [ -x /usr/bin/update-mime-database ]; then
+            /usr/bin/update-mime-database /usr/share/mime
+        fi
+        ;;
+
+esac
+
+#DEBHELPER#
+
+exit 0
