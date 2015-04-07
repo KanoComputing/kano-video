@@ -10,6 +10,7 @@
 
 # File which tells LXDE which file extensions trigger what apps when double clicked
 associations_file=/usr/share/applications/defaults.list
+updated=0
 
 # Video formats that kano-video-cli should handle
 video_formats="
@@ -48,11 +49,16 @@ case "$1" in
         # associate video files to kano-video-cli, so double click will watch them
         for v in $video_formats; do
             pattern="video/$v=video-cli.desktop"
-            if [ `grep "$pattern" myformats | wc -l` -eq 0 ]; then
+            if [ `grep "$pattern" $associations_file | wc -l` -eq 0 ]; then
                 echo "Registering video format: $pattern"
-                echo "$pattern" >> myformats
+                echo "$pattern" >> $associations_file
+                updated=1
             fi
         done
+
+        if [ "$updated" == "1" ] && [ -x /usr/bin/update-mime-database ]; then
+            /usr/bin/update-mime-database /usr/share/mime
+        fi
         ;;
 
 esac
