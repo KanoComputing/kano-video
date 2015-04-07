@@ -1,0 +1,37 @@
+[Desktop Entry]
+Name=Kano Video CLI
+Comment=Play video files from the command line or desktop associations
+Exec=/usr/bin/kano-video-cli
+TryExec=/usr/bin/kano-video-cli
+
+MimeType=video/3gpp
+MimeType=video/3gpp2
+MimeType=video/annodex
+MimeType=video/dv
+MimeType=video/isivideo
+MimeType=video/mp2t
+MimeType=video/mp4
+MimeType=video/mpeg
+MimeType=video/ogg
+MimeType=video/quicktime
+MimeType=video/vivo
+MimeType=video/vnd.mpegurl
+MimeType=video/vnd.rn-realvideo
+MimeType=video/wavelet.xml
+MimeType=video/webm
+MimeType=video/anim
+MimeType=video/flic
+MimeType=video/flv
+MimeType=video/javafx
+MimeType=video/matroska
+MimeType=video/mng
+MimeType=video/ms-asf
+MimeType=video/ms-wmv
+MimeType=video/msvideo
+MimeType=video/nsv
+MimeType=video/ogm+ogg
+MimeType=video/sgi-movie
+MimeType=video/theora+ogg
+
+Icon=/usr/share/kano-video/icon/video.png
+Type=Application
