@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=kano-video-cli
+Icon=video
+Terminal=false
+Name=Video and Music
+Comment=Watch your movies and listen to music
+Categories=tools;

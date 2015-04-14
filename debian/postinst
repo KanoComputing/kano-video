@@ -14,41 +14,44 @@ updated=0
 
 # Video formats that kano-video-cli should handle
 video_formats="
-3gpp
-3gpp2
-annodex
-dv
-isivideo
-mp2t
-mp4
-mpeg
-ogg
-quicktime
-vivo
-vnd.mpegurl
-vnd.rn-realvideo
-wavelet.xml
-webm
-anim
-flic
-flv
-javafx
-matroska
-mng
-ms-asf
-ms-wmv
-msvideo
-nsv
-ogm+ogg
-sgi-movie
-theora+ogg
+video/3gpp
+video/3gpp2
+video/annodex
+video/dv
+video/isivideo
+video/mp2t
+video/mp4
+video/mpeg
+video/ogg
+video/quicktime
+video/vivo
+video/vnd.mpegurl
+video/vnd.rn-realvideo
+video/wavelet.xml
+video/webm
+video/anim
+video/flic
+video/flv
+video/javafx
+video/matroska
+video/mng
+video/ms-asf
+video/ms-wmv
+video/msvideo
+video/nsv
+video/ogm+ogg
+video/sgi-movie
+video/theora+ogg
+video/quicktime
+audio/x-wav
+audio/mpeg
 "
 
 case "$1" in
     configure)
         # associate video files to kano-video-cli, so double click will watch them
         for v in $video_formats; do
-            pattern="video/$v=video-cli.desktop"
+            pattern="$v=video-cli.desktop"
             if [ `grep "$pattern" $associations_file | wc -l` -eq 0 ]; then
                 echo "Registering video format: $pattern"
                 echo "$pattern" >> $associations_file
