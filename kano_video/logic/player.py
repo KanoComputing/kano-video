@@ -82,7 +82,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
             from kano_settings.system.display import is_overscan
             if not is_overscan():
                 subtitles_str = '--subtitle "{subtitles}" ' \
-                    '--font "/usr/share/fonts/kano/Bariol_Regular.otf" --font-size 35 ' \
+                    '--font "/usr/share/fonts/kano/bariol/Bariol_Regular.otf" --font-size 35 ' \
                     '--align center'.format(subtitles=subtitles)
         except Exception:
             pass
