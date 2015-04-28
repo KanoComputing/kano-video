@@ -11,7 +11,7 @@ Conflicts: make-video, youtube-dl, kano-youtube
 Provides: make-video, youtube-dl, kano-youtube
 Replaces: make-video, youtube-dl, kano-youtube
 Depends: ${misc:Depends}, kano-toolset (>=1.1-7), python,
-         fonts-takao
+         fonts-takao, kano-fonts (>= 2.0-1)
 Suggests: kano-profile, kano-settings
 Recommends: omxplayer
 Description: A small video player for Kano OS
