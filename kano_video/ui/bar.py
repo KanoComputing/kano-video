@@ -122,7 +122,7 @@ class SearchBar(KanoWidget):
         self._grid.set_column_spacing(10)
 
         search_keyword_entry = Gtk.Entry(hexpand=True)
-        search_keyword_entry.props.placeholder_text = 'Search Youtube'
+        search_keyword_entry.props.placeholder_text = 'Search YouTube'
         search_keyword_entry.set_alignment(0)
         search_keyword_entry.set_size_request(100, 20)
         search_keyword_entry.connect('activate', self.switch_to_youtube,

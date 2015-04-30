@@ -6,6 +6,6 @@ Exec=/usr/bin/kano-video
 Icon=/usr/share/kano-video/icon/video.png
 Terminal=false
 Name=Make Video
-Comment=Play videos from Youtube
+Comment=Play videos from YouTube
 Categories=Application;Education;Development;Kano;
 Name[en_GB]=kano-video.desktop

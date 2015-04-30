@@ -5,7 +5,7 @@
 # Copyright (C) 2014-2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# Interracts with the Youtube API to retreive video links
+# Interracts with the YouTube API to retreive video links
 #
 
 import os
@@ -64,7 +64,7 @@ def search_youtube_by_keyword(keyword=None, popular=False, max_results=10,
     success, error, data = requests_get_json(url, params=params)
 
     if not success:
-        logger.error('Searching Youtube by keyword failed: ' + error)
+        logger.error('Searching YouTube by keyword failed: ' + error)
         return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
@@ -87,7 +87,7 @@ def search_youtube_by_user(username, parent_control=False):
 
     success, error, data = requests_get_json(url, params=params)
     if not success:
-        logger.error('Searching Youtube by keyword failed: ' + error)
+        logger.error('Searching YouTube by keyword failed: ' + error)
         return None
     if 'feed' in data and 'entry' in data['feed']:
         global last_search_count
@@ -156,7 +156,7 @@ def get_video_file_url(video_url):
         cmd_youtube = 'youtube-dl -g "{}" {}'.format(video_url, proxy_arg)
 
         output, error, rc = run_cmd(cmd_youtube)
-        logger.info('Youtube-dl returns with rc=%d' % rc)
+        logger.info('youtube-dl returns with rc=%d' % rc)
         output = output.strip('\n')
         assert (rc == 0)
         return True, output
