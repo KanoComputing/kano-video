@@ -41,11 +41,11 @@ class HeaderBar(KanoWidget):
 
 class YoutubeHeader(HeaderBar):
     """
-    Header bar for views of Youtube videos
+    Header bar for views of YouTube videos
     """
 
     def __init__(self):
-        self._title = 'Youtube'
+        self._title = 'YouTube'
         self._count = 10
         self._item = '{} video'
 
@@ -101,7 +101,7 @@ class PlaylistHeader(HeaderBar):
 
 class SearchResultsHeader(HeaderBar):
     """
-    Header bar for views of searched Youtube videos
+    Header bar for views of searched YouTube videos
     """
 
     def __init__(self, search_keyword, result_count, start=1):

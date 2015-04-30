@@ -43,7 +43,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
         logger.info('Getting video url: {}'.format(video_url))
         success, data = get_video_file_url(video_url)
         if not success:
-            logger.error('Error with getting Youtube url: {}'.format(data))
+            logger.error('Error with getting YouTube url: {}'.format(data))
             if _button:
                 _button.set_sensitive(True)
             return

@@ -1,13 +1,13 @@
 #Kano Video
 
 ***Kano Video*** is a basic media player which allows watching of videos from
-both Youtube and from local media. It allows the creation of playlists of your
+both YouTube and from local media. It allows the creation of playlists of your
 favourite videos and it endeavours to make every feature easy to use. It is
 designed for the ***Kano OS***.
 
 ![Kano Video Home Window](http://i.imgur.com/ZarQO4t.png)
 
-Youtube videos are searchable from the input at the top and playlists can be
+YouTube videos are searchable from the input at the top and playlists can be
 created from each video. A detailed view is also available for each video by
 just clicking on the video entry
 

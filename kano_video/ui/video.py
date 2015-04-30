@@ -307,7 +307,7 @@ class VideoListLocal(VideoList):
 
 class VideoListYoutube(VideoList):
     """
-    A video collection list used for videos on Youtube
+    A video collection list used for videos on YouTube
     """
 
     def __init__(self, keyword=None, username=None, playlist=None, page=1):
@@ -354,7 +354,7 @@ class VideoListYoutube(VideoList):
 
 class VideoListPopular(VideoList):
     """
-    A selection of videos that are popular on Youtube
+    A selection of videos that are popular on YouTube
     """
 
     def __init__(self):
