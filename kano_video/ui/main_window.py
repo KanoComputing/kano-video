@@ -48,6 +48,7 @@ class MainWindow(ApplicationWindow):
         self.grid.attach(self.contents, 0, 1, 1, 1)
 
         self.connect('delete-event', self.on_close)
+        self.connect('show', self.on_show)
 
     def switch_view(self, view, playlist=None, search_keyword=None,
                     permanent=False, users=False, video=None, page=1):
@@ -151,3 +152,6 @@ class MainWindow(ApplicationWindow):
         library_playlist.save()
 
         Gtk.main_quit()
+
+    def on_show(self, widget=None):
+        os.system('kano-stop-splash')
