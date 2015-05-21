@@ -4,7 +4,6 @@ media /usr/share/kano-video/
 playlists /usr/share/kano-video/
 icon/video.png /usr/share/kano-video/icon
 icon/video.png /usr/share/icons/Kano/88x88/apps
-icon/youtube.app /usr/share/applications
 kdesktop/kano-video.desktop /usr/share/applications/
 kdesktop/video-cli.desktop /usr/share/applications/
 kdesktop/auto_video-cli.desktop /usr/share/applications/
