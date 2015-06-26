@@ -52,7 +52,7 @@ def jackd_stop():
 def main():
     jackd_started = False
 
-    midori_skel = 'etc/skel/.config/midori/youtube'
+    midori_skel = '/etc/skel/.config/midori/youtube'
     midori_config_dir = '.config/midori/youtube'
 
     # Make sure jackd is up and running
