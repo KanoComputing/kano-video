@@ -1,6 +1,6 @@
 #!/usr/bin/kano-splash /usr/share/kano-video/media/images/splash.png /usr/bin/env python
 
-# Copyright (C) 2014 Kano Computing Ltd.
+# Copyright (C) 2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # Command line wrapper to Kano Video Midori version to watch YouTube videos
@@ -41,11 +41,10 @@ def jackd_running():
     
     
 def jackd_start(jackd='jackd -p32 -dalsa -dhw:0,0 -p1024 -n3 -s'):
-
     cmdline='/bin/bash -c "{}" &'.format(jackd)
     rc=os.system(cmdline)
-    print 'RC', rc
     return (rc==0)
+
 
 def jackd_stop():
     run_cmd('pkill jackd')
