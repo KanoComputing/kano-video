@@ -1,3 +1,9 @@
+kano-video (1.2-1) unstable; urgency=low
+
+  * Replaced Kano Video GUI to use the Midori browser
+
+ -- Team Kano <dev@kano.me>  Fri, 26 Jun 2015 11:18:11 +0100
+
 kano-video (1.1-1) unstable; urgency=low
 
   * Pre-release review.

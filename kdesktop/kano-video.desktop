@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=/usr/bin/kano-video
+Exec=/usr/bin/kano-video-browser
 Icon=/usr/share/kano-video/icon/video.png
 Terminal=false
 Name=Make Video

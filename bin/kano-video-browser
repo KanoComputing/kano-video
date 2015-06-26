@@ -1,0 +1,82 @@
+#!/usr/bin/kano-splash /usr/share/kano-video/media/images/splash.png /usr/bin/env python
+
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# Command line wrapper to Kano Video Midori version to watch YouTube videos
+#
+
+from gi.repository import Gtk, Gdk, GObject
+from kano.gtk3.kano_dialog import KanoDialog
+from kano.utils import run_cmd
+from kano.network import launch_midori
+
+import os
+import sys
+
+if __name__ == '__main__' and __package__ is None:
+    dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    if dir_path != '/usr':
+        sys.path.insert(1, dir_path)
+
+from kano_video.ui.main_window import MainWindow
+from kano_video.paths import css_dir
+
+try:
+    from kano_profile.tracker import Tracker
+    kanotracker = Tracker()
+except:
+    pass
+
+
+def jackd_running():
+    try:
+        pid=os.popen('pidof jackd').read()
+        if len(pid):
+            return True
+    except:
+        pass
+
+    return False
+    
+    
+def jackd_start(jackd='jackd -p32 -dalsa -dhw:0,0 -p1024 -n3 -s'):
+
+    cmdline='/bin/bash -c "{}" &'.format(jackd)
+    rc=os.system(cmdline)
+    print 'RC', rc
+    return (rc==0)
+
+def jackd_stop():
+    run_cmd('pkill jackd')
+
+
+def main():
+
+    jackd_started=False
+    youtube_url='http://youtube.com'
+
+    # Make sure jackd is up and running
+    if not jackd_running():
+        jackd_started=True
+        jackd_start()
+
+    run_cmd('midori -a {}'.format(youtube_url))
+
+    if jackd_started:
+        jackd_stop()
+
+
+if __name__ == '__main__':
+
+    # If there are VNC connected clients, show a warning message
+    if os.path.isfile('/usr/bin/kano-vnc'):
+        _,_,rc=run_cmd('/usr/bin/kano-vnc clients')
+        if rc==0:
+            msg='YouTube videos over a VNC session will be played slowly'
+            kdialog = KanoDialog(
+                title_text='VNC Warning',
+                description_text=msg)
+            response = kdialog.run()
+
+    main()
