@@ -8,9 +8,10 @@
 
 from kano.gtk3.kano_dialog import KanoDialog
 from kano.utils import run_cmd, get_home
+from kano.logging import logger
 from kano_settings.config_file import get_setting
-import shutil
 
+import shutil
 import os
 import sys
 
@@ -51,8 +52,9 @@ def jackd_stop():
 def main():
     jackd_started = False
     youtube_url = 'http://youtube.com'
-    midori_skel = '/usr/share/kano-video/midori_skel'
-    midori_config_dir = '.config/midori/customconfig'
+
+    midori_skel = '/usr/share/kano-video/midori_skel/kanovideo'
+    midori_config_dir = '.config/midori/kanovideo'
 
     # Make sure jackd is up and running
     if not jackd_running():
@@ -60,15 +62,15 @@ def main():
         jackd_start()
 
     # Configuration directory contains Midori per-user cookies and extra stuff
-    full_path = os.path.join(get_home(), midori_config_dir)
-    if not os.path.isdir(midori_config_dir):
+    full_user_path = os.path.join(get_home(), midori_config_dir)
+    if not os.path.isdir(full_user_path):
         try:
-            shutil.copytree(midori_skel, midori_config_dir)
+            shutil.copytree(midori_skel, full_user_path)
         except:
-            print 'Error copying Midori user skeleton {}'.format(midori_skel)
+            logger.error('Error copying Midori user skeleton {}'.format(midori_skel))
 
     # FIXME: Midori -c seems to detach itself from the terminal and we lose control
-    run_cmd('midori -c {} "{}"'.format(full_path, youtube_url))
+    run_cmd('midori -c {} "{}"'.format(full_user_path, youtube_url))
 
     if jackd_started:
         jackd_stop()
@@ -78,7 +80,7 @@ if __name__ == '__main__':
 
     # This app cannot be sudoed, because we instruct Midori to pull user settings
     if os.getuid() == 0:
-        print 'This app cannot be run as root, please start it from the Desktop'
+        logger.error('This app cannot be run as root, please start it from the Desktop')
         exit(1)
 
     # Check if parental control is in Ultimate mode (3)
