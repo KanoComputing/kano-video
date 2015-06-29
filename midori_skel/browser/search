@@ -1,0 +1,17 @@
+[Google]
+name=Google
+text=Web Search
+uri=http://www.google.com/search?q=%s
+token=g
+
+[Wikipedia]
+name=Wikipedia
+text=The free encyclopedia
+uri=http://en.wikipedia.org/wiki/Special:Search/%s
+token=wp
+
+[The Free Dictionary]
+name=The Free Dictionary
+text=Dictionary, Encyclopedia and Thesaurus
+uri=http://www.thefreedictionary.com/%s
+token=fd

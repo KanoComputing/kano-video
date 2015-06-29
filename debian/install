@@ -7,3 +7,6 @@ icon/video.png /usr/share/icons/Kano/88x88/apps
 kdesktop/kano-video.desktop /usr/share/applications/
 kdesktop/video-cli.desktop /usr/share/applications/
 kdesktop/auto_video-cli.desktop /usr/share/applications/
+cookies /usr/share/kano-video/
+midori_skel/youtube etc/skel/.config/midori/
+midori_skel/browser /usr/share/kano-video/
