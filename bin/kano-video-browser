@@ -7,7 +7,7 @@
 #
 
 from kano.gtk3.kano_dialog import KanoDialog
-from kano.utils import run_cmd, get_home
+from kano.utils import run_cmd, get_home, is_model_2_b
 from kano.logging import logger
 from kano_settings.system.advanced import get_parental_level
 
@@ -84,26 +84,34 @@ if __name__ == '__main__':
 
     # Check if parental control is in Ultimate mode (4)
     if get_parental_level() == 4:
+        # Close splash before launching dialogue
+        os.system('kano-stop-splash')
         head = 'Whoops!'
         msg = "I can\'t show you videos because my parental settings are" \
-            "turned on."
-        dialog = KanoDialog(
-            head,
-            msg,
-            {
-                "OK": {
-                    "return_value": True,
-                    "color": "green"
-                },
-            },
-        )
+            " turned on."
+        dialog = KanoDialog(head, msg)
         dialog.run()
         exit(0)
+
+    # Check if not RPi2
+    if not is_model_2_b():
+        # Close splash before launching dialogue
+        os.system('kano-stop-splash')
+        head = 'Powerup!'
+        msg = "Playing video uses all of my brainpower, and sometimes" \
+            " it\'s hard for me to keep up. I\'ll try, but for the best" \
+            " experience upgrade my brain and get all the new powers! \n" \
+            "Visit: http://powerup.kano.me/"
+        dialog = KanoDialog(head, msg)
+        dialog.run()
+        del dialog
 
     # If there are VNC connected clients, show a warning message
     if os.path.isfile('/usr/bin/kano-vnc'):
         _, _, rc = run_cmd('/usr/bin/kano-vnc clients')
         if rc == 0:
+            # Close splash before launching dialogue
+            os.system('kano-stop-splash')
             msg = 'YouTube videos over a VNC session will be played slowly'
             kdialog = KanoDialog(
                 title_text='VNC Warning',
