@@ -106,6 +106,7 @@ if __name__ == '__main__':
         dialog = KanoDialog(head, msg)
         dialog.run()
 
+        # This is to force the dialog to close on clicking OK
         while Gtk.events_pending():
             Gtk.main_iteration()
 
