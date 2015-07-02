@@ -82,8 +82,8 @@ if __name__ == '__main__':
         logger.error('This app cannot be run as root, please start it from the Desktop')
         exit(1)
 
-    # Check if parental control is in Ultimate mode (4)
-    if get_parental_level() == 4:
+    # Check if parental control is in Ultimate mode (3)
+    if get_parental_level() == 3:
         # Close splash before launching dialogue
         os.system('kano-stop-splash')
         head = 'Whoops!'
