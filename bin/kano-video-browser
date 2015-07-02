@@ -11,6 +11,7 @@ from kano.utils import run_cmd, get_home, is_model_2_b
 from kano.logging import logger
 from kano_settings.system.advanced import get_parental_level
 
+from gi.repository import Gtk
 import shutil
 import os
 import sys
@@ -104,7 +105,9 @@ if __name__ == '__main__':
             "Visit: http://powerup.kano.me/"
         dialog = KanoDialog(head, msg)
         dialog.run()
-        del dialog
+
+        while Gtk.events_pending():
+            Gtk.main_iteration()
 
     # If there are VNC connected clients, show a warning message
     if os.path.isfile('/usr/bin/kano-vnc'):
