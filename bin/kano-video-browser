@@ -28,38 +28,13 @@ except:
     pass
 
 
-def jackd_running():
-    try:
-        pid = os.popen('pidof jackd').read()
-        if len(pid):
-            return True
-    except:
-        pass
-
-    return False
-
-
-def jackd_start(jackd='jackd -p32 -dalsa -dhw:0,0 -p1024 -n3 -s'):
-    # Start jackd in the background, discarding console output
-    cmdline = '/bin/bash -c "{} > /dev/null 2>&1" & '.format(jackd)
-    rc = os.system(cmdline)
-    return (rc == 0)
-
-
-def jackd_stop():
-    run_cmd('pkill jackd')
 
 
 def main():
-    jackd_started = False
-
+    
     midori_skel = '/etc/skel/.config/midori/youtube'
     midori_config_dir = '.config/midori/youtube'
 
-    # Make sure jackd is up and running
-    if not jackd_running():
-        jackd_started = True
-        jackd_start()
 
     # Configuration directory contains Midori per-user cookies and extra stuff
     full_user_path = os.path.join(get_home(), midori_config_dir)
@@ -71,8 +46,6 @@ def main():
     # Launch midori youtube mode
     run_cmd('midori -c {}'.format(full_user_path))
 
-    if jackd_started:
-        jackd_stop()
 
 
 if __name__ == '__main__':
