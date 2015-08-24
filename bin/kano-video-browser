@@ -120,6 +120,10 @@ if __name__ == '__main__':
             kdialog = KanoDialog(
                 title_text='VNC Warning',
                 description_text=msg)
-            response = kdialog.run()
+            kdialog.run()
+
+            # This is to force the dialog to close on clicking OK
+            while Gtk.events_pending():
+                Gtk.main_iteration()
 
     main()
