@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xbel PUBLIC "+//IDN python.org//DTD XML Bookmark Exchange Language 1.0//EN//XML" "http://www.python.org/topics/xml/dtds/xbel-1.0.dtd">
+<xbel version="1.0" xmlns:midori="http://www.twotoasts.de">
+<info>
+<metadata owner="http://www.twotoasts.de"/>
+</info>
+<bookmark href="https://www.gmail.com/intl/en/mail/help/about.html">
+<title>‪Gmail - Free Storage and Email from Google</title>
+<info>
+<metadata midori:icon="text-html" midori:history-step="2" owner="http://www.twotoasts.de"/>
+</info>
+</bookmark>
+<bookmark href="https://en.wikipedia.org/wiki/Main_Page">
+<title>‪Wikipedia, the free encyclopedia</title>
+<info>
+<metadata midori:icon="https://en.wikipedia.org/static/favicon/wikipedia.ico" midori:history-step="2" owner="http://www.twotoasts.de"/>
+</info>
+</bookmark>
+<bookmark href="http://world.kano.me/">
+<title>‪http://world.kano.me/</title>
+<info>
+<metadata midori:icon="http://world.kano.me/assets/icons/app/android-hires.png" midori:history-step="1" owner="http://www.twotoasts.de"/>
+</info>
+</bookmark>
+<bookmark href="https://www.google.com/preferences?hl=en&amp;fg=1">
+<title>‪Search Settings</title>
+<info>
+<metadata midori:history-step="2" midori:icon="https://www.google.com/favicon.ico" owner="http://www.twotoasts.de"/>
+</info>
+</bookmark>
+</xbel>
