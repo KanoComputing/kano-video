@@ -3,7 +3,7 @@
 # Copyright (C) 2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Command line wrapper to Kano Video Midori version to watch YouTube videos
+# Command line wrapper to Kano Video Chromium version to watch YouTube videos
 #
 
 from kano.gtk3.kano_dialog import KanoDialog
@@ -28,56 +28,15 @@ except:
     pass
 
 
-def jackd_running():
-    try:
-        pid = os.popen('pidof jackd').read()
-        if len(pid):
-            return True
-    except:
-        pass
-
-    return False
-
-
-def jackd_start(jackd='jackd -p32 -dalsa -dhw:0,0 -p1024 -n3 -s'):
-    # Start jackd in the background, discarding console output
-    cmdline = '/bin/bash -c "{} > /dev/null 2>&1" & '.format(jackd)
-    rc = os.system(cmdline)
-    return (rc == 0)
-
-
-def jackd_stop():
-    run_cmd('pkill jackd')
-
-
 def main():
-    jackd_started = False
 
-    midori_skel = '/etc/skel/.config/midori/youtube'
-    midori_config_dir = '.config/midori/youtube'
-
-    # Make sure jackd is up and running
-    if not jackd_running():
-        jackd_started = True
-        jackd_start()
-
-    # Configuration directory contains Midori per-user cookies and extra stuff
-    full_user_path = os.path.join(get_home(), midori_config_dir)
-    if not os.path.isdir(full_user_path):
-        try:
-            shutil.copytree(midori_skel, full_user_path)
-        except:
-            logger.error('Error copying Midori user skeleton {}'.format(midori_skel))
-    # Launch midori youtube mode
-    run_cmd('midori -c {}'.format(full_user_path))
-
-    if jackd_started:
-        jackd_stop()
+    # Launch Chromium youtube mode
+    run_cmd("chromium --window-size=900,650 --app=http://www.youtube.com")
 
 
 if __name__ == '__main__':
 
-    # This app cannot be sudoed, because we instruct Midori
+    # This app cannot be sudoed, because we instruct Chromium
     # to pull user settings
     if os.getuid() == 0:
         logger.error('This app cannot be run as root, please start it from the Desktop')
