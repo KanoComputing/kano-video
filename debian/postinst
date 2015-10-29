@@ -63,10 +63,6 @@ case "$1" in
             /usr/bin/update-mime-database /usr/share/mime
         fi
 
-        # We set the default Midori profile using our own settings,
-        # and keep a copy of the original (see postrm)
-        mv -f /etc/xdg/midori /etc/xdg/midori-original
-        cp -ra /usr/share/kano-video/browser /etc/xdg/midori
         ;;
 
 esac
