@@ -32,8 +32,8 @@ if not omxplayer_present and not vlc_present:
     sys.exit('Neither vlc nor omxplayer is installed!')
 
 
-def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
-                   init_threads=True, keyboard_engulfer=True):
+def play_video(_button=None, video_url=None, localfile=None, subtitles=None,
+               init_threads=True, keyboard_engulfer=True):
     """
     Plays a local or remote video using the optimal video player found.
     Handles sound settings and subtitles.
@@ -60,7 +60,7 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
 
     if omxplayer_present:
 
-        volume_percent, _ = get_volume()
+        volume_percent = get_volume()
         volume_str = '--vol {}'.format(
             percent_to_millibel(volume_percent, raspberry_mod=True))
 
@@ -96,8 +96,8 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None, \
 
     # Play with keyboard interaction coming from udev directly
     # so that we do not lose focus and capture all key presses
-    playudev.run_player(player_cmd, init_threads=init_threads, \
-                            keyboard_engulfer=keyboard_engulfer)
+    playudev.run_player(player_cmd, init_threads=init_threads,
+                        keyboard_engulfer=keyboard_engulfer)
 
     # finally, enable the button back again
     if _button:
