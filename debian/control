@@ -10,7 +10,7 @@ Architecture: all
 Conflicts: make-video, youtube-dl, kano-youtube
 Provides: make-video, youtube-dl, kano-youtube
 Replaces: make-video, youtube-dl, kano-youtube
-Depends: ${misc:Depends}, kano-toolset (>= 2.3.0-3), python,
+Depends: ${misc:Depends}, kano-toolset (>= 2.4.0-1), python,
          fonts-takao, kano-fonts (>= 2.0-1), kano-settings (>= 2.0-3),
          kano-video-files (>= 1.1-2), chromium-browser
 Suggests: kano-profile
