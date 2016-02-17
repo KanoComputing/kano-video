@@ -7,12 +7,11 @@
 #
 
 from kano.gtk3.kano_dialog import KanoDialog
-from kano.utils import run_cmd, get_home, is_model_2_b
+from kano.utils import run_cmd, has_min_performance, RPI_2_B_SCORE
 from kano.logging import logger
 from kano_settings.system.advanced import get_parental_level
 
 from gi.repository import Gtk
-import shutil
 import os
 import sys
 
@@ -54,7 +53,7 @@ if __name__ == '__main__':
         exit(0)
 
     # Check if not RPi2
-    if not is_model_2_b():
+    if not has_min_performance(RPI_2_B_SCORE):
         # Close splash before launching dialogue
         os.system('kano-stop-splash')
         head = 'Powerup!'
