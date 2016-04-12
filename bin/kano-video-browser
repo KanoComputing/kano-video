@@ -1,6 +1,6 @@
 #!/usr/bin/kano-splash /usr/share/kano-video/media/images/splash.png /usr/bin/env python
 
-# Copyright (C) 2015 Kano Computing Ltd.
+# Copyright (C) 2015-2016 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # Command line wrapper to Kano Video Chromium version to watch YouTube videos
@@ -25,6 +25,8 @@ try:
     kanotracker = Tracker()
 except:
     pass
+
+from kano.network import is_internet
 
 
 def main():
@@ -83,5 +85,49 @@ if __name__ == '__main__':
             # This is to force the dialog to close on clicking OK
             while Gtk.events_pending():
                 Gtk.main_iteration()
+
+    if not is_internet():
+        os.system('kano-stop-splash')
+        title = 'Oh No'
+        desc = 'You need to be connected to the Internet. ' \
+            'Click on the OK button to set up your WiFi'
+        confirm = KanoDialog(
+            title_text=title,
+            description_text=desc,
+            button_dict={
+                'OK': {
+                    'return_value': True,
+                    'color': 'green'
+                },
+                'QUIT': {
+                    'return_value': False,
+                    'color': 'red'
+                }
+
+            },
+            hide_from_taskbar=True
+        )
+        keep_on = confirm.run()
+
+        if not keep_on:
+            sys.exit(0)
+
+        run_cmd('sudo kano-wifi-gui')
+
+        if not is_internet():
+            title = 'Oh No'
+            desc = 'It looks like something went wrong. ' \
+                'Your Kano kit is still not connected to the Internet.'
+            KanoDialog(
+                title_text=title,
+                description_text=desc,
+                button_dict={
+                    'QUIT': {
+                        'color': 'red'
+                    }
+                },
+                hide_from_taskbar=True
+            ).run()
+            sys.exit(0)
 
     main()
