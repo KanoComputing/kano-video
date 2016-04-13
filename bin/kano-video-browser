@@ -32,7 +32,11 @@ from kano.network import is_internet
 def main():
 
     # Launch Chromium youtube mode
-    run_cmd("chromium --window-size=900,650 --app=http://www.youtube.com")
+    run_cmd(
+        'chromium '
+        '--window-size=900,650 '
+        '--app=http://www.youtube.com/user/kanoComputing'
+    )
 
 
 if __name__ == '__main__':
