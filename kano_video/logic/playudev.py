@@ -34,7 +34,13 @@ def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     that says "kbd" alone. The field following that *should* be the device name mapped to keyboard keys.
     Any other combination seems to point to other devices (trackpads and various other goodies)
 
+    On pre 4.4.7 linux kernels we were used to see this:
+
     "H: Handlers=kbd event0"
+
+    But, starting on recent kernel 4.4.7-v7+, we notice that the keyboard is reported with leds support.
+
+    "H: Handlers=kbd leds event1"
 
     https://www.kernel.org/doc/Documentation/input/input.txt
     '''
@@ -45,14 +51,31 @@ def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     with open(fdevice_list, 'r') as csvfile:
         input_devices = csv.reader(csvfile, delimiter=' ', lineterminator='\n', skipinitialspace=True)
         for ndevice, device_info in enumerate(input_devices):
-            if len(device_info) > 2 and \
-               device_info[0] == 'H:' and \
-               device_info[1] == 'Handlers=kbd' and \
-               len(device_info[2]) and device_info[2].startswith('event'):
+            try:
+                if len(device_info) > 2:
 
-                keyboard_input_device = '/dev/input/%s' % device_info[2]
-                logger.info('keyboard input device discovered is %s' % keyboard_input_device)
-                break
+                    # We are looking for something like this: H: Handlers=kbd [xxx] eventY
+                    if device_info[0] == 'H:' and device_info[1] == 'Handlers=kbd':
+
+                        # Discern between differing kernels and how they report devices
+
+                        # looks like this is a pre 4.4.7 kernel, so we see:
+                        # H: Handlers=kbd eventY
+                        if device_info[2].startswith('event'):
+                            keyboard_input_device = '/dev/input/%s' % device_info[2]
+                            logger.info('discovered keyboard udev on kernel < 4.4.7 is %s' % keyboard_input_device)
+                            break
+
+                        elif device_info[2] == 'leds' and len(device_info) > 3 and \
+                           device_info[3].startswith('event'):
+                            # Looks like we are on >= 4.4.7 kernel, we now see:
+                            # H: Handlers=kbd leds eventY
+                            keyboard_input_device = '/dev/input/%s' % device_info[3]
+                            logger.info('discovered keyboard udev on kernel > 4.4.7 is %s' % keyboard_input_device)
+                            break
+
+            except:
+                pass
 
     return keyboard_input_device
 
