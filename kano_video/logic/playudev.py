@@ -31,10 +31,21 @@ def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     Most keyboards send data to /dev/input/event0, but some use a different device.
     This function heuristically finds the correct device name that the kernel decides to map.
     We are reading /proc/bus/input/devices in search for an entry H: (handler)
-    that says "kbd" alone. The field following that *should* be the device name mapped to keyboard keys.
+    that says "kbd".
+
+    The name at the end *should* be the device name mapped at /dev/input.
     Any other combination seems to point to other devices (trackpads and various other goodies)
 
+    On pre 4.4.7 linux kernels we were used to see this:
+
     "H: Handlers=kbd event0"
+
+    But, starting on recent kernel 4.4.7-v7+, we notice that the keyboard is reported with leds support.
+
+    "H: Handlers=kbd leds event1"
+
+    The correct mapping in this case seems to be the last reported one (there are commonly 2 reported).
+    Tested on 2 common keyboards, and 3 RT, trackpad based ones, including the official Kano Keyboard.
 
     https://www.kernel.org/doc/Documentation/input/input.txt
     '''
@@ -45,14 +56,16 @@ def get_keyboard_input_device(fdevice_list='/proc/bus/input/devices'):
     with open(fdevice_list, 'r') as csvfile:
         input_devices = csv.reader(csvfile, delimiter=' ', lineterminator='\n', skipinitialspace=True)
         for ndevice, device_info in enumerate(input_devices):
-            if len(device_info) > 2 and \
-               device_info[0] == 'H:' and \
-               device_info[1] == 'Handlers=kbd' and \
-               len(device_info[2]) and device_info[2].startswith('event'):
 
-                keyboard_input_device = '/dev/input/%s' % device_info[2]
-                logger.info('keyboard input device discovered is %s' % keyboard_input_device)
-                break
+            try:
+                if device_info[1] == 'Handlers=kbd' and \
+                   device_info[2] == 'leds' and \
+                   device_info[3].startswith('event'):
+
+                    # will iterate until the last reported kbd device is captured
+                    keyboard_input_device='/dev/input/{}'.format(device_info[3].strip())
+            except:
+                pass
 
     return keyboard_input_device
 
@@ -68,11 +81,11 @@ def wait_for_keys(pomx):
     infile_path = get_keyboard_input_device()
     logger.info('wait_for_keys is using keyboard input device: %s' % infile_path)
 
-    #long int, long int, unsigned short, unsigned short, unsigned int
+    # long int, long int, unsigned short, unsigned short, unsigned int
     FORMAT = 'llHHI'
     EVENT_SIZE = struct.calcsize(FORMAT)
 
-    #open file in binary mode
+    # Open the keyboard device file in binary mode
     in_file = open(infile_path, "rb")
 
     event = in_file.read(EVENT_SIZE)
