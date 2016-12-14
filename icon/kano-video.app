@@ -5,7 +5,7 @@
     "slug": "youtube",
     "icon": "youtube",
     "colour": "#7BAA64",
-    "categories": ["code"],
+    "categories": ["media"],
     "mime_type": "application/x-youtube",
     "packages": [],
     "dependencies": [],
