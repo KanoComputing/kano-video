@@ -9,4 +9,5 @@ kdesktop/video-cli.desktop /usr/share/applications/
 kdesktop/auto_video-cli.desktop /usr/share/applications/
 
 icon/kano-video.app /usr/share/applications
+icon/locale/es_AR/*.app /usr/share/applications/locale/es_AR/
 icon/youtube.png /usr/share/icons/Kano/66x66/apps
