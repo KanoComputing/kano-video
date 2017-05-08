@@ -85,9 +85,21 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None,
         except Exception:
             pass
 
-        player_cmd = 'omxplayer -o both {volume_str} {subtitles} -b ' \
-                     '"{link}"'.format(link=link, volume_str=volume_str,
-                                       subtitles=subtitles_str)
+        audio_out = 'both'
+        try:
+            from kano_settings.system.audio import is_HDMI
+            if is_HDMI():
+                audio_out = 'hdmi'
+        except Exception:
+            pass
+
+        player_cmd = 'omxplayer -o {audio_out} {volume_str} {subtitles} -b "{link}"' \
+                     ''.format(
+                         audio_out=audio_out,
+                         link=link,
+                         volume_str=volume_str,
+                         subtitles=subtitles_str
+                     )
     else:
         player_cmd = 'vlc -f --no-video-title-show ' \
             '"{link}"'.format(link=link)
