@@ -85,11 +85,13 @@ def play_video(_button=None, video_url=None, localfile=None, subtitles=None,
         except Exception:
             pass
 
-        audio_out = 'both'
+        # Set the audio output between HDMI or Jack. Default is HDMI since it's the
+        # safest route given the PiHat lib getting destabilised if Jack is used.
+        audio_out = 'hdmi'
         try:
             from kano_settings.system.audio import is_HDMI
-            if is_HDMI():
-                audio_out = 'hdmi'
+            if not is_HDMI():
+                audio_out = 'local'
         except Exception:
             pass
 
