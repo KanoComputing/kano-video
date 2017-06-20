@@ -1,7 +1,7 @@
 {
-    "title": "Youtube",
-    "tagline": "Watch youtube videos",
-    "description": "Allows you to watch HD Youtube videos in normal and full screen modes",
+    "title": "YouTube",
+    "tagline": "Watch YouTube videos",
+    "description": "Allows you to watch HD YouTube videos in normal and full screen modes",
     "slug": "youtube",
     "icon": "youtube",
     "colour": "#7BAA64",
