@@ -1,3 +1,9 @@
+kano-video (3.12.1-0) unstable; urgency=low
+
+  * Replaced Dashboard position of Youtube with Make Snake
+
+ -- Team Kano <dev@kano.me>  Mon, 25 Sep 2017 15:24:11 +0100
+
 kano-video (1.2-1) unstable; urgency=low
 
   * Replaced Kano Video GUI to use the Midori browser

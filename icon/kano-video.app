@@ -12,5 +12,5 @@
     "launch_command": "kano-video-browser",
     "overrides": [],
     "desktop": false,
-    "priority": 800
+    "priority": 475
 }
