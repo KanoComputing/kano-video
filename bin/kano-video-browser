@@ -1,4 +1,4 @@
-#!/usr/bin/kano-splash /usr/share/kano-video/media/images/splash.png /usr/bin/env python
+#!/usr/bin/kano-splash loader-animation /usr/bin/env python
 
 # Copyright (C) 2015-2016 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
@@ -32,6 +32,7 @@ from kano.network import is_internet
 def main():
 
     # Launch Chromium youtube mode
+    os.system('(sleep 3 ; kano-stop-splash) &')
     run_cmd(
         '/usr/bin/chromium-browser '
         '--start-maximized '
@@ -45,6 +46,7 @@ if __name__ == '__main__':
     # to pull user settings
     if os.getuid() == 0:
         logger.error('This app cannot be run as root, please start it from the Desktop')
+        os.system('kano-stop-splash')
         exit(1)
 
     # Check if parental control is in Ultimate mode (3)

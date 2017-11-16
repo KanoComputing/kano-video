@@ -1,3 +1,9 @@
+kano-video (3.14.0-0) unstable; urgency=low
+
+  * Added Loading animation splash window
+
+ -- Team Kano <dev@kano.me>  Thu, 16 Nov 2017 17:18:32 +0100
+
 kano-video (3.12.1-0) unstable; urgency=low
 
   * Replaced Dashboard position of Youtube with Make Snake
