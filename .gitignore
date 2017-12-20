@@ -2,3 +2,4 @@ kano
 
 *.pyc
 *.swp
+.DS_Store
