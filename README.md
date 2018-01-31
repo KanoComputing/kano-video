@@ -1,4 +1,4 @@
-#Kano Video
+# Kano Video
 
 ***Kano Video*** is a basic media player which allows watching of videos from
 both YouTube and from local media. It allows the creation of playlists of your
