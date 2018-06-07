@@ -1,6 +1,6 @@
 #!/usr/bin/kano-splash loader-animation /usr/bin/env python
 
-# Copyright (C) 2015-2016 Kano Computing Ltd.
+# Copyright (C) 2015 - 2018 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # Command line wrapper to Kano Video Chromium version to watch YouTube videos
@@ -36,6 +36,7 @@ def main():
     run_cmd(
         '/usr/bin/chromium-browser '
         '--start-maximized '
+        '--force-device-scale-factor=1.2 '
         '--app=http://www.youtube.com/user/kanoComputing'
     )
 
