@@ -37,7 +37,7 @@ def main():
         '/usr/bin/chromium-browser '
         '--start-maximized '
         '--force-device-scale-factor=1.2 '
-        '--app=http://www.youtube.com/user/kanoComputing'
+        '--app=http://getkano.co/youtube-landing'
     )
 
 
